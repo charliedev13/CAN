@@ -12,14 +12,14 @@ secondo metodo:
 tramite postman e la creazione composta degli URL'''
 
 #Connessione e setup dell'ORM
-engine = create_engine('mysql://user:pass@localhost/dbname') #localhost da collegare al docker
+engine = create_engine('mysql://root:Hfdfzbhvd.665root@localhost/CAN_DB') #localhost da collegare al docker
 Base = declarative_base()  # Classe base per i modelli ORM
 Session = sessionmaker(bind=engine)  # Factory per creare sessioni
 
 #Classe Paesi
-class Paesi(Base):
+class Regioni(Base):
     __tablename__ = 'paesi'
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, autoincrement=1, primary_key=True) 
     nome = Column(String(50))
     abitanti = Column(Integer)
     superficie_kmq = Column(Integer)
