@@ -1,0 +1,8 @@
+DB/mysqldata/
+DB/**/mysqldata/
+*.ibd
+ib*
+binlog*
+undo_*
+*.ibt
+*.iblog
