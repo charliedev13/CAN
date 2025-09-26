@@ -5,7 +5,7 @@ from sqlalchemy.orm import sessionmaker
 
 #collegare le API
 '''primo metodo: 
-pip3 install eurostat 
+pip3 install eurostat o istatapi
 + libreria pandas
 
 secondo metodo: 
@@ -16,9 +16,8 @@ engine = create_engine('mysql://root:Hfdfzbhvd.665root@localhost/CAN_DB') #local
 Base = declarative_base()  # Classe base per i modelli ORM
 Session = sessionmaker(bind=engine)  # Factory per creare sessioni
 
-#Classe Paesi
 class Regioni(Base):
-    __tablename__ = 'paesi'
+    __tablename__ = 'regioni'
     id = Column(Integer, autoincrement=1, primary_key=True) 
     nome = Column(String(50))
     abitanti = Column(Integer)
@@ -28,13 +27,6 @@ class Regioni(Base):
 
 #Creazione tabelle e inserimento dati
 Base.metadata.create_all(engine)
-session = Session()  = Paesi(nome="Spagna", abitanti=500000, pil=1700, superficie_kmq=505990, settore_primario="agricoltura")
-session.add(Paesi)
+session = Session()  = Regioni(nome="Piemonte", abitanti=500000, pil=1700, superficie_kmq=505990, settore_primario="agricoltura")
+session.add(Regioni)
 session.commit()
-
-
-
-
-
-
-
