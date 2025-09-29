@@ -1,24 +1,18 @@
 #creazione tabelle
 from sqlalchemy import create_engine, Column, Integer, String, Numeric, ForeignKey, Text, CheckConstraint
-from sqlalchemy.ext.declarative import declarative_base, relationship
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, declarative_base, relationship
 
-#collegare le API
-'''primo metodo: 
-pip3 install eurostat o istatapi
-+ libreria pandas
-
-secondo metodo: 
-tramite postman e la creazione composta degli URL'''
-
-#Connessione e setup dell'ORM
-engine = create_engine('mysql://root:Hfdfzbhvd.665root@/CAN_DB') #localhost da collegare al docker
+#Connessione e setup dell'ORM - localhost da collegare al docker
+engine = create_engine(
+    "mysql+pymysql://root:Hfdfzbhvd.665root@127.0.0.1:3306/CAN_DB",
+    pool_pre_ping=True
+)
 Base = declarative_base()  # Classe base per i modelli ORM
 Session = sessionmaker(bind=engine)  # Factory per creare sessioni
 
 class Regioni(Base):
     __tablename__ = 'regioni'
-    id_regione = Column(Integer, autoincrement=1, primary_key=True) 
+    id_regione = Column(Integer, autoincrement=True, primary_key=True) 
     nome = Column(String(80), unique=True, nullable=False)
     superficie_kmq = Column(Numeric(12,2))
     densita_demografica = Column(Numeric(12,2))
@@ -123,8 +117,5 @@ class Azioni(Base):
 
     regione = relationship("Regioni", back_populates="azioni")
 
-#Creazione tabelle e inserimento dati
+#Creazione tabelle 
 Base.metadata.create_all(engine)
-session = Session()  = Regioni(nome="Piemonte", pil=1700, superficie_kmq=505990, densita_demografica=150)
-session.add(Regioni)
-session.commit()

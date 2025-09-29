@@ -1,0 +1,22 @@
+Indicatore,Regione,Regione-codice,Carbone,Petrolio,Gas,Rinnovabili
+mix-energetico,Abruzzo,abr,0,32,47,21
+mix-energetico,Basilicata,bas,0,41,21,38
+mix-energetico,Calabria,cal,0,31,41,28
+mix-energetico,Campania,cam,0,48,29,22
+mix-energetico,Emilia-Romagna,emi,0,30,56,14
+mix-energetico,Friuli-Venezia Giulia,fri,7,19,53,20
+mix-energetico,Lazio,laz,15,43,28,14
+mix-energetico,Liguria,lig,3,40,48,9
+mix-energetico,Lombardia,lom,0,27,58,15
+mix-energetico,Marche,mar,0,47,35,19
+mix-energetico,Molise,mol,0,35,37,28
+mix-energetico,Piemonte,pie,0,28,55,17
+mix-energetico,Puglia,pug,29,28,30,13
+mix-energetico,Sardegna,sar,18,68,0,14
+mix-energetico,Sicilia,sic,0,70,21,9
+mix-energetico,Toscana,tos,0,24,28,49
+mix-energetico,Trentino-Alto Adige,tre,0,34,26,40
+mix-energetico,Umbria,umb,0,38,37,24
+mix-energetico,Valle d'Aosta,val,0,27,18,55
+mix-energetico,Veneto,ven,7,37,37,19
+mix-energetico,media Italia,ita,5,37,39,19
