@@ -12,7 +12,7 @@ secondo metodo:
 tramite postman e la creazione composta degli URL'''
 
 #Connessione e setup dell'ORM
-engine = create_engine('mysql://root:Hfdfzbhvd.665root@localhost/CAN_DB') #localhost da collegare al docker
+engine = create_engine('mysql://root:Hfdfzbhvd.665root@/CAN_DB') #localhost da collegare al docker
 Base = declarative_base()  # Classe base per i modelli ORM
 Session = sessionmaker(bind=engine)  # Factory per creare sessioni
 

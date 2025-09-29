@@ -6,3 +6,4 @@ binlog*
 undo_*
 *.ibt
 *.iblog
+.DS_Store
