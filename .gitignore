@@ -7,3 +7,5 @@ undo_*
 *.ibt
 *.iblog
 .DS_Store
+venv
+.venv
