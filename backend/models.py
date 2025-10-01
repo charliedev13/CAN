@@ -1,7 +1,7 @@
 #modellazione del DB e creazione tabelle
 from sqlalchemy import Engine, create_engine, Column, Integer, String, Numeric, ForeignKey, Text, CheckConstraint
 from sqlalchemy.orm import sessionmaker, declarative_base, relationship
-from database import Base
+from database import Base, engine
 
 # Regioni
 
@@ -113,4 +113,4 @@ class Azioni(Base):
     regione = relationship("Regioni", back_populates="azioni")
 
 #Creazione tabelle 
-Base.metadata.create_all(Engine)
+Base.metadata.create_all(engine)
