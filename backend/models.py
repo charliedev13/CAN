@@ -1,14 +1,9 @@
-#creazione tabelle
-from sqlalchemy import create_engine, Column, Integer, String, Numeric, ForeignKey, Text, CheckConstraint
+#modellazione del DB e creazione tabelle
+from sqlalchemy import Engine, create_engine, Column, Integer, String, Numeric, ForeignKey, Text, CheckConstraint
 from sqlalchemy.orm import sessionmaker, declarative_base, relationship
+from database import Base
 
-#Connessione e setup dell'ORM - localhost da collegare al docker
-engine = create_engine(
-    "mysql+pymysql://root:Hfdfzbhvd.665root@127.0.0.1:3306/CAN_DB",
-    pool_pre_ping=True
-)
-Base = declarative_base()  # Classe base per i modelli ORM
-Session = sessionmaker(bind=engine)  # Factory per creare sessioni
+# Regioni
 
 class Regioni(Base):
     __tablename__ = 'regioni'
@@ -18,7 +13,7 @@ class Regioni(Base):
     densita_demografica = Column(Numeric(12,2))
     pil = Column(Numeric(14,2))
 
- #relazioni 1:1
+    # relazioni 1:1
     morfologia = relationship("MorfologiaSuolo", back_populates="regione", uselist=False)
     emissioni_totali = relationship("EmissioniTotali", back_populates="regione", uselist=False)
     edifici = relationship("Edifici", back_populates="regione", uselist=False)
@@ -95,7 +90,7 @@ class MixEnergetico(Base):
         ),
     )
 
-# Assorbimenti (testo qualitativo)
+# Assorbimenti
 class Assorbimenti(Base):
     __tablename__ = "assorbimenti"
 
@@ -105,7 +100,7 @@ class Assorbimenti(Base):
 
     regione = relationship("Regioni", back_populates="assorbimenti")
 
-# Azioni (indicatori sintetici)
+# Azioni
 class Azioni(Base):
     __tablename__ = "azioni"
 
@@ -118,4 +113,4 @@ class Azioni(Base):
     regione = relationship("Regioni", back_populates="azioni")
 
 #Creazione tabelle 
-Base.metadata.create_all(engine)
+Base.metadata.create_all(Engine)

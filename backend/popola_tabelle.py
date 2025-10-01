@@ -1,7 +1,17 @@
-from model_db import *
+from requests import Session
+from models import *
 import pandas as pd
+import os
 
-session = Session()  
+# Path base = cartella DB (fratello di backend)
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DB_DIR = os.path.join(BASE_DIR, "DB")
+
+def csv_path(filename: str) -> str:
+    """Restituisce il path assoluto del CSV nella cartella DB"""
+    return os.path.join(DB_DIR, filename)
+
+session = Session()
 
 # Dizionario per la normalizzazione dei nomi delle regioni
 REGIONI_STANDARD = {
