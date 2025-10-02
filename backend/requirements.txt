@@ -1,7 +1,12 @@
+# Per far funzionare l'applicazione, è necessario installare le dipendenze elencate in questo file.
+# assicuratevi di essere nella cartella in cui c'è il file e poi:
+# pip install -r requirements.txt
+
 fastapi
 uvicorn
 sqlalchemy
 pymysql
+cryptography
 pydantic
 typing-extensions
 pandas

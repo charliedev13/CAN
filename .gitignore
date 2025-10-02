@@ -9,3 +9,5 @@ undo_*
 .DS_Store
 venv
 .venv
+.vscode/
+__pycache__/

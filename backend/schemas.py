@@ -1,3 +1,6 @@
+"""Schemas è il ponte tra il database (modelli) e le operazioni CRUD (routes). 
+Quindi, ci permette di definire come i dati vengono inviati e ricevuti dall'API."""
+
 #Qui definiamo i modelli Pydantic per la validazione
 
 from pydantic import BaseModel

@@ -1,52 +1,43 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from typing import List
-import models, schemas
+import schemas
 from database import get_db
+from services import (
+    RegioneService,
+    MorfologiaService,
+    EmissioniService,
+    EdificiService,
+    IndustriaService,
+    MixService,
+    AssorbimentiService,
+    AzioniService
+)
 
 router = APIRouter()
 
 # =====================================================
-# ROUTES REGIONI
+# REGIONI
 # =====================================================
 @router.get("/regioni", response_model=List[schemas.Regione])
 def get_all_regioni(db: Session = Depends(get_db)):
-    return db.query(models.Regioni).all()
+    return RegioneService.get_all(db)
 
 @router.get("/regioni/{regione_id}", response_model=schemas.Regione)
 def get_regione(regione_id: int, db: Session = Depends(get_db)):
-    regione = db.query(models.Regioni).filter(models.Regioni.id_regione == regione_id).first()
-    if not regione:
-        raise HTTPException(status_code=404, detail="Regione non trovata")
-    return regione
+    return RegioneService.get_by_id(regione_id, db)
 
 @router.post("/regioni", response_model=schemas.Regione)
 def create_regione(regione: schemas.RegioneCreate, db: Session = Depends(get_db)):
-    db_regione = models.Regioni(**regione.dict())
-    db.add(db_regione)
-    db.commit()
-    db.refresh(db_regione)
-    return db_regione
+    return RegioneService.create(regione, db)
 
 @router.put("/regioni/{regione_id}", response_model=schemas.Regione)
 def update_regione(regione_id: int, regione: schemas.RegioneCreate, db: Session = Depends(get_db)):
-    db_regione = db.query(models.Regioni).filter(models.Regioni.id_regione == regione_id).first()
-    if not db_regione:
-        raise HTTPException(status_code=404, detail="Regione non trovata")
-    for key, value in regione.dict().items():
-        setattr(db_regione, key, value)
-    db.commit()
-    db.refresh(db_regione)
-    return db_regione
+    return RegioneService.update(regione_id, regione, db)
 
 @router.delete("/regioni/{regione_id}")
 def delete_regione(regione_id: int, db: Session = Depends(get_db)):
-    regione = db.query(models.Regioni).filter(models.Regioni.id_regione == regione_id).first()
-    if not regione:
-        raise HTTPException(status_code=404, detail="Regione non trovata")
-    db.delete(regione)
-    db.commit()
-    return {"message": "Regione eliminata con successo"}
+    return RegioneService.delete(regione_id, db)
 
 
 # =====================================================
@@ -54,15 +45,11 @@ def delete_regione(regione_id: int, db: Session = Depends(get_db)):
 # =====================================================
 @router.get("/morfologia", response_model=List[schemas.MorfologiaSuolo])
 def get_all_morfologia(db: Session = Depends(get_db)):
-    return db.query(models.MorfologiaSuolo).all()
+    return MorfologiaService.get_all(db)
 
 @router.post("/morfologia", response_model=schemas.MorfologiaSuolo)
 def create_morfologia(morf: schemas.MorfologiaSuoloCreate, db: Session = Depends(get_db)):
-    db_morf = models.MorfologiaSuolo(**morf.dict())
-    db.add(db_morf)
-    db.commit()
-    db.refresh(db_morf)
-    return db_morf
+    return MorfologiaService.create(morf, db)
 
 
 # =====================================================
@@ -70,15 +57,11 @@ def create_morfologia(morf: schemas.MorfologiaSuoloCreate, db: Session = Depends
 # =====================================================
 @router.get("/emissioni", response_model=List[schemas.EmissioniTotali])
 def get_all_emissioni(db: Session = Depends(get_db)):
-    return db.query(models.EmissioniTotali).all()
+    return EmissioniService.get_all(db)
 
 @router.post("/emissioni", response_model=schemas.EmissioniTotali)
 def create_emissioni(emiss: schemas.EmissioniTotaliCreate, db: Session = Depends(get_db)):
-    db_emiss = models.EmissioniTotali(**emiss.dict())
-    db.add(db_emiss)
-    db.commit()
-    db.refresh(db_emiss)
-    return db_emiss
+    return EmissioniService.create(emiss, db)
 
 
 # =====================================================
@@ -86,15 +69,11 @@ def create_emissioni(emiss: schemas.EmissioniTotaliCreate, db: Session = Depends
 # =====================================================
 @router.get("/edifici", response_model=List[schemas.Edifici])
 def get_all_edifici(db: Session = Depends(get_db)):
-    return db.query(models.Edifici).all()
+    return EdificiService.get_all(db)
 
 @router.post("/edifici", response_model=schemas.Edifici)
 def create_edifici(ed: schemas.EdificiCreate, db: Session = Depends(get_db)):
-    db_ed = models.Edifici(**ed.dict())
-    db.add(db_ed)
-    db.commit()
-    db.refresh(db_ed)
-    return db_ed
+    return EdificiService.create(ed, db)
 
 
 # =====================================================
@@ -102,30 +81,23 @@ def create_edifici(ed: schemas.EdificiCreate, db: Session = Depends(get_db)):
 # =====================================================
 @router.get("/industria", response_model=List[schemas.Industria])
 def get_all_industria(db: Session = Depends(get_db)):
-    return db.query(models.Industria).all()
+    return IndustriaService.get_all(db)
 
 @router.post("/industria", response_model=schemas.Industria)
 def create_industria(ind: schemas.IndustriaCreate, db: Session = Depends(get_db)):
-    db_ind = models.Industria(**ind.dict())
-    db.add(db_ind)
-    db.commit()
-    db.refresh(db_ind)
-    return db_ind
+    return IndustriaService.create(ind, db)
+
 
 # =====================================================
 # MIX ENERGETICO
 # =====================================================
 @router.get("/mix", response_model=List[schemas.MixEnergetico])
 def get_all_mix(db: Session = Depends(get_db)):
-    return db.query(models.MixEnergetico).all()
+    return MixService.get_all(db)
 
 @router.post("/mix", response_model=schemas.MixEnergetico)
 def create_mix(mix: schemas.MixEnergeticoCreate, db: Session = Depends(get_db)):
-    db_mix = models.MixEnergetico(**mix.dict())
-    db.add(db_mix)
-    db.commit()
-    db.refresh(db_mix)
-    return db_mix
+    return MixService.create(mix, db)
 
 
 # =====================================================
@@ -133,15 +105,11 @@ def create_mix(mix: schemas.MixEnergeticoCreate, db: Session = Depends(get_db)):
 # =====================================================
 @router.get("/assorbimenti", response_model=List[schemas.Assorbimenti])
 def get_all_assorbimenti(db: Session = Depends(get_db)):
-    return db.query(models.Assorbimenti).all()
+    return AssorbimentiService.get_all(db)
 
 @router.post("/assorbimenti", response_model=schemas.Assorbimenti)
 def create_assorbimenti(ass: schemas.AssorbimentiCreate, db: Session = Depends(get_db)):
-    db_ass = models.Assorbimenti(**ass.dict())
-    db.add(db_ass)
-    db.commit()
-    db.refresh(db_ass)
-    return db_ass
+    return AssorbimentiService.create(ass, db)
 
 
 # =====================================================
@@ -149,12 +117,8 @@ def create_assorbimenti(ass: schemas.AssorbimentiCreate, db: Session = Depends(g
 # =====================================================
 @router.get("/azioni", response_model=List[schemas.Azioni])
 def get_all_azioni(db: Session = Depends(get_db)):
-    return db.query(models.Azioni).all()
+    return AzioniService.get_all(db)
 
 @router.post("/azioni", response_model=schemas.Azioni)
 def create_azioni(az: schemas.AzioniCreate, db: Session = Depends(get_db)):
-    db_az = models.Azioni(**az.dict())
-    db.add(db_az)
-    db.commit()
-    db.refresh(db_az)
-    return db_az
+    return AzioniService.create(az, db)
