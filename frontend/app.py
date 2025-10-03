@@ -111,7 +111,20 @@ app = Dash(__name__, external_stylesheets=[dbc.themes.FLATLY], title="CAN Dashbo
 app.layout = dbc.Container(fluid=True, children=[
     
     # Navbar/Header
-    dbc.NavbarSimple(brand="Progetto CAN – Dashboard", color="primary", dark=True, className="mb-3"),
+    # Header
+dbc.Navbar(
+    dbc.Container([
+        dbc.NavbarBrand("CAN", className="text-white fw-bold me-5"),
+
+        dbc.Nav([
+            dbc.NavItem(dbc.NavLink("Mappa", href="#mappa", className="text-white")),
+            dbc.NavItem(dbc.NavLink("Suolo", href="#suolo", className="text-white")),
+            dbc.NavItem(dbc.NavLink("Fonti", href="#fonti", className="text-white")),
+            dbc.NavItem(dbc.NavLink("Edifici", href="#edifici", className="text-white")),
+            dbc.NavItem(dbc.NavLink("Industria", href="#industria", className="text-white")),
+        ], className="ms-auto", navbar=True)
+    ]),
+    color="#005f73", dark=True, className="mb-3"),
 
     # Sezione Mappa + Dropdown
     dbc.Row([
@@ -124,7 +137,7 @@ app.layout = dbc.Container(fluid=True, children=[
             ), md=4
         ),
         dbc.Col(dcc.Graph(id="italia-map", style={"height": "500px"}), md=8)
-    ], className="mb-4"),
+    ], className="mb-4", id="mappa"),
 
     # Sezione Grafici a torta morfologia
     dbc.Row([
@@ -146,7 +159,7 @@ app.layout = dbc.Container(fluid=True, children=[
                 html.Div(id="contenitore-semaforo")
             ])), md=12
         )
-    ], className="mb-4"),
+    ], className="mb-4", id="suolo"),
 
     # Sezione Mix Energetico
     dbc.Row([
@@ -156,7 +169,7 @@ app.layout = dbc.Container(fluid=True, children=[
                 dcc.Graph(id="grafico-mix", style={"height": "300px"})
             ])), md=12
         )
-    ], className="mb-4"),
+    ], className="mb-4", id="fonti"),
 
     # Sezione Edifici
     dbc.Row([
@@ -166,42 +179,85 @@ app.layout = dbc.Container(fluid=True, children=[
                 dcc.Graph(id="grafico-edifici", style={"height": "400px"})
             ])), md=12
         )
-    ], className="mb-4"),
+    ], className="mb-4", id="edifici"),
 
     # Sezione Azioni
     dbc.Row([
+        # Fotovoltaico
         dbc.Col(
             dbc.Card(dbc.CardBody([
-                html.Div(id="azioni-fotovoltaico-img", className="azioni-img"),
+                html.Div(
+                    html.Img(src="/assets/pannello.png", style={"width": "60%"}),
+                    className="azioni-img"
+                ),
                 html.H5("Capacità fotovoltaico (GW)", className="text-center"),
                 html.Div(id="azioni-fotovoltaico-val", className="azioni-val text-center")
             ])), md=3
         ),
+
+        # Produzione da FER
         dbc.Col(
             dbc.Card(dbc.CardBody([
-                html.Div(id="azioni-fer-img", className="azioni-img"),
+                html.Div(
+                    html.Img(src="/assets/palaeolica.png", style={"width": "60%"}),
+                    className="azioni-img"
+                ),
                 html.H5("Produzione da FER (%)", className="text-center"),
                 html.Div(id="azioni-fer-val", className="azioni-val text-center")
             ])), md=3
         ),
+
+        # Auto elettriche
         dbc.Col(
             dbc.Card(dbc.CardBody([
-                html.Div(id="azioni-auto-img", className="azioni-img"),
+                html.Div(
+                    html.Img(src="/assets/autoelettrica.png", style={"width": "60%"}),
+                    className="azioni-img"
+                ),
                 html.H5("Auto elettriche (%)", className="text-center"),
                 html.Div(id="azioni-auto-val", className="azioni-val text-center")
             ])), md=3
         ),
+
+        # Risparmi energetici
         dbc.Col(
             dbc.Card(dbc.CardBody([
-                html.Div(id="azioni-risparmio-img", className="azioni-img"),
+                html.Div(
+                    html.Img(src="/assets/casa.png", style={"width": "60%"}),
+                    className="azioni-img"
+                ),
                 html.H5("Risparmi energetici (Mtep mln)", className="text-center"),
                 html.Div(id="azioni-risparmio-val", className="azioni-val text-center")
             ])), md=3
         )
     ], className="mb-4"),
 
+    # Sezione Industria
+    dbc.Row([
+        dbc.Col(
+            dbc.Card(dbc.CardBody([
+                html.H5(id="titolo-industria", className="mb-3"),
+                dcc.Graph(id="grafico-industria", style={"height": "350px"})
+            ])), md=12
+        )
+    ], className="mb-4", id="industria"),
+
+    # Sezione frase d'effetto
+    dbc.Row([
+        dbc.Col(
+            html.Blockquote([
+                html.P("“La Terra non appartiene all’uomo, è l’uomo che appartiene alla Terra.”"),
+            ], className="blockquote text-center"),
+            md=12
+        )
+    ], className="mb-4"),
+
     # Footer
-    html.Footer(dbc.Container([html.Hr(), html.Small("Progetto CAN – Dashboard", className="text-muted")]))
+    html.Footer(
+    dbc.Container([
+        html.Small("Eurix Srl © 2025", className="text-white")
+    ], className="text-center"),
+    style={"backgroundColor": "#005f73", "padding": "10px"})
 ])
 
 # --------------------------
@@ -393,19 +449,33 @@ def update_mix(selected_region):
         "Gas": record["gas_pct"].iloc[0],
         "Rinnovabili": record["rinnovabili_pct"].iloc[0]
     }
-    colori = ["black", "#008080", "gray", "lightgreen"]
 
+    colori = {
+        "Carbone": "black",
+        "Petrolio": "#008080",   # ottanio bluastro
+        "Gas": "gray",
+        "Rinnovabili": "lightgreen"
+    }
+
+    # Grafico a barre orizzontali (una barra per ogni fonte)
     fig = px.bar(
-        x=list(valori.keys()),
-        y=list(valori.values()),
+        x=list(valori.values()),   # valori percentuali
+        y=list(valori.keys()),     # nomi fonti
+        orientation="h",
         text=[f"{v}%" for v in valori.values()],
-        labels={"x": "Fonte", "y": "Percentuale"},
+        labels={"x": "Percentuale (%)", "y": "Fonte"},
         title="Mix energetico (%)"
     )
-    fig.update_traces(marker_color=colori, textposition="outside")
-    fig.update_layout(margin=dict(l=40, r=20, t=40, b=40), yaxis=dict(range=[0, 100]))
-    return fig
 
+    # Colori personalizzati
+    fig.update_traces(marker_color=[colori[k] for k in valori.keys()], textposition="outside")
+
+    fig.update_layout(
+        margin=dict(l=60, r=20, t=40, b=20),
+        xaxis=dict(range=[0, 100])  # sempre fino a 100%
+    )
+
+    return fig
 
 # --------------------------
 # EDIFICI
@@ -441,6 +511,78 @@ def update_edifici(selected_region):
         yaxis=dict(title="")
     )
     return fig
+
+# --------------------------
+# AZIONI
+# --------------------------
+@app.callback(
+    Output("azioni-fotovoltaico-val", "children"),
+    Output("azioni-fer-val", "children"),
+    Output("azioni-auto-val", "children"),
+    Output("azioni-risparmio-val", "children"),
+    Input("regione-dropdown", "value")
+)
+def update_azioni(selected_region):
+    resp = requests.get(f"{BASE_URL}/azioni").json()
+    df_azioni = pd.DataFrame(resp).merge(df_regioni, on="id_regione")
+    df_azioni.rename(columns={"nome": "Regione"}, inplace=True)
+
+    record = df_azioni[df_azioni["Regione"] == selected_region]
+    if record.empty:
+        return "-", "-", "-", "-"
+
+    return (
+        f"{record['fotovoltaico_capacita_gw'].iloc[0]} GW",
+        f"{record['quota_produzione_fer_pct'].iloc[0]} %",
+        f"{record['quota_auto_elettriche_pct'].iloc[0]} %",
+        f"{record['risparmi_energetici_mtep_mln'].iloc[0]}"
+    )
+
+# --------------------------
+# INDUSTRIA
+# --------------------------
+@app.callback(
+    Output("grafico-industria", "figure"),
+    Output("titolo-industria", "children"),
+    Input("regione-dropdown", "value")
+)
+def update_industria(selected_region):
+    # Recupera dati dall'endpoint /industria
+    resp = requests.get(f"{BASE_URL}/industria").json()
+    df_ind = pd.DataFrame(resp).merge(df_regioni, on="id_regione")
+    df_ind.rename(columns={"nome": "Regione"}, inplace=True)
+
+    record = df_ind[df_ind["Regione"] == selected_region]
+    if record.empty:
+        return px.bar(title="Nessun dato disponibile"), f"Industria della {selected_region}"
+
+    # 🔹 Rescaling: da tCO₂ / mln € → kg CO₂ / €
+    emissioni_rescaled = record["emissioni_per_valore_aggiunto_tco2_per_mln_eur"].iloc[0] * 1000
+    quota_elettrico = record["quota_elettrico_pct"].iloc[0]
+
+    valori = {
+        "Emissioni per valore aggiunto\n(kg CO₂ per €)": emissioni_rescaled,
+        "Quota elettrico (%)": quota_elettrico
+    }
+
+    colori = ["lightgray", "yellow"]
+
+    fig = px.bar(
+        x=list(valori.keys()),
+        y=list(valori.values()),
+        text=[f"{v:.2f}" for v in valori.values()],
+        labels={"x": "Indicatore", "y": "Valore"},
+        title=""
+    )
+    fig.update_traces(marker_color=colori, textposition="outside")
+    fig.update_layout(
+        margin=dict(l=40, r=20, t=20, b=80),
+        xaxis=dict(title=""),
+        yaxis=dict(title=""),
+        showlegend=False
+    )
+
+    return fig, f"Industria della {selected_region}"
 
 # --------------------------
 if __name__ == "__main__":
