@@ -117,27 +117,34 @@ dbc.Navbar(
         dbc.NavbarBrand("CAN", className="text-white fw-bold me-5"),
 
         dbc.Nav([
-            dbc.NavItem(dbc.NavLink("Mappa", href="#mappa", className="text-white")),
-            dbc.NavItem(dbc.NavLink("Suolo", href="#suolo", className="text-white")),
-            dbc.NavItem(dbc.NavLink("Fonti", href="#fonti", className="text-white")),
-            dbc.NavItem(dbc.NavLink("Edifici", href="#edifici", className="text-white")),
-            dbc.NavItem(dbc.NavLink("Industria", href="#industria", className="text-white")),
+            dbc.NavItem(dbc.NavLink("Mappa", href="#mappa", external_link=True, className="text-white")),
+            dbc.NavItem(dbc.NavLink("Suolo", href="#suolo", external_link=True, className="text-white")),
+            dbc.NavItem(dbc.NavLink("Fonti", href="#fonti", external_link=True, className="text-white")),
+            dbc.NavItem(dbc.NavLink("Edifici", href="#edifici", external_link=True, className="text-white")),
+            dbc.NavItem(dbc.NavLink("Industria", href="#industria", external_link=True, className="text-white")),
         ], className="ms-auto", navbar=True)
     ]),
     color="#005f73", dark=True, className="mb-3"),
 
     # Sezione Mappa + Dropdown
+    # Sezione Mappa
     dbc.Row([
         dbc.Col(
-            dcc.Dropdown(
-                id="regione-dropdown",
-                options=[{"label": r, "value": r} for r in regioni],
-                value=regioni[0],
-                clearable=False
-            ), md=4
-        ),
-        dbc.Col(dcc.Graph(id="italia-map", style={"height": "500px"}), md=8)
+            html.Div([
+                html.H2("Cambiamento Ambientale Nazionale", className="text-center mb-2"),
+                html.H5("Scegli una regione di cui vedere i dati", className="text-center mb-4"),
+                dcc.Dropdown(
+                    id="regione-dropdown",
+                    options=[{"label": r, "value": r} for r in regioni],
+                    value=regioni[0],
+                    clearable=False,
+                    style={"width": "60%", "margin": "0 auto"}
+                ),
+                dcc.Graph(id="italia-map", style={"height": "500px"})
+            ])
+        , md=12)
     ], className="mb-4", id="mappa"),
+
 
     # Sezione Grafici a torta morfologia
     dbc.Row([
