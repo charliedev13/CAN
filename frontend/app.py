@@ -158,15 +158,30 @@ dbc.Navbar(
     )
     ], className="mb-4"),
 
-    # Sezione Aree di miglioramento (semaforo)
+    # Sezione Punti di forza + Aree di miglioramento (altezza uguale)
     dbc.Row([
+        # Colonna sinistra – Punto di forza
         dbc.Col(
-            dbc.Card(dbc.CardBody([
-                html.H5("Aree di miglioramento"),
-                html.Div(id="contenitore-semaforo")
-            ])), md=12
+            dbc.Card(
+                dbc.CardBody([
+                    html.H5("Punto di forza"),
+                    html.Div(id="contenitore-punto-forza", className="flex-grow-1")
+                ]),
+                className="carta-sezione"
+            ), md=6
+        ),
+
+        # Colonna destra – Aree di miglioramento
+        dbc.Col(
+            dbc.Card(
+                dbc.CardBody([
+                    html.H5("Aree di miglioramento"),
+                    html.Div(id="contenitore-semaforo", className="flex-grow-1")
+                ]),
+                className="carta-sezione"
+            ), md=6
         )
-    ], className="mb-4", id="suolo"),
+    ], className="mb-4", align="stretch"),
 
     # Sezione Mix Energetico
     dbc.Row([
@@ -291,21 +306,31 @@ def update_all(drop_val, clickData):
         pts = clickData.get("points")
         if pts and len(pts) > 0:
             clicked_loc = pts[0].get("location") or pts[0].get("hovertext")
+            # normalizza dai nomi GeoJSON a quelli del DB
             if clicked_loc in geojson_to_df_map:
                 clicked_loc = geojson_to_df_map[clicked_loc]
-            if clicked_loc in df_long["geo_region"].values:
+            # verifica contro l’elenco del DB
+            if clicked_loc in df_regioni["nome"].values:
                 selected_region = clicked_loc
 
+   # --------------------------
+    # Mappa coropletica (costruita da df_regioni)
     # --------------------------
-    # Mappa coropletica
-    # --------------------------
-    df_map = pd.DataFrame({"geo_region": df_long["geo_region"].unique()})
-    df_map["sel"] = df_map["geo_region"].apply(lambda g: 1 if g == selected_region else 0)
+    df_map = df_regioni.copy()
+
+    # Nome da usare nel GeoJSON (solo VdA e Trentino hanno etichette diverse)
+    df_map["geojson_name"] = df_map["nome"].replace({
+        "Valle d'Aosta": "Valle d'Aosta/Vallée d'Aoste",
+        "Trentino-Alto Adige": "Trentino-Alto Adige/Südtirol"
+    })
+
+    # Evidenzia la regione selezionata
+    df_map["sel"] = (df_map["nome"] == selected_region).astype(int)
 
     fig_map = px.choropleth_mapbox(
         df_map,
         geojson=geojson,
-        locations="geo_region",
+        locations="geojson_name",                 # <- usa il nome compatibile col GeoJSON
         featureidkey=f"properties.{prop_name_key}",
         color="sel",
         color_continuous_scale=["#cccccc", "#ff7f0e"],
@@ -313,10 +338,19 @@ def update_all(drop_val, clickData):
         mapbox_style="carto-positron",
         center={"lat": 41.9, "lon": 12.5},
         zoom=5.5,
-        opacity=0.7,
-        hover_name="geo_region"
+        opacity=0.7
     )
-    fig_map.update_layout(margin={"r": 0, "t": 0, "l": 0, "b": 0}, coloraxis_showscale=False)
+
+    # Tooltip pulito (niente "geo_region=...")
+    fig_map.update_traces(
+        hovertemplate="<b>%{customdata[0]}</b><br>" +
+                    "Superficie: %{customdata[1]} km²<br>" +
+                    "Densità: %{customdata[2]} ab/km²<br>" +
+                    "PIL: %{customdata[3]} mln €<extra></extra>",
+        customdata=df_map[["nome", "superficie_kmq", "densita_demografica", "pil"]].values
+    )
+
+    fig_map.update_layout(margin={"r":0,"t":0,"l":0,"b":0}, coloraxis_showscale=False)
 
     # --------------------------
     # Grafici a torta morfologia (uso del suolo)
@@ -436,6 +470,25 @@ def update_semaforo(selected_region):
         ])
     else:
         return html.Small("Nessuna area di miglioramento definita", className="text-muted")
+
+@app.callback(
+    Output("contenitore-punto-forza", "children"),
+    Input("regione-dropdown", "value")
+)
+def update_punto_forza(selected_region):
+    record = df_assorb[df_assorb["Regione"] == selected_region]
+    testo = record["punti_forza"].iloc[0] if not record.empty else None
+
+    if not testo:
+        return html.Small("Nessun punto di forza indicato", className="text-muted")
+
+    return html.Div([
+        html.H6("💪 Questa regione si distingue per:", className="mt-2"),
+        html.Div([
+            html.Span(testo, style={"marginLeft": "10px"})
+        ], style={"display": "flex", "alignItems": "center", "marginBottom": "8px"})
+    ])
+
 
 
 # --------------------------
