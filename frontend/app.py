@@ -264,6 +264,49 @@ dbc.Navbar(
         )
     ], className="mb-4", id="industria"),
 
+    # --------------------------
+    # Sezione Comparazione
+    # --------------------------
+    dbc.Row([
+        dbc.Col(
+            html.Div([
+                html.H4("Ora scegli tu: compara un dato di tua preferenza", className="text-center mb-2"),
+                html.H6("Scegli le due regioni e la categoria", className="text-center mb-4"),
+
+                # 3 Dropdowns
+                dbc.Row([
+                    dbc.Col(
+                        dcc.Dropdown(
+                            id="dropdown-regione-1",
+                            options=[{"label": r, "value": r} for r in sorted(regioni)],
+                            value="Abruzzo",
+                            clearable=False
+                        ), md=4
+                    ),
+                    dbc.Col(
+                        dcc.Dropdown(
+                            id="dropdown-regione-2",
+                            options=[{"label": r, "value": r} for r in sorted(regioni) if r != "Abruzzo"],
+                            value="Basilicata",
+                            clearable=False
+                        ), md=4
+                    ),
+                    dbc.Col(
+                        dcc.Dropdown(
+                            id="dropdown-categoria",
+                            options=[],
+                            placeholder="Seleziona una categoria",
+                            clearable=False
+                        ), md=4
+                    )
+                ], className="mb-4"),
+
+                # Grafico comparazione
+                dcc.Graph(id="grafico-comparazione", style={"height": "400px"})
+            ])
+        , md=12)
+    ], className="mb-4", id="comparazione"),
+
     # Sezione frase d'effetto
     dbc.Row([
         dbc.Col(
@@ -643,6 +686,164 @@ def update_industria(selected_region):
     )
 
     return fig, f"Industria della {selected_region}"
+
+# --------------------------
+# CALLBACK – aggiornamento dropdown e grafico comparazione
+# --------------------------
+
+# 1️⃣ Dropdown sinistro e destro si escludono a vicenda
+@app.callback(
+    Output("dropdown-regione-2", "options"),
+    Input("dropdown-regione-1", "value")
+)
+def aggiorna_opzioni_regione2(selected_left):
+    return [{"label": r, "value": r} for r in sorted(regioni) if r != selected_left]
+
+
+@app.callback(
+    Output("dropdown-regione-1", "options"),
+    Input("dropdown-regione-2", "value")
+)
+def aggiorna_opzioni_regione1(selected_right):
+    return [{"label": r, "value": r} for r in sorted(regioni) if r != selected_right]
+
+# 2️⃣ Dropdown categorie (estrae tutti i campi numerici da tutte le tabelle tranne "assorbimenti")
+# --------------------------
+# Popola le categorie numeriche per la comparazione
+# --------------------------
+@app.callback(
+    Output("dropdown-categoria", "options"),
+    Input("dropdown-categoria", "id")
+)
+def popola_categorie(_):
+    # Campi numerici dalle tabelle utili (escluso "assorbimenti")
+    categorie = {
+        # Tabella REGIONI
+        "superficie_kmq": "Superficie (km²)",
+        "densita_demografica": "Densità demografica (ab/km²)",
+        "pil": "PIL pro capite (mln €)",
+
+        # Tabella MIX
+        "carbone_pct": "Carbone (%)",
+        "petrolio_pct": "Petrolio (%)",
+        "gas_pct": "Gas (%)",
+        "rinnovabili_pct": "Rinnovabili (%)",
+
+        # Tabella EDIFICI
+        "consumo_medio_kwh_m2y": "Consumo medio edifici (kWh/m²·anno)",
+        "emissioni_procapite_tco2_ab": "Emissioni pro capite (tCO₂/ab)",
+        "quota_elettrico_pct": "Quota elettrico edifici (%)",
+        "quota_ape_classe_a_pct": "Edifici in Classe A (%)",
+
+        # Tabella INDUSTRIA
+        "emissioni_per_valore_aggiunto_tco2_per_mln_eur": "Emissioni industriali (tCO₂ per mln €)",
+        "quota_elettrico_pct_industria": "Quota elettrico industria (%)",
+
+        # Tabella MORFOLOGIA
+        "pianura_pct": "Aree pianeggianti (%)",
+        "collina_pct": "Aree collinari (%)",
+        "montagna_pct": "Aree montuose (%)",
+        "agricolo_pct": "Aree agricole (%)",
+        "urbano_pct": "Aree urbane (%)",
+        "forestale_pct": "Aree forestali (%)"
+    }
+
+    return [{"label": v, "value": k} for k, v in categorie.items()]
+
+# 3️⃣ Grafico comparativo
+# --------------------------
+# Confronto tra due regioni
+# --------------------------
+@app.callback(
+    Output("grafico-comparazione", "figure"),
+    Input("dropdown-regione-1", "value"),
+    Input("dropdown-regione-2", "value"),
+    Input("dropdown-categoria", "value")
+)
+def update_confronto(regione1, regione2, categoria):
+    if not (regione1 and regione2 and categoria):
+        return px.bar(title="Seleziona due regioni e una categoria")
+
+    # Campo -> endpoint
+    endpoint_map = {
+        # regioni
+        "superficie_kmq": "regioni",
+        "densita_demografica": "regioni",
+        "pil": "regioni",
+        # mix
+        "carbone_pct": "mix",
+        "petrolio_pct": "mix",
+        "gas_pct": "mix",
+        "rinnovabili_pct": "mix",
+        # edifici
+        "consumo_medio_kwh_m2y": "edifici",
+        "emissioni_procapite_tco2_ab": "edifici",
+        "quota_elettrico_pct": "edifici",
+        "quota_ape_classe_a_pct": "edifici",
+        # industria
+        "emissioni_per_valore_aggiunto_tco2_per_mln_eur": "industria",
+        "quota_elettrico_pct_industria": "industria",
+        # morfologia
+        "pianura_pct": "morfologia",
+        "collina_pct": "morfologia",
+        "montagna_pct": "morfologia",
+        "agricolo_pct": "morfologia",
+        "urbano_pct": "morfologia",
+        "forestale_pct": "morfologia",
+    }
+
+    endpoint = endpoint_map.get(categoria)
+    if not endpoint:
+        return px.bar(title="Categoria non supportata")
+
+    # Carico dati endpoint
+    try:
+        dati = requests.get(f"{BASE_URL}/{endpoint}").json()
+        df = pd.DataFrame(dati)
+    except Exception as e:
+        return px.bar(title=f"Errore nel recupero dati: {e}")
+
+    if df.empty:
+        return px.bar(title=f"Nessun dato disponibile in {endpoint}")
+
+    # Alias per il campo industria se serve
+    if categoria == "quota_elettrico_pct_industria" and "quota_elettrico_pct" in df.columns:
+        df["quota_elettrico_pct_industria"] = df["quota_elettrico_pct"]
+
+    if categoria not in df.columns:
+        return px.bar(title=f"Manca il campo '{categoria}' in {endpoint}")
+
+    # Conversione sicura a numerico (gestisce NULL/None/str)
+    df[categoria] = pd.to_numeric(df[categoria], errors="coerce").fillna(0)
+
+    # Se non c'è 'nome', faccio merge con df_regioni usando id_regione
+    if "nome" not in df.columns:
+        if "id_regione" not in df.columns:
+            return px.bar(title=f"Manca 'id_regione' in {endpoint}")
+        df = df.merge(df_regioni[["id_regione", "nome"]], on="id_regione", how="left")
+
+    # Filtro le due regioni selezionate
+    df_sel = df[df["nome"].isin([regione1, regione2])]
+    if df_sel.empty:
+        return px.bar(title="Dati non trovati per le regioni selezionate")
+
+    # Grafico orizzontale
+    fig = px.bar(
+        df_sel,
+        x=categoria,
+        y="nome",
+        orientation="h",
+        text=df_sel[categoria],
+        color="nome",
+        color_discrete_sequence=["#00798c", "#00b4d8"]
+    )
+    fig.update_traces(texttemplate="%{text:.2f}", textposition="outside")
+    fig.update_layout(
+        title=f"Confronto: {categoria.replace('_', ' ').capitalize()}",
+        xaxis_title="Valore", yaxis_title="", showlegend=False,
+        margin=dict(l=60, r=30, t=50, b=40)
+    )
+    return fig
 
 # --------------------------
 if __name__ == "__main__":

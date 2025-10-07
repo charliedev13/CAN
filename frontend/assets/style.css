@@ -21,3 +21,110 @@
     justify-content: space-between;
 }
 
+/* --------------------------
+   SEZIONE COMPARAZIONE
+---------------------------*/
+
+/* Contenitore complessivo */
+#comparazione {
+  background-color: #f8f9fa; /* grigio chiaro */
+  border-radius: 12px;
+  padding: 25px;
+  margin-top: 25px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* Titoli */
+#comparazione h4 {
+  font-weight: 700;
+  color: #004c5c; /* blu oceano */
+}
+
+#comparazione h6 {
+  font-weight: 500;
+  color: #00798c;
+  margin-bottom: 20px;
+}
+
+/* Dropdowns */
+#comparazione .Select-control {
+  border-radius: 8px;
+  border-color: #cfd8dc;
+  box-shadow: none;
+}
+
+#comparazione .Select-menu-outer {
+  border-radius: 8px;
+}
+
+/* Allineamento dropdowns sulla stessa riga */
+#comparazione .row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px; /* spazio orizzontale tra i dropdown */
+}
+
+/* Grafico comparazione */
+#grafico-comparazione {
+  margin-top: 20px;
+}
+
+/* Testo valori sul grafico */
+#grafico-comparazione .bar text {
+  font-size: 13px;
+  font-weight: bold;
+  fill: #003a45;
+}
+
+/* --------------------------
+   RESPONSIVE – SEZIONE COMPARAZIONE
+---------------------------*/
+
+/* Schermi medi: tablet */
+@media (max-width: 992px) {
+  #comparazione .row {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  #comparazione .col-md-4 {
+    flex: 0 0 45%;
+    max-width: 45%;
+  }
+
+  #grafico-comparazione {
+    height: 350px !important;
+  }
+}
+
+/* Schermi piccoli: smartphone */
+@media (max-width: 768px) {
+  #comparazione {
+    padding: 15px;
+  }
+
+  #comparazione h4 {
+    font-size: 1.2rem;
+  }
+
+  #comparazione h6 {
+    font-size: 1rem;
+  }
+
+  #comparazione .row {
+    flex-direction: column;
+    gap: 12px;
+    align-items: stretch;
+  }
+
+  #comparazione .col-md-4 {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  #grafico-comparazione {
+    height: 300px !important;
+  }
+}
+

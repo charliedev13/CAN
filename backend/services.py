@@ -53,7 +53,24 @@ class RegioneService:
 class MorfologiaService:
     @staticmethod
     def get_all(db: Session):
-        return db.query(models.MorfologiaSuolo).all()
+        query = (
+            db.query(models.MorfologiaSuolo, models.Regioni.nome.label("nome"))
+            .join(models.Regioni, models.MorfologiaSuolo.id_regione == models.Regioni.id_regione)
+            .all()
+        )
+        return [
+            {
+                "id_regione": r.MorfologiaSuolo.id_regione,
+                "nome": r.nome,
+                "pianura_pct": r.MorfologiaSuolo.pianura_pct,
+                "collina_pct": r.MorfologiaSuolo.collina_pct,
+                "montagna_pct": r.MorfologiaSuolo.montagna_pct,
+                "agricolo_pct": r.MorfologiaSuolo.agricolo_pct,
+                "urbano_pct": r.MorfologiaSuolo.urbano_pct,
+                "forestale_pct": r.MorfologiaSuolo.forestale_pct
+            }
+            for r in query
+        ]
 
     @staticmethod
     def create(morf: schemas.MorfologiaSuoloCreate, db: Session):
@@ -87,7 +104,22 @@ class EmissioniService:
 class EdificiService:
     @staticmethod
     def get_all(db: Session):
-        return db.query(models.Edifici).all()
+        query = (
+            db.query(models.Edifici, models.Regioni.nome.label("nome"))
+            .join(models.Regioni, models.Edifici.id_regione == models.Regioni.id_regione)
+            .all()
+        )
+        return [
+            {
+                "id_regione": r.Edifici.id_regione,
+                "nome": r.nome,
+                "consumo_medio_kwh_m2y": r.Edifici.consumo_medio_kwh_m2y,
+                "emissioni_procapite_tco2_ab": r.Edifici.emissioni_procapite_tco2_ab,
+                "quota_elettrico_pct": r.Edifici.quota_elettrico_pct,
+                "quota_ape_classe_a_pct": r.Edifici.quota_ape_classe_a_pct
+            }
+            for r in query
+        ]
 
     @staticmethod
     def create(ed: schemas.EdificiCreate, db: Session):
@@ -104,7 +136,20 @@ class EdificiService:
 class IndustriaService:
     @staticmethod
     def get_all(db: Session):
-        return db.query(models.Industria).all()
+        query = (
+            db.query(models.Industria, models.Regioni.nome.label("nome"))
+            .join(models.Regioni, models.Industria.id_regione == models.Regioni.id_regione)
+            .all()
+        )
+        return [
+            {
+                "id_regione": r.Industria.id_regione,
+                "nome": r.nome,
+                "emissioni_per_valore_aggiunto_tco2_per_mln_eur": r.Industria.emissioni_per_valore_aggiunto_tco2_per_mln_eur,
+                "quota_elettrico_pct": r.Industria.quota_elettrico_pct
+            }
+            for r in query
+        ]
 
     @staticmethod
     def create(ind: schemas.IndustriaCreate, db: Session):
@@ -121,7 +166,22 @@ class IndustriaService:
 class MixService:
     @staticmethod
     def get_all(db: Session):
-        return db.query(models.MixEnergetico).all()
+        query = (
+            db.query(models.MixEnergetico, models.Regioni.nome.label("nome"))
+            .join(models.Regioni, models.MixEnergetico.id_regione == models.Regioni.id_regione)
+            .all()
+        )
+        return [
+            {
+                "id_regione": r.MixEnergetico.id_regione,
+                "nome": r.nome,
+                "carbone_pct": r.MixEnergetico.carbone_pct,
+                "petrolio_pct": r.MixEnergetico.petrolio_pct,
+                "gas_pct": r.MixEnergetico.gas_pct,
+                "rinnovabili_pct": r.MixEnergetico.rinnovabili_pct
+            }
+            for r in query
+        ]
 
     @staticmethod
     def create(mix: schemas.MixEnergeticoCreate, db: Session):

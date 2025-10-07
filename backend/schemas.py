@@ -81,9 +81,9 @@ class Edifici(EdificiBase):
         orm_mode = True
 
 
-# ---------------------
-# Industria
-# ---------------------
+# =====================================================
+# INDUSTRIA
+# =====================================================
 class IndustriaBase(BaseModel):
     emissioni_per_valore_aggiunto_tco2_per_mln_eur: Optional[float] = None
     quota_elettrico_pct: Optional[float] = None
@@ -97,6 +97,14 @@ class Industria(IndustriaBase):
     class Config:
         orm_mode = True
 
+    # ✅ Proprietà alias per compatibilità con la dashboard
+    @property
+    def quota_elettrico_pct_industria(self) -> Optional[float]:
+        """
+        Alias per quota_elettrico_pct usato nel frontend
+        (grafici e comparazioni).
+        """
+        return self.quota_elettrico_pct
 
 # ---------------------
 # Mix energetico
