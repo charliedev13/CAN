@@ -128,3 +128,33 @@
   }
 }
 
+/* Scroll morbido a tutti gli anchor */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Offset in alto per le sezioni ancorate (altezza navbar ~ 70-80px) */
+#mappa, #suolo, #swot, #fonti, #edifici, #azioni, #industria, #comparazione {
+  scroll-margin-top: 80px;
+}
+
+/* Spazio tra menu a tendina e mappa */
+#regione-dropdown {
+  display: block !important;
+  margin: 0 auto 30px auto !important; /* puoi regolare */
+}
+
+/* Forza proporzioni uguali per i grafici a torta */
+.grafico-torta {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.grafico-torta .js-plotly-plot {
+  width: 100% !important;   /* riempie interamente il box */
+  height: 100% !important;
+  max-width: 420px;         /* limite massimo, per uniformità */
+  max-height: 420px;
+  flex-shrink: 0;
+}

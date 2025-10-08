@@ -9,6 +9,7 @@ import pandas as pd
 import plotly.express as px
 from dash import Dash, dcc, html, Input, Output, ctx
 import dash_bootstrap_components as dbc
+from dash.dependencies import Input, Output, State
 
 # --------------------------
 # CONFIG
@@ -116,15 +117,26 @@ dbc.Navbar(
     dbc.Container([
         dbc.NavbarBrand("CAN", className="text-white fw-bold me-5"),
 
-        dbc.Nav([
-            dbc.NavItem(dbc.NavLink("Mappa", href="#mappa", external_link=True, className="text-white")),
-            dbc.NavItem(dbc.NavLink("Suolo", href="#suolo", external_link=True, className="text-white")),
-            dbc.NavItem(dbc.NavLink("Fonti", href="#fonti", external_link=True, className="text-white")),
-            dbc.NavItem(dbc.NavLink("Edifici", href="#edifici", external_link=True, className="text-white")),
-            dbc.NavItem(dbc.NavLink("Industria", href="#industria", external_link=True, className="text-white")),
-        ], className="ms-auto", navbar=True)
+        dbc.NavbarToggler(id="navbar-toggler", n_clicks=0),
+
+        dbc.Collapse(
+            dbc.Nav([
+                dbc.NavItem(dbc.NavLink("Mappa", href="#mappa", external_link=True, className="text-white")),
+                dbc.NavItem(dbc.NavLink("Suolo", href="#suolo", external_link=True, className="text-white")),
+                dbc.NavItem(dbc.NavLink("Swot", href="#swot", external_link=True, className="text-white")),
+                dbc.NavItem(dbc.NavLink("Fonti", href="#fonti", external_link=True, className="text-white")),
+                dbc.NavItem(dbc.NavLink("Edifici", href="#edifici", external_link=True, className="text-white")),
+                dbc.NavItem(dbc.NavLink("Azioni", href="#azioni", external_link=True, className="text-white")),
+                dbc.NavItem(dbc.NavLink("Industria", href="#industria", external_link=True, className="text-white")),
+                dbc.NavItem(dbc.NavLink("Comparazione", href="#comparazione", external_link=True, className="text-white")),
+            ], className="ms-auto", navbar=True),
+            id="navbar-collapse",
+            is_open=False,
+            navbar=True,
+        ),
     ]),
-    color="#005f73", dark=True, className="mb-3"),
+    color="#005f73", dark=True, className="mb-3"
+    ),
 
     # Sezione Mappa + Dropdown
     # Sezione Mappa
@@ -149,14 +161,20 @@ dbc.Navbar(
     # Sezione Grafici a torta morfologia
     dbc.Row([
     dbc.Col(
-        dcc.Graph(id="grafico-altimetria", style={"height": "350px"}),
+        html.Div(
+            dcc.Graph(id="grafico-altimetria"),
+            className="grafico-torta"
+        ),
         md=6
     ),
     dbc.Col(
-        dcc.Graph(id="grafico-uso", style={"height": "350px"}),
+        html.Div(
+            dcc.Graph(id="grafico-uso"),
+            className="grafico-torta"
+        ),
         md=6
     )
-    ], className="mb-4"),
+    ], className="mb-4 justify-content-center align-items-center", id="suolo"),
 
     # Sezione Punti di forza + Aree di miglioramento (altezza uguale)
     dbc.Row([
@@ -181,7 +199,7 @@ dbc.Navbar(
                 className="carta-sezione"
             ), md=6
         )
-    ], className="mb-4", align="stretch"),
+    ], className="mb-4", align="stretch", id="swot"),
 
     # Sezione Mix Energetico
     dbc.Row([
@@ -252,7 +270,7 @@ dbc.Navbar(
                 html.Div(id="azioni-risparmio-val", className="azioni-val text-center")
             ])), md=3
         )
-    ], className="mb-4"),
+    ], className="mb-4", id="azioni"),
 
     # Sezione Industria
     dbc.Row([
@@ -395,7 +413,7 @@ def update_all(drop_val, clickData):
 
     fig_map.update_layout(margin={"r":0,"t":0,"l":0,"b":0}, coloraxis_showscale=False)
 
-    # --------------------------
+        # --------------------------
     # Grafici a torta morfologia (uso del suolo)
     # --------------------------
     dati_regione = df_long[df_long["Regione"] == selected_region].copy()
@@ -404,6 +422,7 @@ def update_all(drop_val, clickData):
     morf_altimetrica = dati_regione[dati_regione["Morfologia"].isin(
         ["pianura_pct", "collina_pct", "montagna_pct"]
     )].copy()
+    morf_altimetrica = morf_altimetrica[morf_altimetrica["Percentuale"] > 0]
 
     morf_altimetrica["Morfologia"] = morf_altimetrica["Morfologia"].map({
         "pianura_pct": "Pianura",
@@ -421,30 +440,46 @@ def update_all(drop_val, clickData):
             "Pianura": "lightgreen",
             "Collina": "yellow",
             "Montagna": "saddlebrown"
-        }
+        },
+        hole=0
     )
+
     fig_altimetrica.update_traces(
         textposition="outside",
-        textinfo="label+percent",
+        textinfo="percent",  # 🔹 solo percentuali
         textfont_size=12,
-        pull=[0.05]*len(morf_altimetrica),
-        marker=dict(line=dict(color="#000000", width=0.5))
+        pull=0,
+        marker=dict(line=dict(color="#ffffff", width=1))
     )
+
     fig_altimetrica.update_layout(
-        margin=dict(t=40, b=10, l=10, r=10),
-        legend=dict(orientation="v", y=0.5, x=1.1, valign="middle")
+        margin=dict(t=40, b=50, l=10, r=10),
+        legend=dict(
+            orientation="h",   # 🔹 legenda orizzontale
+            y=-0.2,
+            x=0.5,
+            xanchor="center",
+            yanchor="top",
+            title_text=None
+        ),
+        legend_traceorder="normal",
+        uniformtext_minsize=10,
+        uniformtext_mode="hide",
+        autosize=False,
+        height=400,
+        width=400
     )
-    fig_altimetrica.update_layout(legend_itemclick=False, legend_itemdoubleclick=False)
 
     # --- Grafico 2: Agricolo, Urbano, Forestale ---
     morf_uso = dati_regione[dati_regione["Morfologia"].isin(
         ["agricolo_pct", "urbano_pct", "forestale_pct"]
     )].copy()
+    morf_uso = morf_uso[morf_uso["Percentuale"] > 0]
 
     morf_uso["Morfologia"] = morf_uso["Morfologia"].map({
-        "agricolo_pct": "Aree agricole",
-        "urbano_pct": "Aree urbane",
-        "forestale_pct": "Aree forestali"
+        "agricolo_pct": "Agricolo",
+        "urbano_pct": "Urbano",
+        "forestale_pct": "Forestale"
     })
 
     fig_uso = px.pie(
@@ -454,28 +489,47 @@ def update_all(drop_val, clickData):
         title=f"Uso del suolo in {selected_region} (%)",
         color="Morfologia",
         color_discrete_map={
-            "Aree agricole": "orange",
-            "Aree urbane": "gray",
-            "Aree forestali": "green"
-        }
+            "Agricolo": "orange",
+            "Urbano": "gray",
+            "Forestale": "green"
+        },
+        hole=0
     )
+
     fig_uso.update_traces(
         textposition="outside",
-        textinfo="label+percent",
+        textinfo="percent",  # 🔹 solo percentuali
         textfont_size=12,
-        pull=[0.05]*len(morf_uso),
-        marker=dict(line=dict(color="#000000", width=0.5))
+        pull=0,
+        marker=dict(line=dict(color="#ffffff", width=1))
     )
+
     fig_uso.update_layout(
-        margin=dict(t=40, b=10, l=10, r=10),
-        legend=dict(orientation="v", y=0.5, x=1.1, valign="middle")
+        margin=dict(t=40, b=50, l=10, r=10),
+        legend=dict(
+            orientation="h",   # 🔹 legenda orizzontale
+            y=-0.2,
+            x=0.5,
+            xanchor="center",
+            yanchor="top",
+            title_text=None
+        ),
+        legend_traceorder="normal",
+        uniformtext_minsize=10,
+        uniformtext_mode="hide",
+        autosize=False,
+        height=400,
+        width=400
     )
+
     fig_uso.update_layout(legend_itemclick=False, legend_itemdoubleclick=False)
 
     # --------------------------
     # Return → mappa + i 2 grafici torta
     # --------------------------
     return fig_map, fig_altimetrica, fig_uso, selected_region
+
+
 
 # --------------------------
 # SEMAFORO (Aree di miglioramento)
@@ -844,6 +898,21 @@ def update_confronto(regione1, regione2, categoria):
         margin=dict(l=60, r=30, t=50, b=40)
     )
     return fig
+
+# --------------------------
+# Navbar hamburger (mobile)
+# --------------------------
+
+@app.callback(
+    Output("navbar-collapse", "is_open"),
+    Input("navbar-toggler", "n_clicks"),
+    State("navbar-collapse", "is_open")
+)
+def toggle_navbar(n, is_open):
+    if n:
+        return not is_open
+    return is_open
+
 
 # --------------------------
 if __name__ == "__main__":
