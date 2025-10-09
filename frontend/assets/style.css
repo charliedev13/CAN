@@ -178,3 +178,108 @@ body {
   backdrop-filter: blur(10px) !important;
   box-shadow: 0 4px 10px rgba(0,0,0,0.15) !important;
 }
+
+/* --------------------------
+   TIPOLOGIA FONT GLOBALE
+---------------------------*/
+body, html {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+  color: #1C1C1C;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+/* --------------------------
+   TITOLI PRINCIPALI
+---------------------------*/
+h1, h2, h3, h4, h5 {
+  color: #005F73;           /* petrolio */
+  font-weight: 700;         /* bold */
+  letter-spacing: 0.3px;
+  margin-bottom: 0.6em;
+}
+
+/* --------------------------
+   SOTTOTITOLI / TESTI SECONDARI
+---------------------------*/
+h6, .subhead, .text-sub {
+  color: #61A1BC;           /* azzurro polvere */
+  font-weight: 500;         /* medium */
+  font-size: 1rem;
+  margin-bottom: 0.4em;
+}
+
+/* --------------------------
+   TESTO NORMALE
+---------------------------*/
+p, small, span, div {
+  color: #1C1C1C;
+  font-weight: 400;
+}
+
+/* --------------------------
+   NAVBAR e LINK
+---------------------------*/
+.navbar, .navbar a, .navbar-brand {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.2px;
+}
+
+/* --------------------------
+   DROPDOWN e LABEL
+---------------------------*/
+.Select-control, .Select-value-label {
+  font-family: inherit;
+  color: #005F73 !important;
+  font-size: 14px;
+}
+
+/* --------------------------
+   TESTI NEI GRAFICI (Plotly)
+---------------------------*/
+.js-plotly-plot text {
+  font-family: 'Inter', sans-serif !important;
+  font-weight: 500;
+  fill: #1C1C1C !important;
+}
+
+/* definisci dimensioni specifiche per H1, H4 in tutto l’app */
+h1 {
+  font-size: 2.5rem;   /* puoi aggiustare se troppo grande / piccolo */
+}
+h4 {
+  font-size: 1.25rem;
+}
+
+/* la classe subhead (usata per sottotitoli) già definita da te */
+.subhead {
+  color: #61A1BC;
+  font-weight: 500;
+}
+
+
+/* Citazione finale color petrolio */
+.blockquote {
+  color: #005F73 !important;
+  font-style: italic;
+}
+
+/* --------------------------
+   ALLINEA I TITOLI DEI BOX SUOLO AI TITOLI SWOT
+---------------------------*/
+#suolo h4 {
+  text-align: left !important;      /* forza l’allineamento a sinistra */
+  margin-left: 1rem !important;     /* rientro coerente con gli altri box */
+  color: #005F73 !important;        /* petrolio */
+  font-weight: 700 !important;
+}
+
+/* Centra solo i grafici a torta */
+#grafico-altimetria .js-plotly-plot,
+#grafico-uso .js-plotly-plot {
+  display: block !important;
+  margin: 0 auto !important;
+  max-width: 420px;
+  max-height: 420px;
+}

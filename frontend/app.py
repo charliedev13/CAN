@@ -132,12 +132,12 @@ dbc.Navbar(
             dbc.Nav([
                 dbc.NavItem(dbc.NavLink("Mappa", href="#mappa", external_link=True, className="text-white")),
                 dbc.NavItem(dbc.NavLink("Suolo", href="#suolo", external_link=True, className="text-white")),
-                dbc.NavItem(dbc.NavLink("Swot", href="#swot", external_link=True, className="text-white")),
+                
                 dbc.NavItem(dbc.NavLink("Fonti", href="#fonti", external_link=True, className="text-white")),
                 dbc.NavItem(dbc.NavLink("Edifici", href="#edifici", external_link=True, className="text-white")),
                 dbc.NavItem(dbc.NavLink("Azioni", href="#azioni", external_link=True, className="text-white")),
                 dbc.NavItem(dbc.NavLink("Industria", href="#industria", external_link=True, className="text-white")),
-                dbc.NavItem(dbc.NavLink("Comparazione", href="#comparazione", external_link=True, className="text-white")),
+                dbc.NavItem(dbc.NavLink("Confronta tu", href="#confronta tu", external_link=True, className="text-white")),
             ], className="ms-auto", navbar=True),
             id="navbar-collapse",
             is_open=False,
@@ -151,8 +151,8 @@ dbc.Navbar(
     dbc.Row([
         dbc.Col(
             html.Div([
-                html.H2("Cambiamento Ambientale Nazionale", className="text-center mb-2"),
-                html.H5("Scegli una regione di cui vedere i dati", className="text-center mb-4"),
+                html.H1("Cambiamento Ambientale Nazionale", className="text-center mb-2", style={"marginTop": "30px"}),
+                html.H6("Scegli una regione di cui vedere i dati", className="text-center subhead mb-4", style={"fontSize": "1.2rem", "fontWeight": "500"}),
                 dcc.Dropdown(
                     id="regione-dropdown",
                     options=[{"label": r, "value": r} for r in regioni],
@@ -176,21 +176,24 @@ dbc.Navbar(
 
     # Sezione Grafici a torta morfologia
     dbc.Row([
+    # Colonna Altimetria
     dbc.Col(
-        html.Div(
-            dcc.Graph(id="grafico-altimetria"),
-            className="grafico-torta"
-        ),
+        dbc.Card(dbc.CardBody([
+            html.H4(id="titolo-altimetria", className="text-center mb-3 fw-bold", style={"color": "#005F73"}),
+            dcc.Graph(id="grafico-altimetria", style={"height": "400px"})
+        ])),
         md=6
     ),
+
+    # Colonna Uso del suolo
     dbc.Col(
-        html.Div(
-            dcc.Graph(id="grafico-uso"),
-            className="grafico-torta"
-        ),
+        dbc.Card(dbc.CardBody([
+            html.H4(id="titolo-uso", className="text-center mb-3 fw-bold", style={"color": "#005F73"}),
+            dcc.Graph(id="grafico-uso", style={"height": "400px"})
+        ])),
         md=6
     )
-    ], className="mb-4 justify-content-center align-items-center", id="suolo"),
+], className="mb-4 justify-content-center align-items-stretch", id="suolo"),
 
     # Sezione Punti di forza + Aree di miglioramento (altezza uguale)
     dbc.Row([
@@ -215,7 +218,7 @@ dbc.Navbar(
                 className="carta-sezione"
             ), md=6
         )
-    ], className="mb-4", align="stretch", id="swot"),
+    ], className="mb-4", align="stretch"),
 
     # Sezione Mix Energetico
     dbc.Row([
@@ -231,7 +234,7 @@ dbc.Navbar(
     dbc.Row([
         dbc.Col(
             dbc.Card(dbc.CardBody([
-                html.H5("Indicatori sugli edifici"),
+                html.H5("Consumi e sostenibilità degli edifici"),
                 dcc.Graph(id="grafico-edifici", style={"height": "400px"})
             ])), md=12
         )
@@ -239,7 +242,7 @@ dbc.Navbar(
 
         # Sezione Azioni
     html.Div([
-        html.H4("Azioni per il risparmio energetico", className="text-center mb-4 fw-bold"),
+        html.H4("Cosa sta facendo la regione per l’ambiente", className="text-center mb-4 fw-bold"),
         
         dbc.Row([
             # Fotovoltaico
@@ -249,7 +252,7 @@ dbc.Navbar(
                         html.Img(src="/assets/pannello.png", style={"width": "60%"}),
                         className="azioni-img"
                     ),
-                    html.H5("Capacità fotovoltaico (GW)", className="text-center"),
+                    html.H5("Impianti solari attivi", className="text-center subhead"),
                     html.Div(id="azioni-fotovoltaico-val", className="azioni-val text-center")
                 ])), md=3
             ),
@@ -261,7 +264,7 @@ dbc.Navbar(
                         html.Img(src="/assets/palaeolica.png", style={"width": "60%"}),
                         className="azioni-img"
                     ),
-                    html.H5("Produzione da FER (%)", className="text-center"),
+                    html.H5("Energia rinnovabile prodotta", className="text-center subhead"),
                     html.Div(id="azioni-fer-val", className="azioni-val text-center")
                 ])), md=3
             ),
@@ -273,7 +276,7 @@ dbc.Navbar(
                         html.Img(src="/assets/autoelettrica.png", style={"width": "60%"}),
                         className="azioni-img"
                     ),
-                    html.H5("Auto elettriche (%)", className="text-center"),
+                    html.H5("Auto elettriche in circolazione", className="text-center subhead"),
                     html.Div(id="azioni-auto-val", className="azioni-val text-center")
                 ])), md=3
             ),
@@ -285,7 +288,7 @@ dbc.Navbar(
                         html.Img(src="/assets/casa.png", style={"width": "60%"}),
                         className="azioni-img"
                     ),
-                    html.H5("Risparmi energetici (Mtep mln)", className="text-center"),
+                    html.H5("Energia risparmiata", className="text-center subhead"),
                     html.Div(id="azioni-risparmio-val", className="azioni-val text-center")
                 ])), md=3
             )
@@ -341,13 +344,13 @@ dbc.Navbar(
                 dcc.Graph(id="grafico-comparazione", style={"height": "400px"})
             ])
         , md=12)
-    ], className="mb-4", id="comparazione"),
+    ], className="mb-4", id="confronta tu"),
 
     # Sezione frase d'effetto
     dbc.Row([
         dbc.Col(
             html.Blockquote([
-                html.P("“La Terra non appartiene all’uomo, è l’uomo che appartiene alla Terra.”"),
+                html.P("“La Terra non appartiene all’uomo, è l’uomo che appartiene alla Terra.”", style={"color": "#005F73"}),
             ], className="blockquote text-center"),
             md=12
         )
@@ -371,6 +374,8 @@ dbc.Navbar(
     Output("grafico-altimetria", "figure"),
     Output("grafico-uso", "figure"),
     Output("regione-dropdown", "value"),
+    Output("titolo-altimetria", "children"),
+    Output("titolo-uso", "children"),
     Input("regione-dropdown", "value"),
     Input("italia-map", "clickData")
 )
@@ -430,7 +435,7 @@ def update_all(drop_val, clickData):
             bgcolor="#faf9f7", 
             font_size=14,
             font_family="Inter, Arial, sans-serif",
-            font_color="#005f73",
+            font_color="#005F73",
             bordercolor="#ffffff", 
         ),
         customdata=df_map[["nome", "superficie_kmq", "densita_demografica", "pil"]].values
@@ -459,7 +464,7 @@ def update_all(drop_val, clickData):
         morf_altimetrica,
         names="Morfologia",
         values="Percentuale",
-        title=f"Altimetria del suolo in {selected_region} (%)",
+        title=None,
         color="Morfologia",
         color_discrete_map={
         "Pianura": "#F27329",   # arancio caldo
@@ -497,6 +502,9 @@ def update_all(drop_val, clickData):
         width=400
     )
 
+    fig_altimetrica.update_layout(title_font=dict(size=22, color="#005F73", family="Inter, sans-serif"))
+    fig_altimetrica.update_layout(legend_itemclick=False, legend_itemdoubleclick=False)
+
     # --- Grafico 2: Agricolo, Urbano, Forestale ---
     morf_uso = dati_regione[dati_regione["Morfologia"].isin(
         ["agricolo_pct", "urbano_pct", "forestale_pct"]
@@ -513,7 +521,7 @@ def update_all(drop_val, clickData):
         morf_uso,
         names="Morfologia",
         values="Percentuale",
-        title=f"Uso del suolo in {selected_region} (%)",
+        title=None,
         color="Morfologia",
         color_discrete_map={
         "Agricolo": "#F2AE2E",   # giallo oro
@@ -551,12 +559,12 @@ def update_all(drop_val, clickData):
         width=400
     )
 
+    fig_uso.update_layout(title_font=dict(size=22, color="#005F73", family="Inter, sans-serif"))
     fig_uso.update_layout(legend_itemclick=False, legend_itemdoubleclick=False)
+    titolo_alt = f"Altimetria del suolo in {selected_region}"
+    titolo_uso = f"Uso del suolo in {selected_region}"
+    return fig_map, fig_altimetrica, fig_uso, selected_region, titolo_alt, titolo_uso
 
-    # --------------------------
-    # Return → mappa + i 2 grafici torta
-    # --------------------------
-    return fig_map, fig_altimetrica, fig_uso, selected_region
 
 # --------------------------
 # SEMAFORO (Aree di miglioramento)
@@ -694,8 +702,8 @@ def update_edifici(selected_region):
         return px.bar(title="Nessun dato disponibile")
 
     valori = {
-        "Consumo medio di energia degli edifici": record["consumo_medio_kwh_m2y"].iloc[0],
-        "Emissioni medie di gas serra per abitante": record["emissioni_procapite_tco2_ab"].iloc[0],
+        "Consumo medio di energia (kWh/m²·anno)": record["consumo_medio_kwh_m2y"].iloc[0],
+        "Emissioni di gas serra per abitante (tCO₂/ab)": record["emissioni_procapite_tco2_ab"].iloc[0],
         "Uso di energia elettrica sugli edifici (%)": record["quota_elettrico_pct"].iloc[0],
         "Edifici ad alta efficienza (Classe A) (%)": record["quota_ape_classe_a_pct"].iloc[0]
     }
@@ -745,7 +753,7 @@ def update_edifici(selected_region):
         ),
         font=dict(size=13)
     )
-
+    fig.update_layout(legend_itemclick=False, legend_itemdoubleclick=False)
     return fig
 
 # --------------------------
@@ -771,7 +779,7 @@ def update_azioni(selected_region):
         f"{record['fotovoltaico_capacita_gw'].iloc[0]} GW",
         f"{record['quota_produzione_fer_pct'].iloc[0]} %",
         f"{record['quota_auto_elettriche_pct'].iloc[0]} %",
-        f"{record['risparmi_energetici_mtep_mln'].iloc[0]}"
+        f"{record['risparmi_energetici_mtep_mln'].iloc[0]} Mtep"
     )
 
 # --------------------------
@@ -789,7 +797,7 @@ def update_industria(selected_region):
 
     record = df_ind[df_ind["Regione"] == selected_region]
     if record.empty:
-        return px.bar(title="Nessun dato disponibile"), f"Industria della {selected_region}"
+        return px.bar(title="Nessun dato disponibile"), f"Emissioni e consumo energetico dell’industria"
 
     emissioni_rescaled = record["emissioni_per_valore_aggiunto_tco2_per_mln_eur"].iloc[0] * 1000
     quota_elettrico = record["quota_elettrico_pct"].iloc[0]
@@ -844,8 +852,8 @@ def update_industria(selected_region):
         ),
         font=dict(size=13)
     )
-
-    return fig, f"Industria della {selected_region}"
+    fig.update_layout(legend_itemclick=False, legend_itemdoubleclick=False)
+    return fig, f"Emissioni e consumo energetico dell’industria"
 
 # --------------------------
 # dropdown e grafico comparazione
@@ -917,7 +925,7 @@ def popola_categorie(_):
 )
 def update_confronto(regione1, regione2, categoria):
     if not (regione1 and regione2 and categoria):
-        return px.bar(title="Seleziona due regioni e una categoria")
+        return px.bar()
 
     # Mappa endpoint per ogni categoria
     endpoint_map = {
@@ -1105,7 +1113,7 @@ def update_meteo(selected_region):
 
     return html.Div([
         html.H4("Meteo", className="text-center mb-1"),
-        html.H5(selected_region, className="text-center mb-2"),
+        html.H5(selected_region, className="text-center subhead mb-2"),
         html.Div([
             html.Span(f"{emoji} ", style={"fontSize": "32px", "marginRight": "10px"}),
             html.Span(f"{temp}°C – {desc.capitalize()}", style={"fontSize": "18px"})
