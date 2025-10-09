@@ -10,6 +10,10 @@ import plotly.express as px
 from dash import Dash, dcc, html, Input, Output, ctx
 import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output, State
+from dotenv import load_dotenv
+import os
+import time
+import threading
 
 # --------------------------
 # CONFIG
@@ -18,6 +22,12 @@ BASE_URL = "http://localhost:8000"
 with open("limits_IT_regions.geojson", "r", encoding="utf-8") as f:
     geojson = json.load(f)
 prop_name_key = "reg_name"
+
+# Caricamento chiave API meteo
+load_dotenv("meteo.env")  # carica variabili dal file meteo.env
+WEATHER_API_KEY = os.environ.get("WEATHER_API_KEY")
+
+meteo_lock = threading.Lock()
 
 # Mapping speciale per regioni
 geojson_to_df_map = {
@@ -111,8 +121,7 @@ app = Dash(__name__, external_stylesheets=[dbc.themes.FLATLY], title="CAN Dashbo
 
 app.layout = dbc.Container(fluid=True, children=[
     
-    # Navbar/Header
-    # Header
+# Navbar/Header
 dbc.Navbar(
     dbc.Container([
         dbc.NavbarBrand("CAN", className="text-white fw-bold me-5"),
@@ -139,7 +148,6 @@ dbc.Navbar(
     ),
 
     # Sezione Mappa + Dropdown
-    # Sezione Mappa
     dbc.Row([
         dbc.Col(
             html.Div([
@@ -152,11 +160,19 @@ dbc.Navbar(
                     clearable=False,
                     style={"width": "60%", "margin": "0 auto"}
                 ),
-                dcc.Graph(id="italia-map", style={"height": "500px"})
+                html.Div(id="meteo-regionale", className="text-center mt-3"),
+                dcc.Graph(id="italia-map", style={"height": "500px"}, config={"scrollZoom":False}) #blocca zoom allo scroll
             ])
         , md=12)
     ], className="mb-4", id="mappa"),
 
+    # Sezione meteo regionale
+    dbc.Row([
+    dbc.Col(
+        html.Div(id="meteo-container"),
+        md=12
+    )
+], className="mb-4"),
 
     # Sezione Grafici a torta morfologia
     dbc.Row([
@@ -205,7 +221,7 @@ dbc.Navbar(
     dbc.Row([
         dbc.Col(
             dbc.Card(dbc.CardBody([
-                html.H5("Mix energetico"),
+                html.H5("Fonti energetiche utilizzate dalla regione"),
                 dcc.Graph(id="grafico-mix", style={"height": "300px"})
             ])), md=12
         )
@@ -221,55 +237,59 @@ dbc.Navbar(
         )
     ], className="mb-4", id="edifici"),
 
-    # Sezione Azioni
-    dbc.Row([
-        # Fotovoltaico
-        dbc.Col(
-            dbc.Card(dbc.CardBody([
-                html.Div(
-                    html.Img(src="/assets/pannello.png", style={"width": "60%"}),
-                    className="azioni-img"
-                ),
-                html.H5("Capacità fotovoltaico (GW)", className="text-center"),
-                html.Div(id="azioni-fotovoltaico-val", className="azioni-val text-center")
-            ])), md=3
-        ),
+        # Sezione Azioni
+    html.Div([
+        html.H4("Azioni per il risparmio energetico", className="text-center mb-4 fw-bold"),
+        
+        dbc.Row([
+            # Fotovoltaico
+            dbc.Col(
+                dbc.Card(dbc.CardBody([
+                    html.Div(
+                        html.Img(src="/assets/pannello.png", style={"width": "60%"}),
+                        className="azioni-img"
+                    ),
+                    html.H5("Capacità fotovoltaico (GW)", className="text-center"),
+                    html.Div(id="azioni-fotovoltaico-val", className="azioni-val text-center")
+                ])), md=3
+            ),
 
-        # Produzione da FER
-        dbc.Col(
-            dbc.Card(dbc.CardBody([
-                html.Div(
-                    html.Img(src="/assets/palaeolica.png", style={"width": "60%"}),
-                    className="azioni-img"
-                ),
-                html.H5("Produzione da FER (%)", className="text-center"),
-                html.Div(id="azioni-fer-val", className="azioni-val text-center")
-            ])), md=3
-        ),
+            # Produzione da FER
+            dbc.Col(
+                dbc.Card(dbc.CardBody([
+                    html.Div(
+                        html.Img(src="/assets/palaeolica.png", style={"width": "60%"}),
+                        className="azioni-img"
+                    ),
+                    html.H5("Produzione da FER (%)", className="text-center"),
+                    html.Div(id="azioni-fer-val", className="azioni-val text-center")
+                ])), md=3
+            ),
 
-        # Auto elettriche
-        dbc.Col(
-            dbc.Card(dbc.CardBody([
-                html.Div(
-                    html.Img(src="/assets/autoelettrica.png", style={"width": "60%"}),
-                    className="azioni-img"
-                ),
-                html.H5("Auto elettriche (%)", className="text-center"),
-                html.Div(id="azioni-auto-val", className="azioni-val text-center")
-            ])), md=3
-        ),
+            # Auto elettriche
+            dbc.Col(
+                dbc.Card(dbc.CardBody([
+                    html.Div(
+                        html.Img(src="/assets/autoelettrica.png", style={"width": "60%"}),
+                        className="azioni-img"
+                    ),
+                    html.H5("Auto elettriche (%)", className="text-center"),
+                    html.Div(id="azioni-auto-val", className="azioni-val text-center")
+                ])), md=3
+            ),
 
-        # Risparmi energetici
-        dbc.Col(
-            dbc.Card(dbc.CardBody([
-                html.Div(
-                    html.Img(src="/assets/casa.png", style={"width": "60%"}),
-                    className="azioni-img"
-                ),
-                html.H5("Risparmi energetici (Mtep mln)", className="text-center"),
-                html.Div(id="azioni-risparmio-val", className="azioni-val text-center")
-            ])), md=3
-        )
+            # Risparmi energetici
+            dbc.Col(
+                dbc.Card(dbc.CardBody([
+                    html.Div(
+                        html.Img(src="/assets/casa.png", style={"width": "60%"}),
+                        className="azioni-img"
+                    ),
+                    html.H5("Risparmi energetici (Mtep mln)", className="text-center"),
+                    html.Div(id="azioni-risparmio-val", className="azioni-val text-center")
+                ])), md=3
+            )
+        ], className="mb-4 justify-content-center")
     ], className="mb-4", id="azioni"),
 
     # Sezione Industria
@@ -282,9 +302,7 @@ dbc.Navbar(
         )
     ], className="mb-4", id="industria"),
 
-    # --------------------------
     # Sezione Comparazione
-    # --------------------------
     dbc.Row([
         dbc.Col(
             html.Div([
@@ -374,7 +392,7 @@ def update_all(drop_val, clickData):
             if clicked_loc in df_regioni["nome"].values:
                 selected_region = clicked_loc
 
-   # --------------------------
+    # --------------------------
     # Mappa coropletica (costruita da df_regioni)
     # --------------------------
     df_map = df_regioni.copy()
@@ -388,7 +406,7 @@ def update_all(drop_val, clickData):
     # Evidenzia la regione selezionata
     df_map["sel"] = (df_map["nome"] == selected_region).astype(int)
 
-    fig_map = px.choropleth_mapbox(
+    fig_map = px.choropleth_map(
         df_map,
         geojson=geojson,
         locations="geojson_name",                 # <- usa il nome compatibile col GeoJSON
@@ -396,9 +414,9 @@ def update_all(drop_val, clickData):
         color="sel",
         color_continuous_scale=["#cccccc", "#ff7f0e"],
         range_color=(0, 1),
-        mapbox_style="carto-positron",
+        map_style="carto-positron",
         center={"lat": 41.9, "lon": 12.5},
-        zoom=5.5,
+        zoom=4.5,
         opacity=0.7
     )
 
@@ -413,7 +431,7 @@ def update_all(drop_val, clickData):
 
     fig_map.update_layout(margin={"r":0,"t":0,"l":0,"b":0}, coloraxis_showscale=False)
 
-        # --------------------------
+    # --------------------------
     # Grafici a torta morfologia (uso del suolo)
     # --------------------------
     dati_regione = df_long[df_long["Regione"] == selected_region].copy()
@@ -449,7 +467,9 @@ def update_all(drop_val, clickData):
         textinfo="percent",  # 🔹 solo percentuali
         textfont_size=12,
         pull=0,
-        marker=dict(line=dict(color="#ffffff", width=1))
+        marker=dict(line=dict(color="#ffffff", width=1)),
+        hoverinfo="none",
+        hovertemplate=None
     )
 
     fig_altimetrica.update_layout(
@@ -501,7 +521,9 @@ def update_all(drop_val, clickData):
         textinfo="percent",  # 🔹 solo percentuali
         textfont_size=12,
         pull=0,
-        marker=dict(line=dict(color="#ffffff", width=1))
+        marker=dict(line=dict(color="#ffffff", width=1)),
+        hoverinfo="none",
+        hovertemplate=None
     )
 
     fig_uso.update_layout(
@@ -528,8 +550,6 @@ def update_all(drop_val, clickData):
     # Return → mappa + i 2 grafici torta
     # --------------------------
     return fig_map, fig_altimetrica, fig_uso, selected_region
-
-
 
 # --------------------------
 # SEMAFORO (Aree di miglioramento)
@@ -586,8 +606,6 @@ def update_punto_forza(selected_region):
         ], style={"display": "flex", "alignItems": "center", "marginBottom": "8px"})
     ])
 
-
-
 # --------------------------
 # MIX ENERGETICO
 # --------------------------
@@ -614,22 +632,44 @@ def update_mix(selected_region):
         "Rinnovabili": "lightgreen"
     }
 
-    # Grafico a barre orizzontali (una barra per ogni fonte)
+    # 🔹 Grafico a barre orizzontali (senza titolo interno)
     fig = px.bar(
-        x=list(valori.values()),   # valori percentuali
-        y=list(valori.keys()),     # nomi fonti
+        x=list(valori.values()),
+        y=list(valori.keys()),
         orientation="h",
-        text=[f"{v}%" for v in valori.values()],
-        labels={"x": "Percentuale (%)", "y": "Fonte"},
-        title="Mix energetico (%)"
+        text=[f"{v:.1f}%" for v in valori.values()],
+        color=list(valori.keys()),
+        color_discrete_map=colori
     )
 
-    # Colori personalizzati
-    fig.update_traces(marker_color=[colori[k] for k in valori.keys()], textposition="outside")
+    # 🔹 Impostazioni estetiche
+    fig.update_traces(
+        textposition="outside",
+        hoverinfo="none",
+        hovertemplate=None
+    )
 
     fig.update_layout(
-        margin=dict(l=60, r=20, t=40, b=20),
-        xaxis=dict(range=[0, 100])  # sempre fino a 100%
+        margin=dict(l=40, r=20, t=10, b=40),
+        xaxis=dict(
+            range=[0, 100],
+            title="Percentuale (%)",
+            showgrid=False,
+            zeroline=False,
+            linecolor="black",   # 🔹 bordo asse nero
+            linewidth=1
+        ),
+        yaxis=dict(
+            title=None,
+            showgrid=False,
+            zeroline=False,
+            linecolor="black",   # 🔹 bordo asse nero
+            linewidth=1
+        ),
+        plot_bgcolor="white",
+        paper_bgcolor="white",
+        showlegend=False,
+        font=dict(size=13)
     )
 
     return fig
@@ -652,21 +692,53 @@ def update_edifici(selected_region):
         "Uso di energia elettrica sugli edifici (%)": record["quota_elettrico_pct"].iloc[0],
         "Edifici ad alta efficienza (Classe A) (%)": record["quota_ape_classe_a_pct"].iloc[0]
     }
+
     colori = ["#A6CEE3", "#B2DF8A", "#FDBF6F", "#CAB2D6"]
 
     fig = px.bar(
         x=list(valori.keys()),
         y=list(valori.values()),
         text=[f"{v}" for v in valori.values()],
-        labels={"x": "Indicatore", "y": "Valore"},
-        title="Indicatori sugli edifici"
+        color=list(valori.keys()),
+        color_discrete_sequence=colori
     )
-    fig.update_traces(marker_color=colori, textposition="outside")
+
+    fig.update_traces(
+        textposition="outside",
+        hoverinfo="none",
+        hovertemplate=None
+    )
+
+    y_max = max(valori.values()) if valori.values() else 0
+    y_range = [0, y_max * 1.25]  # piccolo zoom-out
+
     fig.update_layout(
-        margin=dict(l=40, r=20, t=40, b=100),
-        xaxis=dict(title="", tickangle=-20),
-        yaxis=dict(title="")
+        margin=dict(l=40, r=20, t=10, b=120),
+        plot_bgcolor="white",
+        paper_bgcolor="white",
+        showlegend=True,                 # 🔹 attiva la legenda
+        legend=dict(
+            orientation="v",             # verticale
+            y=-0.25,                      # posizione sotto il grafico
+            x=0.5,
+            xanchor="center",
+            yanchor="top",
+            title_text=None,
+            itemwidth=30,                # spazio per il quadratino
+            itemsizing="constant"        # quadratini uniformi
+        ),
+        xaxis=dict(
+            title="", showticklabels=False,  # 🔹 nasconde le etichette asse X
+            linecolor="black", linewidth=1, showgrid=False, zeroline=False
+        ),
+        yaxis=dict(
+            title="",
+            linecolor="black", linewidth=1, showgrid=False, zeroline=False,
+            range=y_range
+        ),
+        font=dict(size=13)
     )
+
     return fig
 
 # --------------------------
@@ -704,7 +776,6 @@ def update_azioni(selected_region):
     Input("regione-dropdown", "value")
 )
 def update_industria(selected_region):
-    # Recupera dati dall'endpoint /industria
     resp = requests.get(f"{BASE_URL}/industria").json()
     df_ind = pd.DataFrame(resp).merge(df_regioni, on="id_regione")
     df_ind.rename(columns={"nome": "Regione"}, inplace=True)
@@ -713,12 +784,11 @@ def update_industria(selected_region):
     if record.empty:
         return px.bar(title="Nessun dato disponibile"), f"Industria della {selected_region}"
 
-    # 🔹 Rescaling: da tCO₂ / mln € → kg CO₂ / €
     emissioni_rescaled = record["emissioni_per_valore_aggiunto_tco2_per_mln_eur"].iloc[0] * 1000
     quota_elettrico = record["quota_elettrico_pct"].iloc[0]
 
     valori = {
-        "Emissioni per valore aggiunto\n(kg CO₂ per €)": emissioni_rescaled,
+        "Emissioni per valore aggiunto (kg CO₂ per €)": emissioni_rescaled,
         "Quota elettrico (%)": quota_elettrico
     }
 
@@ -728,21 +798,50 @@ def update_industria(selected_region):
         x=list(valori.keys()),
         y=list(valori.values()),
         text=[f"{v:.2f}" for v in valori.values()],
-        labels={"x": "Indicatore", "y": "Valore"},
-        title=""
+        color=list(valori.keys()),
+        color_discrete_sequence=colori
     )
-    fig.update_traces(marker_color=colori, textposition="outside")
+
+    fig.update_traces(
+        textposition="outside",
+        hoverinfo="none",
+        hovertemplate=None
+    )
+
+    y_max = max(valori.values()) if valori.values() else 0
+    y_range = [0, y_max * 1.2]
+
     fig.update_layout(
-        margin=dict(l=40, r=20, t=20, b=80),
-        xaxis=dict(title=""),
-        yaxis=dict(title=""),
-        showlegend=False
+        margin=dict(l=40, r=20, t=10, b=120),
+        plot_bgcolor="white",
+        paper_bgcolor="white",
+        showlegend=True,
+        legend=dict(
+            orientation="v",
+            y=-0.25,
+            x=0.5,
+            xanchor="center",
+            yanchor="top",
+            title_text=None,
+            itemwidth=30,
+            itemsizing="constant"
+        ),
+        xaxis=dict(
+            title="", showticklabels=False,
+            linecolor="black", linewidth=1, showgrid=False, zeroline=False
+        ),
+        yaxis=dict(
+            title="",
+            linecolor="black", linewidth=1, showgrid=False, zeroline=False,
+            range=y_range
+        ),
+        font=dict(size=13)
     )
 
     return fig, f"Industria della {selected_region}"
 
 # --------------------------
-# CALLBACK – aggiornamento dropdown e grafico comparazione
+# dropdown e grafico comparazione
 # --------------------------
 
 # 1️⃣ Dropdown sinistro e destro si escludono a vicenda
@@ -762,9 +861,7 @@ def aggiorna_opzioni_regione1(selected_right):
     return [{"label": r, "value": r} for r in sorted(regioni) if r != selected_right]
 
 # 2️⃣ Dropdown categorie (estrae tutti i campi numerici da tutte le tabelle tranne "assorbimenti")
-# --------------------------
 # Popola le categorie numeriche per la comparazione
-# --------------------------
 @app.callback(
     Output("dropdown-categoria", "options"),
     Input("dropdown-categoria", "id")
@@ -805,9 +902,6 @@ def popola_categorie(_):
     return [{"label": v, "value": k} for k, v in categorie.items()]
 
 # 3️⃣ Grafico comparativo
-# --------------------------
-# Confronto tra due regioni
-# --------------------------
 @app.callback(
     Output("grafico-comparazione", "figure"),
     Input("dropdown-regione-1", "value"),
@@ -818,26 +912,21 @@ def update_confronto(regione1, regione2, categoria):
     if not (regione1 and regione2 and categoria):
         return px.bar(title="Seleziona due regioni e una categoria")
 
-    # Campo -> endpoint
+    # Mappa endpoint per ogni categoria
     endpoint_map = {
-        # regioni
         "superficie_kmq": "regioni",
         "densita_demografica": "regioni",
         "pil": "regioni",
-        # mix
         "carbone_pct": "mix",
         "petrolio_pct": "mix",
         "gas_pct": "mix",
         "rinnovabili_pct": "mix",
-        # edifici
         "consumo_medio_kwh_m2y": "edifici",
         "emissioni_procapite_tco2_ab": "edifici",
         "quota_elettrico_pct": "edifici",
         "quota_ape_classe_a_pct": "edifici",
-        # industria
         "emissioni_per_valore_aggiunto_tco2_per_mln_eur": "industria",
         "quota_elettrico_pct_industria": "industria",
-        # morfologia
         "pianura_pct": "morfologia",
         "collina_pct": "morfologia",
         "montagna_pct": "morfologia",
@@ -850,7 +939,7 @@ def update_confronto(regione1, regione2, categoria):
     if not endpoint:
         return px.bar(title="Categoria non supportata")
 
-    # Carico dati endpoint
+    # Carico i dati
     try:
         dati = requests.get(f"{BASE_URL}/{endpoint}").json()
         df = pd.DataFrame(dati)
@@ -860,26 +949,27 @@ def update_confronto(regione1, regione2, categoria):
     if df.empty:
         return px.bar(title=f"Nessun dato disponibile in {endpoint}")
 
-    # Alias per il campo industria se serve
+    # Gestione campo industria
     if categoria == "quota_elettrico_pct_industria" and "quota_elettrico_pct" in df.columns:
         df["quota_elettrico_pct_industria"] = df["quota_elettrico_pct"]
 
-    if categoria not in df.columns:
-        return px.bar(title=f"Manca il campo '{categoria}' in {endpoint}")
-
-    # Conversione sicura a numerico (gestisce NULL/None/str)
+    # Conversione sicura
     df[categoria] = pd.to_numeric(df[categoria], errors="coerce").fillna(0)
 
-    # Se non c'è 'nome', faccio merge con df_regioni usando id_regione
+    # Merge con i nomi regione se serve
     if "nome" not in df.columns:
         if "id_regione" not in df.columns:
             return px.bar(title=f"Manca 'id_regione' in {endpoint}")
         df = df.merge(df_regioni[["id_regione", "nome"]], on="id_regione", how="left")
 
-    # Filtro le due regioni selezionate
+    # Filtro le regioni selezionate
     df_sel = df[df["nome"].isin([regione1, regione2])]
     if df_sel.empty:
         return px.bar(title="Dati non trovati per le regioni selezionate")
+
+    # Calcolo range X per “zoom-out”
+    x_max = df_sel[categoria].max()
+    x_range = [0, x_max * 1.2]
 
     # Grafico orizzontale
     fig = px.bar(
@@ -891,18 +981,42 @@ def update_confronto(regione1, regione2, categoria):
         color="nome",
         color_discrete_sequence=["#00798c", "#00b4d8"]
     )
-    fig.update_traces(texttemplate="%{text:.2f}", textposition="outside")
-    fig.update_layout(
-        title=f"Confronto: {categoria.replace('_', ' ').capitalize()}",
-        xaxis_title="Valore", yaxis_title="", showlegend=False,
-        margin=dict(l=60, r=30, t=50, b=40)
+
+    fig.update_traces(
+        texttemplate="%{text:.2f}",
+        textposition="outside",
+        hoverinfo="none",      # 🔸 disattiva fumetti
+        hovertemplate=None
     )
+
+    fig.update_layout(
+        margin=dict(l=60, r=30, t=10, b=40),
+        plot_bgcolor="white",   # 🔸 sfondo bianco
+        paper_bgcolor="white",
+        showlegend=False,
+        xaxis=dict(
+            title="",           # 🔸 nessun titolo asse X
+            linecolor="black",
+            linewidth=1,
+            showgrid=False,
+            zeroline=False,
+            range=x_range
+        ),
+        yaxis=dict(
+            title="",           # 🔸 nessun titolo asse Y
+            linecolor="black",
+            linewidth=1,
+            showgrid=False,
+            zeroline=False
+        ),
+        font=dict(size=13)
+    )
+
     return fig
 
 # --------------------------
 # Navbar hamburger (mobile)
 # --------------------------
-
 @app.callback(
     Output("navbar-collapse", "is_open"),
     Input("navbar-toggler", "n_clicks"),
@@ -913,6 +1027,110 @@ def toggle_navbar(n, is_open):
         return not is_open
     return is_open
 
+# --------------------------
+# METEO REGIONALE
+# --------------------------
+# Mappatura regioni -> città per meteo
+REGIONE_TO_CITY = {
+    "Piemonte": "Torino",
+    "Valle d'Aosta": "Aosta",
+    "Lombardia": "Milano",
+    "Trentino-Alto Adige": "Trento",
+    "Veneto": "Venezia",
+    "Friuli-Venezia Giulia": "Trieste",
+    "Liguria": "Genova",
+    "Emilia-Romagna": "Bologna",
+    "Toscana": "Firenze",
+    "Umbria": "Perugia",
+    "Marche": "Ancona",
+    "Lazio": "Roma",
+    "Abruzzo": "L'Aquila",
+    "Molise": "Campobasso",
+    "Campania": "Napoli",
+    "Puglia": "Bari",
+    "Basilicata": "Potenza",
+    "Calabria": "Catanzaro",
+    "Sicilia": "Palermo",
+    "Sardegna": "Cagliari"
+}
+
+# Funzione emoji in base al meteo
+def meteo_emoji(description: str):
+    d = description.lower()
+    
+    if "sereno" in d or "clear" in d:
+        return "☀️"
+    elif "poche nuvole" in d or "nubi sparse" in d or "nuvoloso" in d or "cielo coperto" in d or "cloud" in d:
+        return "☁️"
+    elif "pioggia" in d or "rain" in d or "rovesci" in d:
+        return "🌧️"
+    elif "temporale" in d or "storm" in d:
+        return "⛈️"
+    elif "neve" in d or "snow" in d:
+        return "❄️"
+    elif "nebbia" in d or "foschia" in d or "fog" in d or "mist" in d:
+        return "🌫️"
+    elif "vento" in d or "wind" in d:
+        return "💨"
+    elif "sole" in d and ("nuvole" in d or "cloud" in d):
+        return "🌤️"
+    else:
+        return "🌡️"
+
+# --------------------------
+# CACHE METEO SICURA
+# --------------------------
+meteo_cache = {}
+CACHE_TTL = 3600  # 1 ora in secondi
+
+meteo_lock = threading.Lock()
+
+@app.callback(
+    Output("meteo-container", "children"),
+    Input("regione-dropdown", "value")
+)
+def update_meteo(selected_region):
+    with meteo_lock:
+        dati = meteo_cache.get(selected_region, {"temp": "N/A", "desc": "Dati non disponibili", "emoji": "🌡️"})
+    temp = dati["temp"]
+    desc = dati["desc"]
+    emoji = dati["emoji"]
+
+    return html.Div([
+        html.H4("Meteo", className="text-center mb-1"),
+        html.H5(selected_region, className="text-center mb-2"),
+        html.Div([
+            html.Span(f"{emoji} ", style={"fontSize": "32px", "marginRight": "10px"}),
+            html.Span(f"{temp}°C – {desc.capitalize()}", style={"fontSize": "18px"})
+        ], style={"textAlign": "center"})
+    ], style={"marginBottom": "20px"})
+
+def aggiorna_cache_meteo():
+    """Aggiorna il meteo di tutte le regioni ogni ora."""
+    while True:
+        now = time.time()
+        for region, city in REGIONE_TO_CITY.items():
+            try:
+                city_url = city.replace(" ", "")
+                url = f"http://api.openweathermap.org/data/2.5/weather?q={city_url},IT&units=metric&appid={WEATHER_API_KEY}&lang=it"
+                resp = requests.get(url).json()
+                temp = resp["main"]["temp"]
+                desc = resp["weather"][0]["description"]
+                emoji = meteo_emoji(desc)
+                with meteo_lock:
+                    meteo_cache[region] = {
+                        "timestamp": now,
+                        "temp": temp,
+                        "desc": desc,
+                        "emoji": emoji
+                    }
+                print(f"[API] Cache aggiornata per {region}: {temp}°C, {desc}")
+            except Exception as e:
+                print(f"[API] Errore aggiornando meteo per {region}: {e}")
+        time.sleep(CACHE_TTL)  # 1 ora
+
+# Avvio del thread daemon
+threading.Thread(target=aggiorna_cache_meteo, daemon=True).start()
 
 # --------------------------
 if __name__ == "__main__":
