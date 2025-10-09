@@ -412,7 +412,7 @@ def update_all(drop_val, clickData):
         locations="geojson_name",                 # <- usa il nome compatibile col GeoJSON
         featureidkey=f"properties.{prop_name_key}",
         color="sel",
-        color_continuous_scale=["#cccccc", "#ff7f0e"],
+        color_continuous_scale=["#F2AE2E", "#F27329"],
         range_color=(0, 1),
         map_style="carto-positron",
         center={"lat": 41.9, "lon": 12.5},
@@ -420,12 +420,19 @@ def update_all(drop_val, clickData):
         opacity=0.7
     )
 
-    # Tooltip pulito (niente "geo_region=...")
+    # Tooltip
     fig_map.update_traces(
         hovertemplate="<b>%{customdata[0]}</b><br>" +
                     "Superficie: %{customdata[1]} km²<br>" +
                     "Densità: %{customdata[2]} ab/km²<br>" +
                     "PIL: %{customdata[3]} mln €<extra></extra>",
+        hoverlabel=dict(
+            bgcolor="#faf9f7", 
+            font_size=14,
+            font_family="Inter, Arial, sans-serif",
+            font_color="#005f73",
+            bordercolor="#ffffff", 
+        ),
         customdata=df_map[["nome", "superficie_kmq", "densita_demografica", "pil"]].values
     )
 
@@ -455,9 +462,9 @@ def update_all(drop_val, clickData):
         title=f"Altimetria del suolo in {selected_region} (%)",
         color="Morfologia",
         color_discrete_map={
-            "Pianura": "lightgreen",
-            "Collina": "yellow",
-            "Montagna": "saddlebrown"
+        "Pianura": "#F27329",   # arancio caldo
+        "Collina": "#F29727",   # giallo oro
+        "Montagna": "#7B4A20"   # rosso autunno
         },
         hole=0
     )
@@ -509,9 +516,9 @@ def update_all(drop_val, clickData):
         title=f"Uso del suolo in {selected_region} (%)",
         color="Morfologia",
         color_discrete_map={
-            "Agricolo": "orange",
-            "Urbano": "gray",
-            "Forestale": "green"
+        "Agricolo": "#F2AE2E",   # giallo oro
+        "Forestale": "#587823",  # verde oliva
+        "Urbano": "#855771"      # malva
         },
         hole=0
     )
@@ -626,10 +633,10 @@ def update_mix(selected_region):
     }
 
     colori = {
-        "Carbone": "black",
-        "Petrolio": "#008080",   # ottanio bluastro
-        "Gas": "gray",
-        "Rinnovabili": "lightgreen"
+        "Carbone": "#1C1C1C",
+        "Petrolio": "#61A1BC",   # ottanio
+        "Gas": "#855771",
+        "Rinnovabili": "#587823"
     }
 
     # 🔹 Grafico a barre orizzontali (senza titolo interno)
@@ -693,8 +700,8 @@ def update_edifici(selected_region):
         "Edifici ad alta efficienza (Classe A) (%)": record["quota_ape_classe_a_pct"].iloc[0]
     }
 
-    colori = ["#A6CEE3", "#B2DF8A", "#FDBF6F", "#CAB2D6"]
-
+    colori = ["#D93223", "#855771", "#F2AE2E", "#587823"]
+    
     fig = px.bar(
         x=list(valori.keys()),
         y=list(valori.values()),
@@ -792,7 +799,7 @@ def update_industria(selected_region):
         "Quota elettrico (%)": quota_elettrico
     }
 
-    colori = ["lightgray", "yellow"]
+    colori = ["#7B4A20", "#F2AE2E"]
 
     fig = px.bar(
         x=list(valori.keys()),
@@ -979,7 +986,7 @@ def update_confronto(regione1, regione2, categoria):
         orientation="h",
         text=df_sel[categoria],
         color="nome",
-        color_discrete_sequence=["#00798c", "#00b4d8"]
+        color_discrete_sequence=["#00798c", "#61A1BC"]
     )
 
     fig.update_traces(

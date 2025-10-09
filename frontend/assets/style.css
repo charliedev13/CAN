@@ -133,6 +133,20 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Navbar fissa */
+.navbar {
+    position: fixed !important;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+/* Aggiusta lo spazio sopra il contenuto */
+body {
+    padding-top: 70px;
+}
+
 /* Offset in alto per le sezioni ancorate (altezza navbar ~ 70-80px) */
 #mappa, #suolo, #swot, #fonti, #edifici, #azioni, #industria, #comparazione {
   scroll-margin-top: 80px;
@@ -157,4 +171,10 @@ html {
   max-width: 420px;         /* limite massimo, per uniformità */
   max-height: 420px;
   flex-shrink: 0;
+}
+
+.hoverlayer .hovertext {
+  border-radius: 12px !important;
+  backdrop-filter: blur(10px) !important;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15) !important;
 }
