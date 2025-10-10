@@ -1,18 +1,25 @@
 # Per far funzionare l'applicazione, è necessario installare le dipendenze elencate in questo file.
 # assicuratevi di essere nella cartella in cui c'è il file e poi:
-# pip install -r requirements.txt
+# Installazione: pip install -r requirements.txt
 
+# Backend & API
 fastapi
 uvicorn
 sqlalchemy
 pymysql
 cryptography
 pydantic
-typing-extensions
-pandas
-requests
-plotly
-streamlit
-pillow
 python-multipart
-bootstrap
+typing-extensions
+requests
+pandas
+python-dotenv
+
+# Frontend Dash
+dash
+dash-bootstrap-components
+plotly
+
+# Utility
+pillow
+streamlit  # opzionale, solo se lo usi per visualizzazioni o debug
