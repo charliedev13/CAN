@@ -1,0 +1,118 @@
+# 🧭 Manuale Utente – CAN Dashboard
+
+## 1️⃣ Introduzione
+
+**CAN Dashboard** è un’applicazione web interattiva che consente di analizzare e confrontare indicatori ambientali ed energetici delle regioni italiane.
+L’app è accessibile tramite browser, senza installazione, ma può essere anche avviata in locale per test o sviluppo.
+
+---
+
+## 2️⃣ Requisiti minimi
+
+| Categoria                | Requisiti                                                             |
+| ------------------------ | --------------------------------------------------------------------- |
+| **Sistema operativo**    | Windows 10/11, macOS Ventura o successivo, Ubuntu 22.04 o equivalente |
+| **Browser**              | Chrome (consigliato), Firefox, Edge, Safari                           |
+| **RAM**                  | minimo 4 GB (consigliati 8 GB)                                        |
+| **Connessione Internet** | necessaria per il caricamento dei dati e mappe                        |
+
+---
+
+## 3️⃣ Avvio dell’applicazione
+
+### 🔹 Accesso online
+
+1. Aprire il browser.
+2. Inserire l’URL dell’app:
+   👉 `http://localhost:8050` (in locale)
+   👉 `https://can-dashboard.it` (se pubblicata)
+3. Comparirà la **pagina di login o registrazione**.
+
+---
+
+### 🔹 Avvio in locale (developer o tester)
+
+#### 🔸 Windows
+
+1. Aprire **Prompt dei comandi** o **PowerShell**.
+2. Posizionarsi nella cartella del progetto:
+
+   ```bash
+   cd C:\Users\<utente>\Desktop\Progetto_CAN\
+   ```
+3. Avviare Docker Desktop.
+4. Eseguire:
+
+   ```bash
+   docker compose up
+   ```
+5. Aprire il browser → `http://127.0.0.1:8050`
+
+#### 🔸 macOS
+
+1. Aprire il **Terminale**.
+2. Posizionarsi nella directory:
+
+   ```bash
+   cd ~/Desktop/Progetto_CAN/
+   ```
+3. Avviare Docker (icona nella barra superiore).
+4. Lanciare:
+
+   ```bash
+   docker compose up
+   ```
+5. Aprire `http://127.0.0.1:8050`
+
+#### 🔸 Linux (Ubuntu)
+
+1. Aprire il **Terminale**.
+2. Entrare nella cartella del progetto:
+
+   ```bash
+   cd ~/Scrivania/Progetto_CAN/
+   ```
+3. Avviare Docker e digitare:
+
+   ```bash
+   sudo docker compose up
+   ```
+4. Aprire `http://localhost:8050`
+
+---
+
+## 4️⃣ Funzionalità principali
+
+| Sezione                 | Descrizione                                                               |
+| ----------------------- | ------------------------------------------------------------------------- |
+| **Login/Registrazione** | Accesso o creazione di un nuovo account con email e password.             |
+| **Scelta Regione**      | Ricerca tramite mappa interattiva o menu a tendina.                       |
+| **Scheda Regione**      | Mostra dati su meteo, altimetria, uso del suolo, energia e sostenibilità. |
+| **Indicatori Grafici**  | Visualizzazione con grafici a torta, barre verticali e orizzontali.       |
+| **Confronto Regioni**   | Confronta due regioni selezionando indicatori da analizzare.              |
+
+---
+
+## 5️⃣ Navigazione base
+
+1. Seleziona la **regione d’interesse**.
+2. Esplora i **dati ambientali ed energetici**.
+3. Clicca su **Confronta regioni** per un’analisi comparativa.
+
+---
+
+## 6️⃣ Risoluzione problemi
+
+| Problema                | Soluzione                                                |
+| ----------------------- | -------------------------------------------------------- |
+| La pagina non si carica | Controlla connessione Internet o stato di Docker.        |
+| Grafici vuoti           | Aggiorna la pagina (F5) o controlla il caricamento dati. |
+| “Port already in use”   | Cambia porta in `docker-compose.yml` (es. 8051).         |
+| Errore database         | Verifica che il container MySQL sia attivo.              |
+
+---
+
+## 7️⃣ Contatti e supporto
+
+Per segnalazioni tecniche o richieste di assistenza:
+📧 **[support@eurix.it](mailto:support@eurix.it)**

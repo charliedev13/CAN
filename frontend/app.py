@@ -27,8 +27,8 @@ from .components.suolo import layout as suolo_layout
 from .components.swot import layout as swot_layout
 from .components.fonti import layout as fonti_layout
 from .components.edifici import layout as edifici_layout
-from .components.industria import layout as industria_layout
 from .components.azioni import layout as azioni_layout
+from .components.industria import layout as industria_layout
 from .components.comparazione import layout as comparazione_layout
 from .components.footer import layout as footer_layout
 
@@ -54,8 +54,8 @@ app.layout = dbc.Container(fluid=True, children=[
     swot_layout,
     fonti_layout,
     edifici_layout,
-    industria_layout,
     azioni_layout,
+    industria_layout,
     comparazione_layout,
     footer_layout
 ])
@@ -69,8 +69,8 @@ from .callbacks.meteo_callbacks import *
 from .callbacks.swot_callbacks import *
 from .callbacks.fonti_callbacks import *
 from .callbacks.edifici_callbacks import *
-from .callbacks.industria_callbacks import *
 from .callbacks.azioni_callbacks import *
+from .callbacks.industria_callbacks import *
 from .callbacks.comparazione_callbacks import *
 
 # ===========================
