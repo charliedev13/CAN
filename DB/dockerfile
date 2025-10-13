@@ -1,0 +1,4 @@
+FROM mysql:8.0
+
+# Copia automaticamente il dump dentro la cartella di inizializzazione
+COPY dump.sql /docker-entrypoint-initdb.d/

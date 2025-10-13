@@ -215,7 +215,7 @@ services:
    ```
 4. **Esegui il frontend Dash** con:
    ```
-   python app.py
+   python -m frontend.app
    ```
 5. Imposta le porte:
    - Backend → `8000`

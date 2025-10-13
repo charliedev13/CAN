@@ -1,0 +1,13 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# Copia il requirements.txt dal backend
+COPY ../backend/requirements.txt .
+
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copia tutti i file del frontend
+COPY . .
+
+CMD ["python", "app.py"]

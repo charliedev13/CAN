@@ -1,0 +1,74 @@
+version: "3.9"
+
+services:
+  # Backend FastAPI
+  backend:
+    build: ./backend
+    container_name: backend_container
+    restart: always
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      - DB_HOST=db
+      - DB_USER=teamcan
+      - DB_PASSWORD=Hfdfzbhvd.665
+      - DB_NAME=CAN_DB
+    networks:
+      - can_network
+
+  # Frontend Dash
+  frontend:
+    build:
+      context: .
+      dockerfile: ./frontend/Dockerfile
+    container_name: frontend_container
+    restart: always
+    ports:
+      - "8050:8050"
+    depends_on:
+      - backend
+    environment:
+      - API_URL=http://backend:8000
+    networks:
+      - can_network
+
+  # Database MySQL
+  db:
+    build: ./db
+    container_name: mysql_container
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: Hfdfzbhvd.665root
+      MYSQL_DATABASE: CAN_DB
+      MYSQL_USER: teamcan
+      MYSQL_PASSWORD: Hfdfzbhvd.665
+    volumes:
+      - db_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    networks:
+      - can_network
+
+  # phpMyAdmin
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin_container
+    restart: always
+    environment:
+      PMA_HOST: db
+      PMA_USER: root
+      PMA_PASSWORD: Hfdfzbhvd.665root
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
+    networks:
+      - can_network
+
+volumes:
+  db_data:
+
+networks:
+  can_network:
