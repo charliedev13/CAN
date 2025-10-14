@@ -73,7 +73,6 @@ CAN/
 │   │   ├── azioni_callbacks.py
 │   │   └── comparazione_callbacks.py
 │   │  
-│   │
 │   ├── assets/
 │   │   ├── style.css         → Stile globale della dashboard
 │   │   ├── pannello.png
