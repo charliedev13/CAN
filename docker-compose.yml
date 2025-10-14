@@ -27,3 +27,28 @@ services:
       - "8080:80"
     depends_on:
       - db
+
+  backend:
+    build: ./backend
+    container_name: backend_container
+    restart: always
+    environment:
+      DB_HOST: db
+      DB_USER: teamcan
+      DB_PASSWORD: Hfdfzbhvd.665
+      DB_NAME: CAN_DB
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+    requirements: #Eseguire l’import nel database CAN_DB 
+      - ./backend/init_db.sql:/docker-entrypoint-initdb.d/init_db.sql
+      
+  frontend:
+    build: ./frontend
+    container_name: frontend_container
+    restart: always
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend

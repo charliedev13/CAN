@@ -1,6 +1,6 @@
--- MySQL dump 10.13  Distrib 8.0.43, for Linux (x86_64)
+-- MySQL dump 10.13  Distrib 9.4.0, for macos14.7 (x86_64)
 --
--- Host: localhost    Database: CAN_DB
+-- Host: 127.0.0.1    Database: CAN_DB
 -- ------------------------------------------------------
 -- Server version	8.0.43
 
@@ -244,4 +244,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-09-30 13:40:18
+-- Dump completed on 2025-10-14 15:52:04

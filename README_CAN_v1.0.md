@@ -40,6 +40,7 @@ CAN/
 │   ├── database.py           → Connessione e motore MySQL
 │   ├── popola_tabelle.py     → Script di popolamento iniziale del DB
 │   ├── can_dump.sql          → Dump SQL del database CAN
+│   ├── dockerfile
 │   └── requirements.txt      → Dipendenze backend
 │
 ├── frontend/
@@ -81,13 +82,21 @@ CAN/
 │   │   └── casa.png
 │   │
 │   ├── limits_IT_regions.geojson  → Dati geografici delle regioni italiane
-│   └── meteo.env                  → API key OpenWeather
+│   ├── meteo.env                  → API key OpenWeather
+│   ├── dockerfile
+│   └── requirements.txt      → Dipendenze frontend
 │
 ├── DB/
 │   ├── *.csv                    → Dataset originali regionali
-│   ├── docker-compose.yml       → Avvio container MySQL + phpMyAdmin
+│   ├── can_dump.sql 
+│   ├── dump.sql
 │   └── mysqldata/               → Volume dati persistente
 │
+├── backupSQL/                    
+│
+├── docker-compose.yml           → Avvio container MySQL + phpMyAdmin
+├── dump_mysql.py                → Esegue il dump
+├── import_mysql.py              → Importa il file MySQL nel DB
 └── README.md                    → Documentazione generale del progetto
 ```
 
