@@ -10,3 +10,4 @@ undo_*
 .venv
 .vscode/
 __pycache__/
+frontend/meteo.env

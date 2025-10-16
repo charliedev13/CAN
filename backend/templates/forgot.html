@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Password dimenticata</title>
+  <style>
+    body { font-family: Arial; display: flex; justify-content: center; align-items: center; height: 100vh; background: #f4f4f4; }
+    .card { background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); width: 320px; text-align: center; }
+    input, button { width: 100%; padding: 10px; margin: 8px 0; border-radius: 8px; border: 1px solid #ddd; }
+    button { background: #ffc107; color: #fff; border: none; cursor: pointer; }
+    button:hover { background: #e0a800; }
+    .msg { margin-top: 10px; font-size: 0.9em; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>Recupera Password</h2>
+    <p>Inserisci il tuo username per ricevere il link di reset via email</p>
+    <input type="text" id="username" placeholder="Username" />
+    <button onclick="requestReset()">Invia Link Reset</button>
+    <div id="msg" class="msg"></div>
+  </div>
+
+  <script>
+    async function requestReset() {
+      const username = document.getElementById("username").value;
+      if (!username) {
+        document.getElementById("msg").innerText = "Inserisci uno username valido.";
+        return;
+      }
+
+      const res = await fetch("/request-reset", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username })
+      });
+
+      const result = await res.json();
+      document.getElementById("msg").innerText = result.msg || result.error;
+    }
+  </script>
+</body>
+</html>

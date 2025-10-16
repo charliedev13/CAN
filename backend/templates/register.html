@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Registrazione</title>
+  <style>
+    body {
+      font-family: Arial;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: #f4f4f4;
+    }
+    .card {
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      width: 320px;
+      text-align: center;
+    }
+    input, button {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+    }
+    button {
+      background: #28a745;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    button:hover {
+      background: #218838;
+    }
+    .msg {
+      margin-top: 10px;
+      font-size: 0.9em;
+      color: #d00;
+      min-height: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>Registrati</h2>
+    <input type="text" id="username" placeholder="Username" />
+    <input type="email" id="email" placeholder="Email" />
+    <input type="password" id="password" placeholder="Password" />
+    <button onclick="register()">Registrati</button>
+    <div id="message" class="msg"></div>
+  </div>
+
+  <script>
+  async function register() {
+    const username = document.getElementById("username").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value.trim();
+    const messageEl = document.getElementById("message");
+
+    if (!username || !email || !password) {
+      messageEl.style.color = "red";
+      messageEl.textContent = "Compila tutti i campi.";
+      return;
+    }
+
+    try {
+      const formData = new FormData();
+      formData.append("username", username);
+      formData.append("email", email);
+      formData.append("password", password);
+
+      const res = await fetch("/auth/register", {
+        method: "POST",
+        body: formData
+      });
+
+      const result = await res.json();
+
+      if (res.ok) {
+        messageEl.style.color = "green";
+        messageEl.textContent = result.message || "Registrazione completata!";
+        setTimeout(() => {
+          window.location.href = "/auth/login-page";
+        }, 1500);
+      } else {
+        messageEl.style.color = "red";
+        messageEl.textContent = result.detail || "Errore durante la registrazione.";
+      }
+    } catch (err) {
+      messageEl.style.color = "red";
+      messageEl.textContent = "Errore di connessione al server.";
+    }
+  }
+</script>
+
+
+</body>
+</html>

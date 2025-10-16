@@ -1,0 +1,15 @@
+{
+  "SECRET_KEY": "supersegreto123456",
+  "ALGORITHM": "HS256",
+  "ACCESS_TOKEN_EXPIRE_MINUTES": 30,
+  "RESET_CODE_EXPIRE_MINUTES": 15,
+
+  "MAIL_USERNAME": "tua_email@gmail.com",
+  "MAIL_PASSWORD": "password_della_tua_email",
+  "MAIL_FROM": "tua_email@gmail.com",
+  "MAIL_PORT": 587,
+  "MAIL_SERVER": "smtp.gmail.com",
+  "MAIL_STARTTLS": true,
+  "MAIL_SSL_TLS": false,
+  "USE_CREDENTIALS": true
+}

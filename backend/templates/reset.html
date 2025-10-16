@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Reset Password</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      height: 100vh;
+      justify-content: center;
+      align-items: center;
+      background: #f4f4f4;
+    }
+    .card {
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      width: 320px;
+      text-align: center;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+    }
+    button {
+      background: #007BFF;
+      color: white;
+      border: none;
+      padding: 10px;
+      width: 100%;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    .msg {
+      margin-top: 10px;
+      font-size: 0.9em;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>Reimposta Password</h2>
+    <input type="password" id="new_password" placeholder="Nuova password" />
+    <button onclick="resetPassword()">Aggiorna Password</button>
+    <div id="msg" class="msg"></div>
+  </div>
+
+  <script>
+    async function resetPassword() {
+      const params = new URLSearchParams(window.location.search);
+      const token = params.get("token");
+      const newPassword = document.getElementById("new_password").value;
+
+      if (!token) {
+        document.getElementById("msg").innerText = "Token mancante nell'URL.";
+        return;
+      }
+
+      const response = await fetch("/reset-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token: token, new_password: newPassword })
+      });
+
+      const result = await response.json();
+      document.getElementById("msg").innerText = result.msg || result.error;
+    }
+  </script>
+</body>
+</html>

@@ -1,119 +1,74 @@
 version: "3.9"
 
 services:
-<<<<<<< HEAD
-  # Backend FastAPI
-  backend:
-    build: ./backend
-    container_name: backend_container
-    restart: always
-    ports:
-      - "8000:8000"
-    depends_on:
-      - db
-    environment:
-      - DB_HOST=db
-      - DB_USER=teamcan
-      - DB_PASSWORD=Hfdfzbhvd.665
-      - DB_NAME=CAN_DB
-    networks:
-      - can_network
-
-  # Frontend Dash
-  frontend:
-    build:
-      context: .
-      dockerfile: ./frontend/Dockerfile
-    container_name: frontend_container
-    restart: always
-    ports:
-      - "8050:8050"
-    depends_on:
-      - backend
-    environment:
-      - API_URL=http://backend:8000
-    networks:
-      - can_network
-
-  # Database MySQL
-  db:
-    build: ./db
-    container_name: mysql_container
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: Hfdfzbhvd.665root
-      MYSQL_DATABASE: CAN_DB
-      MYSQL_USER: teamcan
-      MYSQL_PASSWORD: Hfdfzbhvd.665
-    volumes:
-      - db_data:/var/lib/mysql
-    ports:
-      - "3306:3306"
-    networks:
-      - can_network
-
-  # phpMyAdmin
-=======
-  db:
-    image: mysql:8.0
-    container_name: mysql_container
-    restart: always
-    environment:
-      MYSQL_USER: teamcan
-      MYSQL_PASSWORD: Hfdfzbhvd.665
-      MYSQL_DATABASE: CAN_DB
-      MYSQL_ROOT_PASSWORD: Hfdfzbhvd.665root
-    ports:
-      - "3306:3306"
-    volumes:
-      - ./mysqldata:/var/lib/mysql
-    
->>>>>>> recupero
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    container_name: phpmyadmin_container
-    restart: always
-    environment:
-      PMA_HOST: db
-      PMA_USER: root
-      PMA_PASSWORD: Hfdfzbhvd.665root
-    ports:
-      - "8080:80"
-    depends_on:
-      - db
-<<<<<<< HEAD
-    networks:
-      - can_network
-
-volumes:
-  db_data:
-
-networks:
-  can_network:
-=======
+# db:
+#   image: mysql:8.0
+#   container_name: mysql_container
+#   restart: always
+#   environment:
+#     MYSQL_USER: teamcan
+#     MYSQL_PASSWORD: Hfdfzbhvd.665
+#     MYSQL_DATABASE: CAN_DB
+#     MYSQL_ROOT_PASSWORD: Hfdfzbhvd.665root
+#   ports:
+#     - "3306:3306"
+#   volumes:
+#     - ./mysqldata:/var/lib/mysql
+#   
+# phpmyadmin:
+#   image: phpmyadmin/phpmyadmin
+#   container_name: phpmyadmin_container
+#   restart: always
+#   environment:
+#     PMA_HOST: db
+#     PMA_USER: root
+#     PMA_PASSWORD: Hfdfzbhvd.665root
+#   ports:
+#     - "8080:80"
+#   depends_on:
+#     - db
 
   backend:
-    build: ./backend
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile
     container_name: backend_container
     restart: always
     environment:
-      DB_HOST: db
+      DB_HOST: 10.10.0.132
       DB_USER: teamcan
       DB_PASSWORD: Hfdfzbhvd.665
       DB_NAME: CAN_DB
     ports:
-      - "5000:5000"
-    depends_on:
-      - db
-    requirements: #Eseguire l’import nel database CAN_DB 
-      - ./backend/init_db.sql:/docker-entrypoint-initdb.d/init_db.sql
-      
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+    #depends_on:
+    #  - db
+    networks:
+      - can_networkup
+
   frontend:
-    build: ./frontend
+    build:  
+      context: .
+      dockerfile: frontend/dockerfile
     container_name: frontend_container
-    restart: always
+    restart: always 
+    environment:
+       BASE_URL: http://backend:8000
+       WEATHER_API_KEY: "596616b2b490c9159dca4a3a8ee498bb"
+      
     ports:
-      - "3000:3000"
+      - "8050:8050"
+    volumes:
+      - ./frontend:/app/frontend
     depends_on:
       - backend
->>>>>>> recupero
+    networks:
+      - can_networkup
+    command: >
+      sh -c "python -m frontend.app"
+
+networks:
+  can_networkup:
+    driver: bridge

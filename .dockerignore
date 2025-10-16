@@ -1,0 +1,5 @@
+backend/auth_*
+backend/templates/login.html
+backend/templates/register.html
+backend/templates/forgot.html
+backend/templates/reset.html

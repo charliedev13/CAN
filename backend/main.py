@@ -3,6 +3,8 @@ from fastapi.middleware.cors import CORSMiddleware
 import models
 from database import engine
 from routes import router as regioni_router
+#from routes_auth import router as auth_api_router
+#from auth_app import router as auth_pages_router
 
 # Creazione delle tabelle
 models.Base.metadata.create_all(bind=engine)
@@ -22,7 +24,9 @@ app.add_middleware(
 )
 
 # Includi router
-app.include_router(regioni_router)
+app.include_router(regioni_router)         # API dati regionali
+#app.include_router(auth_api_router)        # API autenticazione
+#app.include_router(auth_pages_router)      # Pagine HTML autenticazione
 
 #test per verificare che l'API sia attiva
 @app.get("/")

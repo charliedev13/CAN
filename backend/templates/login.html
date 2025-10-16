@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Login</title>
+  <style>
+    body { font-family: Arial; display: flex; justify-content: center; align-items: center; height: 100vh; background: #f4f4f4; }
+    .card { background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); width: 320px; text-align: center; }
+    input, button { width: 100%; padding: 10px; margin: 8px 0; border-radius: 8px; border: 1px solid #ddd; }
+    button { background: #007bff; color: #fff; border: none; cursor: pointer; }
+    button:hover { background: #0056b3; }
+    .msg { margin-top: 10px; font-size: 0.9em; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>Login</h2>
+    <input type="text" id="username" placeholder="Username" />
+    <input type="password" id="password" placeholder="Password" />
+    <button onclick="login()">Accedi</button>
+    <div id="msg" class="msg"></div>
+  </div>
+
+  <script>
+    async function login() {
+      const data = {
+        username: document.getElementById("username").value,
+        password: document.getElementById("password").value
+      };
+      const res = await fetch("/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+      const result = await res.json();
+      if (result.access_token) {
+        document.getElementById("msg").innerText = "Login riuscito ✅";
+      } else {
+        document.getElementById("msg").innerText = result.error;
+      }
+    }
+  </script>
+</body>
+</html>

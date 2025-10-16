@@ -8,5 +8,6 @@ dash-bootstrap-components
 plotly
 
 # Utility
+python-dotenv
 pillow
 streamlit  # opzionale, solo se lo usi per visualizzazioni o debug
