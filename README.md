@@ -155,7 +155,7 @@ Docker gestisce tutto automaticamente: **non serve creare né attivare ambienti 
 export COMPOSE_HTTP_TIMEOUT=300
 export DOCKER_CLIENT_TIMEOUT=300
 
-# scarica le immagini necessarie (db e phpMyAdmin)
+# la prima volta, scarica le immagini necessarie (db e phpMyAdmin)
 docker compose pull
 
 # avvia tutti i container
