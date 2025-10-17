@@ -151,13 +151,6 @@ cd CAN
 Docker gestisce tutto automaticamente: **non serve creare né attivare ambienti virtuali** o installare manualmente le dipendenze Python.
 
 ```bash
-# (facoltativo) se riscontri errori di timeout durante il pull:
-export COMPOSE_HTTP_TIMEOUT=300
-export DOCKER_CLIENT_TIMEOUT=300
-
-# la prima volta, scarica le immagini necessarie (db e phpMyAdmin)
-docker compose pull
-
 # avvia tutti i container
 docker compose up -d
 ```
