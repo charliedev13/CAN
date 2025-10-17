@@ -24,60 +24,7 @@ L’app è accessibile tramite browser, senza installazione, ma può essere anch
 
 1. Aprire il browser.
 2. Inserire l’URL dell’app:
-   👉 `http://localhost:8050` (in locale)
    👉 `https://can-dashboard.it` (se pubblicata)
-3. Comparirà la **pagina di login o registrazione**.
-
----
-
-### 🔹 Avvio in locale (developer o tester)
-
-#### 🔸 Windows
-
-1. Aprire **Prompt dei comandi** o **PowerShell**.
-2. Posizionarsi nella cartella del progetto:
-
-   ```bash
-   cd C:\Users\<utente>\Desktop\Progetto_CAN\
-   ```
-3. Avviare Docker Desktop.
-4. Eseguire:
-
-   ```bash
-   docker compose up
-   ```
-5. Aprire il browser → `http://127.0.0.1:8050`
-
-#### 🔸 macOS
-
-1. Aprire il **Terminale**.
-2. Posizionarsi nella directory:
-
-   ```bash
-   cd ~/Desktop/Progetto_CAN/
-   ```
-3. Avviare Docker (icona nella barra superiore).
-4. Lanciare:
-
-   ```bash
-   docker compose up
-   ```
-5. Aprire `http://127.0.0.1:8050`
-
-#### 🔸 Linux (Ubuntu)
-
-1. Aprire il **Terminale**.
-2. Entrare nella cartella del progetto:
-
-   ```bash
-   cd ~/Scrivania/Progetto_CAN/
-   ```
-3. Avviare Docker e digitare:
-
-   ```bash
-   sudo docker compose up
-   ```
-4. Aprire `http://localhost:8050`
 
 ---
 
@@ -85,7 +32,6 @@ L’app è accessibile tramite browser, senza installazione, ma può essere anch
 
 | Sezione                 | Descrizione                                                               |
 | ----------------------- | ------------------------------------------------------------------------- |
-| **Login/Registrazione** | Accesso o creazione di un nuovo account con email e password.             |
 | **Scelta Regione**      | Ricerca tramite mappa interattiva o menu a tendina.                       |
 | **Scheda Regione**      | Mostra dati su meteo, altimetria, uso del suolo, energia e sostenibilità. |
 | **Indicatori Grafici**  | Visualizzazione con grafici a torta, barre verticali e orizzontali.       |
