@@ -1,4 +1,4 @@
-# 🌍 CAN – Cambiamento Ambientale Nazionale
+# EURIX 🌍 CAN – Cambiamento Ambientale Nazionale
 
 ### Analisi e visualizzazione dei dati ambientali ed energetici regionali italiani
 
@@ -11,8 +11,18 @@
 - un **frontend Dash/Plotly** per la visualizzazione interattiva di mappe e grafici;
 - un **database MySQL** gestito tramite Docker, per garantire persistenza e scalabilità.
 
-L’obiettivo è offrire una panoramica chiara e interattiva della transizione energetica italiana,
-fornendo uno strumento utile a enti, analisti e cittadini.
+L’obiettivo è offrire una panoramica chiara e interattiva della transizione energetica italiana, fornendo uno strumento utile a enti, analisti e cittadini.
+
+---
+
+## ⏺️ Diagramma
+
+Il flusso logico di navigazione della dashboard è rappresentato nel seguente diagramma BPMN:
+
+![Diagramma BPMN del flusso utente](docs/can_bpmn.png)
+*(Mostra il percorso dell’utente tra mappa, dati meteo, suolo, energia, edifici, industria e comparazione regioni.)*
+
+🔗 [Visualizza il file sorgente BPMN](docs/can.bpmn)
 
 ---
 
@@ -40,7 +50,19 @@ CAN/
 │   ├── database.py           → Connessione e motore MySQL
 │   ├── popola_tabelle.py     → Script di popolamento iniziale del DB
 │   ├── can_dump.sql          → Dump SQL del database CAN
-│   ├── dockerfile
+│   ├── dockerfile            → Dockerfile di backend
+│   ├── auth_app.py           → #implementazione futura (autenticazione)
+│   ├── auth_config.json      → #implementazione futura
+│   ├── auth_core.py          → #implementazione futura
+│   ├── auth_utils.py         → #implementazione futura
+│   ├── routes_auth.py        → #implementazione futura
+│   ├── users.json            → #implementazione futura
+│   ├── templates/            → Layout pagine autenticazione #implementazione futura
+│   │   ├── forgot.html
+│   │   ├── login.html
+│   │   ├── register.html
+│   │   └── reset.html
+│   │
 │   └── requirements.txt      → Dipendenze backend
 │
 ├── frontend/
@@ -82,21 +104,32 @@ CAN/
 │   │
 │   ├── limits_IT_regions.geojson  → Dati geografici delle regioni italiane
 │   ├── meteo.env                  → API key OpenWeather
-│   ├── dockerfile
-│   └── requirements.txt      → Dipendenze frontend
+│   ├── dockerfile                 → Dockerfile di frontend
+│   └── requirements.txt           → Dipendenze frontend
 │
 ├── DB/
 │   ├── *.csv                    → Dataset originali regionali
-│   ├── can_dump.sql 
-│   ├── dump.sql
+│   ├── can_dump.sql             → Dump SQL del database CAN, importabile da phpMyAdmin (“Importa → File SQL”)
+│   ├── dockerfile               → Dockerfile del servizio MySQL
 │   └── mysqldata/               → Volume dati persistente
 │
-├── backupSQL/                    
+├── backupSQL/                   → Backup automatico del DB (#implementazione futura)
 │
-├── docker-compose.yml           → Avvio container MySQL + phpMyAdmin
-├── dump_mysql.py                → Esegue il dump
-├── import_mysql.py              → Importa il file MySQL nel DB
-└── README.md                    → Documentazione generale del progetto
+├── dump_mysql.py                → Script per generare automaticamente il dump MySQL (#implementazione futura)
+├── import_mysql.py              → Script per importare il dump nel DB all’avvio (#implementazione futura)
+│
+├── docker-compose.yml           → Avvio container MySQL + phpMyAdmin + backend + frontend
+│
+├── docs/                        → Documentazione e diagrammi
+│   ├── manuale_utente.txt       → Manuale d’uso per utenti finali
+│   ├── can.bpmn                 → Diagramma BPMN 
+│   ├── can_bpmn.png             → Diagramma BPMN visibile nel README
+│   ├── backend.html             → Documentazione PyDoc backend
+│   └── frontend.html            → Documentazione PyDoc frontend
+│
+├── .gitignore                   → Esclude file temporanei, venv, credenziali, ecc.
+├── .dockerignore                → Esclude file inutili dal build Docker
+└── README_CAN_v_1.md            → Documentazione generale del progetto
 ```
 
 ---
@@ -109,39 +142,65 @@ git clone https://github.com/<nome_repo>/CAN.git
 cd CAN
 ```
 
-### 2️⃣ Crea un ambiente virtuale
+### 2️⃣ Crea e attiva un ambiente virtuale
 ```bash
-python3 -m venv venv
-source venv/bin/activate      # macOS/Linux
-venv\Scripts\activate       # Windows
+# macOS/Linux
+python3 -m venv venv        
+source venv/bin/activate  
+
+# Windows
+python -m venv venv
+venv\Scripts\activate       
 ```
 
 ### 3️⃣ Installa le dipendenze
 ```bash
+# macOS/Linux
+pip3 install -r backend/requirements.txt
+pip3 install -r frontend/requirements.txt
+
+# Windows
 pip install -r backend/requirements.txt
 pip install -r frontend/requirements.txt
 ```
 
-### 4️⃣ Avvia i servizi
+---
+
+## ▶️ Avvio dei servizi (2 opzioni)
+
+### 4️⃣.a Avvia tutto con Docker
+```bash
+cd CAN
+docker compose up -d
+```
+
+### 4️⃣.b Avvia i servizi in locale
+
+- **Database**
+  ```bash
+  cd DB
+  docker compose up -d
+  ```
+  + Apri [http://localhost:8080](http://localhost:8080)
+  + Accedi a phpMyAdmin → Importa → Scegli file → `can_dump.sql` → Esegui
+  + Verifica la presenza delle tabelle in `CAN_DB`
+
 - **Backend**
   ```bash
   cd backend
   uvicorn main:app --reload --port 8000
   ```
-- **Frontend**
+
+- **Frontend**  
+  *(Lascia aperto il terminale del backend e avviane un secondo)*
   ```bash
-  cd can
+  cd frontend
   python -m frontend.app
-  ```
-- **Database**
-  ```bash
-  cd ../DB
-  docker compose up -d
   ```
 
 ---
 
-## 🧰 Dipendenze principali
+## 🧮 Dipendenze principali
 
 - **Python ≥ 3.9**
 - **FastAPI**, **SQLAlchemy**, **PyMySQL**, **Uvicorn**
@@ -155,105 +214,107 @@ pip install -r frontend/requirements.txt
 
 ### 🐳 Docker Compose (completo: backend + frontend + DB)
 
-Esempio di `docker-compose.yml` per eseguire tutti i servizi insieme:
+Esempio di `docker-compose.yml` funzionante per l’intero stack:
 
 ```yaml
 version: "3.9"
+
 services:
   db:
-    image: mysql:8
-    container_name: can_mysql
+    image: mysql:8.0
+    container_name: mysql_container
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_USER: teamcan
+      MYSQL_PASSWORD: Hfdfzbhvd.665
       MYSQL_DATABASE: CAN_DB
+      MYSQL_ROOT_PASSWORD: Hfdfzbhvd.665root
     ports:
       - "3306:3306"
     volumes:
-      - ./DB/mysqldata:/var/lib/mysql
-
+      - ./mysqldata:/var/lib/mysql
+   
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
-    container_name: can_phpmyadmin
+    container_name: phpmyadmin_container
     restart: always
-    ports:
-      - "8080:80"
     environment:
       PMA_HOST: db
       PMA_USER: root
-      PMA_PASSWORD: rootpass
+      PMA_PASSWORD: Hfdfzbhvd.665root
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
 
   backend:
-    build: ./backend
-    container_name: can_backend
-    command: uvicorn main:app --host 0.0.0.0 --port 8000
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: backend_container
+    restart: always
+    environment:
+      DB_HOST: db
+      DB_USER: teamcan
+      DB_PASSWORD: Hfdfzbhvd.665
+      DB_NAME: CAN_DB
     ports:
       - "8000:8000"
     volumes:
       - ./backend:/app
     depends_on:
       - db
+    networks:
+      - can_networkup
 
   frontend:
-    build: ./frontend
-    container_name: can_frontend
-    command: python app.py
+    build:  
+      context: .
+      dockerfile: frontend/dockerfile
+    container_name: frontend_container
+    restart: always
+    environment:
+       BASE_URL: http://backend:8000
+       WEATHER_API_KEY: "596616b2b490c9159dca4a3a8ee498bb"
     ports:
       - "8050:8050"
     volumes:
-      - ./frontend:/app
+      - ./frontend:/app/frontend
     depends_on:
       - backend
+    networks:
+      - can_networkup
+    command: >
+      sh -c "python -m frontend.app"
+
+networks:
+  can_networkup:
+    driver: bridge
 ```
-
----
-
-## 🌐 Deploy su Render o altri provider
-
-1. **Crea un database MySQL gestito** (Render, Railway, Neon, ecc.)
-2. **Imposta le variabili d’ambiente:**
-   - `DB_HOST`
-   - `DB_USER`
-   - `DB_PASSWORD`
-   - `DB_NAME`
-   - `WEATHER_API_KEY`
-3. **Esegui il backend su un servizio Python (FastAPI)** con `start command`:
-   ```
-   uvicorn main:app --host 0.0.0.0 --port 8000
-   ```
-4. **Esegui il frontend Dash** con:
-   ```
-   python -m frontend.app
-   ```
-5. Imposta le porte:
-   - Backend → `8000`
-   - Frontend → `8050`
 
 ---
 
 ## 🧠 Documentazione
 
 ### ▶️ Swagger UI
-Accesso automatico alla documentazione interattiva FastAPI:  
-👉 [http://localhost:8000/docs](http://localhost:8000/docs)
+🔗 [http://localhost:8000/docs](http://localhost:8000/docs)
 
-### 🗺️ Dashboard interattiva
-👉 [http://localhost:8050](http://localhost:8050)
+### 🟙️ Dashboard interattiva
+🔗 [http://localhost:8050](http://localhost:8050)
 
-### 📄 Pydoc
-Genera la documentazione HTML:
-```bash
-pydoc -w frontend
-```
-oppure
+### 🗞️ Pydoc
+Genera la documentazione automatica di entrambi i moduli:
 
 ```bash
 python -m pydoc -w frontend
+python -m pydoc -w backend
 ```
+
+Gli output HTML vengono salvati nella cartella `CAN/docs`.
 
 ---
 
-## 🧱 Database e container
+## 🧱 Porte e servizi
 
 | Servizio | Porta | Descrizione |
 |-----------|-------|-------------|
@@ -270,7 +331,7 @@ python -m pydoc -w frontend
   - Frontend Dash componentizzato (layout + callback separati)
   - Backend FastAPI con CRUD e documentazione Swagger
   - Cache meteo e integrazione OpenWeather
-  - Database MySQL in container Docker
+  - Database MySQL
 
 ---
 
@@ -282,3 +343,4 @@ Progetto di sviluppo e comunicazione per la transizione energetica e ambientale.
 - Carlotta Forlino  
 - Andrea Calabrò  
 - Nicolò Giraudo
+
