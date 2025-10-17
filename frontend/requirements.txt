@@ -3,11 +3,11 @@
 # Installazione: pip install -r requirements.txt
 
 # Frontend Dash
-dash
-dash-bootstrap-components
-plotly
+dash==2.18.2
+dash-bootstrap-components==1.6.0
+plotly==5.24.1
 
 # Utility
-python-dotenv
-pillow
-streamlit  # opzionale, solo se lo usi per visualizzazioni o debug
+python-dotenv==1.0.1
+pillow==11.0.0
+streamlit==1.39.0  # opzionale, solo se lo usi per visualizzazioni o debug

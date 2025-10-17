@@ -136,13 +136,42 @@ CAN/
 
 ## ⚙️ Setup e installazione
 
-### 1️⃣ Clona il repository
+### Clona il repository
 ```bash
 git clone https://github.com/<nome_repo>/CAN.git
 cd CAN
 ```
 
-### 2️⃣ Crea e attiva un ambiente virtuale
+---
+
+## ▶️ Avvio dei servizi (2 opzioni)
+
+### 🔹 Opzione 1 – Avvio completo con Docker (consigliato)
+
+Docker gestisce tutto automaticamente: **non serve creare né attivare ambienti virtuali** o installare manualmente le dipendenze Python.
+
+```bash
+# (facoltativo) se riscontri errori di timeout durante il pull:
+export COMPOSE_HTTP_TIMEOUT=300
+export DOCKER_CLIENT_TIMEOUT=300
+
+# scarica le immagini necessarie (db e phpMyAdmin)
+docker compose pull
+
+# avvia tutti i container
+docker compose up -d
+```
+
+#### Accessi rapidi:
+- **phpMyAdmin** → [http://localhost:8080](http://localhost:8080)  
+- **Backend FastAPI** → [http://localhost:8000/docs](http://localhost:8000/docs)  
+- **Frontend Dash** → [http://localhost:8050](http://localhost:8050)
+
+---
+
+### 🔹 Opzione 2 – Avvio manuale in locale
+
+#### 1️⃣ Crea e attiva un ambiente virtuale
 ```bash
 # macOS/Linux
 python3 -m venv venv        
@@ -153,7 +182,7 @@ python -m venv venv
 venv\Scripts\activate       
 ```
 
-### 3️⃣ Installa le dipendenze
+#### 2️⃣ Installa le dipendenze
 ```bash
 # macOS/Linux
 pip3 install -r backend/requirements.txt
@@ -164,17 +193,7 @@ pip install -r backend/requirements.txt
 pip install -r frontend/requirements.txt
 ```
 
----
-
-## ▶️ Avvio dei servizi (2 opzioni)
-
-### 4️⃣.a Avvia tutto con Docker
-```bash
-cd CAN
-docker compose up -d
-```
-
-### 4️⃣.b Avvia i servizi in locale
+#### 3️⃣ Avvia i servizi
 
 - **Database**
   ```bash
@@ -182,8 +201,7 @@ docker compose up -d
   docker compose up -d
   ```
   + Apri [http://localhost:8080](http://localhost:8080)
-  + Accedi a phpMyAdmin → Importa → Scegli file → `can_dump.sql` → Esegui
-  + Verifica la presenza delle tabelle in `CAN_DB`
+  + Accedi a phpMyAdmin → Importa → `can_dump.sql` → Esegui
 
 - **Backend**
   ```bash
@@ -191,8 +209,8 @@ docker compose up -d
   uvicorn main:app --reload --port 8000
   ```
 
-- **Frontend**  
-  *(Lascia aperto il terminale del backend e avviane un secondo)*
+- **Frontend**
+  *(lascia aperto il terminale del backend e aprine un altro)*
   ```bash
   cd frontend
   python -m frontend.app
