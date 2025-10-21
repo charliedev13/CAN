@@ -51,7 +51,7 @@ services:
   frontend:
     build:  
       context: .
-      dockerfile: frontend/dockerfile
+      dockerfile: frontend/Dockerfile
     container_name: frontend_container
     restart: always 
     environment:
