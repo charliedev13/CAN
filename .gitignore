@@ -1,5 +1,3 @@
-DB/mysqldata/
-DB/**/mysqldata/
 *.ibd
 ib*
 binlog*

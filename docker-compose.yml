@@ -13,8 +13,12 @@ services:
    ports:
      - "3306:3306"
    volumes:
-     - ./mysqldata:/var/lib/mysql
-   
+     - mysql_data:/var/lib/mysql
+     - ./DB/can_dump.sql:/docker-entrypoint-initdb.d/can_dump.sql
+   networks:
+     - can_networkup
+
+  #per production, commentare phpmyadmin 
   phpmyadmin:
    image: phpmyadmin/phpmyadmin
    container_name: phpmyadmin_container
@@ -32,10 +36,11 @@ services:
     build: 
       context: ./backend
       dockerfile: Dockerfile
+    image: can-backend
     container_name: backend_container
     restart: always
     environment:
-      DB_HOST: 10.10.0.132
+      DB_HOST: db
       DB_USER: teamcan
       DB_PASSWORD: Hfdfzbhvd.665
       DB_NAME: CAN_DB
@@ -52,6 +57,7 @@ services:
     build:  
       context: .
       dockerfile: frontend/Dockerfile
+    image: can-frontend
     container_name: frontend_container
     restart: always 
     environment:
@@ -72,3 +78,6 @@ services:
 networks:
   can_networkup:
     driver: bridge
+
+volumes:
+  mysql_data:

@@ -15,7 +15,7 @@ from dotenv import load_dotenv
 import threading
 
 # --- CONFIGURAZIONE BASE ---
-BASE_URL = "http://10.10.0.132:8000"
+BASE_URL = "http://backend:8000"
 from pathlib import Path
 from dotenv import load_dotenv
 

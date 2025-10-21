@@ -11,7 +11,7 @@ import requests
 import os
 from .api import BASE_URL
 
-BASE_URL = "http://10.10.0.132:8000"
+BASE_URL = "http://backend:8000"
 
 # Percorso sicuro per il geojson
 geojson_path = os.path.join(os.path.dirname(__file__), "limits_IT_regions.geojson")
