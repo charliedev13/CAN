@@ -13,7 +13,7 @@ Versione: 1.0.0
 
 from fastapi import APIRouter, HTTPException, Form, status
 from fastapi.responses import JSONResponse
-from auth_core import register_user, login_user, request_password_reset, reset_password
+from backend.playground.auth_core import register_user, login_user, request_password_reset, reset_password
 
 router = APIRouter(
     prefix="/auth",
@@ -67,15 +67,14 @@ def forgot_password_route(
 
 @router.post("/reset-password")
 def reset_password_route(
-    email: str = Form(...),
-    code: str = Form(...),
+    token: str = Form(...),
     new_password: str = Form(...)
 ):
     """
     Reimposta la password dopo aver ricevuto il codice di verifica.
     """
     try:
-        result = reset_password(email, code, new_password)
+        result = reset_password(token, new_password)
         return {"message": "Password aggiornata con successo", "data": result}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))

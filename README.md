@@ -41,37 +41,25 @@ Il flusso logico di navigazione della dashboard è rappresentato nel seguente di
 ```
 CAN/
 │
-├── backend/
-│   ├── main.py               → Avvio FastAPI e registrazione router
-│   ├── routes.py             → Endpoint API per ogni tabella
-│   ├── models.py             → Modelli SQLAlchemy
-│   ├── schemas.py            → Schemi Pydantic
-│   ├── services.py           → Logica CRUD separata dalle route
-│   ├── database.py           → Connessione e motore MySQL
-│   ├── popola_tabelle.py     → Script di popolamento iniziale del DB
-│   ├── can_dump.sql          → Dump SQL del database CAN
-│   ├── dockerfile            → Dockerfile di backend
-│   ├── auth_app.py           → #implementazione futura (autenticazione)
-│   ├── auth_config.json      → #implementazione futura
-│   ├── auth_core.py          → #implementazione futura
-│   ├── auth_utils.py         → #implementazione futura
-│   ├── routes_auth.py        → #implementazione futura
-│   ├── users.json            → #implementazione futura
-│   ├── templates/            → Layout pagine autenticazione #implementazione futura
-│   │   ├── forgot.html
-│   │   ├── login.html
-│   │   ├── register.html
-│   │   └── reset.html
-│   │
-│   └── requirements.txt      → Dipendenze backend
+├── backend/                     # Backend FastAPI
+│   ├── main.py                 # Avvio FastAPI e registrazione router
+│   ├── routes.py               # Endpoint API per ogni tabella
+│   ├── models.py               # Modelli SQLAlchemy
+│   ├── schemas.py              # Schemi Pydantic
+│   ├── services.py             # Logica CRUD separata dalle route
+│   ├── database.py             # Connessione e motore MySQL
+│   ├── popola_tabelle.py       # Script di popolamento iniziale del DB
+│   ├── can_dump.sql            # Dump SQL di riferimento
+│   ├── dockerfile              # Dockerfile backend
+│   └── requirements.txt        # Dipendenze backend
 │
-├── frontend/
-│   ├── app.py                → File principale Dash (avvio dell’app)
-│   ├── api.py                → Funzioni di richiesta ai servizi FastAPI
-│   ├── data_utils.py         → Dati e funzioni condivise
-│   ├── __init__.py           
+├── frontend/                   # Dashboard interattiva (Dash + Plotly)
+│   ├── app.py                  # File principale: avvio dell’app
+│   ├── api.py                  # Funzioni di richiesta ai servizi FastAPI
+│   ├── data_utils.py           # Utilità comuni
+│   ├── __init__.py
 │   │
-│   ├── components/           → Layout della dashboard
+│   ├── components/             # Componenti UI della dashboard
 │   │   ├── navbar.py
 │   │   ├── mappa.py
 │   │   ├── meteo.py
@@ -84,7 +72,7 @@ CAN/
 │   │   ├── comparazione.py
 │   │   └── footer.py
 │   │
-│   ├── callbacks/            → Logica interattiva per ogni sezione
+│   ├── callbacks/              # Logica interattiva per ogni sezione
 │   │   ├── navbar_callbacks.py
 │   │   ├── mappa_callbacks.py
 │   │   ├── meteo_callbacks.py
@@ -94,42 +82,56 @@ CAN/
 │   │   ├── industria_callbacks.py
 │   │   ├── azioni_callbacks.py
 │   │   └── comparazione_callbacks.py
-│   │  
-│   ├── assets/
-│   │   ├── style.css         → Stile globale della dashboard
+│   │
+│   ├── assets/                 # File statici
+│   │   ├── style.css           # Stile globale
 │   │   ├── pannello.png
 │   │   ├── palaeolica.png
 │   │   ├── autoelettrica.png
 │   │   └── casa.png
 │   │
-│   ├── limits_IT_regions.geojson  → Dati geografici delle regioni italiane
-│   ├── meteo.env                  → API key OpenWeather
-│   ├── dockerfile                 → Dockerfile di frontend
-│   └── requirements.txt           → Dipendenze frontend
+│   ├── limits_IT_regions.geojson # Dati geografici delle regioni italiane
+│   ├── meteo.env                  # API key OpenWeather
+│   ├── dockerfile                 # Dockerfile frontend
+│   └── requirements.txt           # Dipendenze frontend
 │
-├── DB/
-│   ├── *.csv                    → Dataset originali regionali
-│   ├── can_dump.sql             → Dump SQL del database CAN, importabile da phpMyAdmin (“Importa → File SQL”)
-│   ├── dockerfile               → Dockerfile del servizio MySQL
-│   └── mysqldata/               → Volume dati persistente
+├── DB/                           # Dati e volume MySQL
+│   ├── *.csv                      # Dataset originali
+│   ├── can_dump.sql               # Dump SQL importabile
+│   ├── dockerfile                 # Dockerfile del servizio MySQL
+│   └── mysqldata/                 # Volume persistente
 │
-├── backupSQL/                   → Backup automatico del DB (#implementazione futura)
+├── playground/                   # Codice sperimentale / esercizi
+│   └── auth/                     # Funzionalità di autenticazione (non incluse in CAN)
+│       ├── auth_app.py
+│       ├── auth_config.json
+│       ├── auth_core.py
+│       ├── auth_utils.py
+│       ├── routes_auth.py
+│       ├── users.json
+│       └── templates/
+│           ├── forgot.html
+│           ├── login.html
+│           ├── register.html
+│           └── reset.html
 │
-├── dump_mysql.py                → Script per generare automaticamente il dump MySQL (#implementazione futura)
-├── import_mysql.py              → Script per importare il dump nel DB all’avvio (#implementazione futura)
+├── backupSQL/                    # Backup automatico DB (futuro)
 │
-├── docker-compose.yml           → Avvio container MySQL + phpMyAdmin + backend + frontend
+├── dump_mysql.py                 # Script per creare un dump MySQL (futuro)
+├── import_mysql.py               # Script per importare il dump (futuro)
 │
-├── docs/                        → Documentazione e diagrammi
-│   ├── manuale_utente.txt       → Manuale d’uso per utenti finali
-│   ├── can.bpmn                 → Diagramma BPMN 
-│   ├── can_bpmn.png             → Diagramma BPMN visibile nel README
-│   ├── backend.html             → Documentazione PyDoc backend
-│   └── frontend.html            → Documentazione PyDoc frontend
+├── docker-compose.yml            # Avvio container (DB, backend, frontend)
 │
-├── .gitignore                   → Esclude file temporanei, venv, credenziali, ecc.
-├── .dockerignore                → Esclude file inutili dal build Docker
-└── README_CAN_v_1.md            → Documentazione generale del progetto
+├── docs/                         # Documentazione e diagrammi
+│   ├── manuale_utente.txt
+│   ├── can.bpmn
+│   ├── can_bpmn.png
+│   ├── backend.html              # Documentazione generata (PyDoc)
+│   └── frontend.html             # Documentazione generata (PyDoc)
+│
+├── .gitignore
+├── .dockerignore
+└── README.md
 ```
 
 ---

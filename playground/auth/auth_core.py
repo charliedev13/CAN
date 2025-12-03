@@ -1,7 +1,7 @@
 # gestione autenticazione (JWT, login, reset password)
 import jwt
 import json
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from fastapi_mail import FastMail, MessageSchema, ConnectionConfig
 from auth_utils import hash_password, verify_password, load_users, save_users
 from pathlib import Path
@@ -34,13 +34,13 @@ mail_conf = ConnectionConfig(
 def create_access_token(data: dict, expires_delta: timedelta = None):
     """Genera un token di accesso standard"""
     to_encode = data.copy()
-    expire = datetime.utcnow() + (expires_delta or timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES))
+    expire = datetime.now(timezone.utc) + (expires_delta or timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES))
     to_encode.update({"exp": expire})
     return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
 
 def create_reset_token(username: str):
     """Genera un token JWT temporaneo per il reset password"""
-    expire = datetime.utcnow() + timedelta(minutes=RESET_CODE_EXPIRE_MINUTES)
+    expire = datetime.now(timezone.utc) + timedelta(minutes=RESET_CODE_EXPIRE_MINUTES)
     to_encode = {"sub": username, "exp": expire, "type": "reset"}
     return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
 
