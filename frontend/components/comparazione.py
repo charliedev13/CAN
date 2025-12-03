@@ -6,30 +6,47 @@ Autore: Eurix Srl - Team CAN – Carlotta Forlino, Andrea Calabrò e Nicolò Gir
 Versione: 1.0.0
 """
 from dash import html, dcc
-import dash_bootstrap_components as dbc
 from ..api import get_regioni
 
 regioni = sorted(get_regioni()["nome"].unique())
 
-layout = dbc.Row([
-    dbc.Col(
-        html.Div([
-            html.H4("Ora scegli tu: compara un dato di tua preferenza", className="text-center mb-2"),
-            html.H6("Scegli le due regioni e la categoria", className="text-center mb-4"),
-            dbc.Row([
-                dbc.Col(dcc.Dropdown(id="dropdown-regione-1",
-                                     options=[{"label": r, "value": r} for r in regioni],
-                                     value="Abruzzo",
-                                     clearable=False), md=4),
-                dbc.Col(dcc.Dropdown(id="dropdown-regione-2",
-                                     options=[{"label": r, "value": r} for r in regioni if r != "Abruzzo"],
-                                     value="Basilicata",
-                                     clearable=False), md=4),
-                dbc.Col(dcc.Dropdown(id="dropdown-categoria",
-                                     options=[], placeholder="Seleziona una categoria",
-                                     clearable=False), md=4)
-            ], className="mb-4"),
-            dcc.Graph(id="grafico-comparazione", style={"height": "400px"})
-        ])
-    , md=12)
-], className="mb-4", id="confronta tu")
+layout = html.Div(
+    id="comparazione",  # <-- ora il CSS lo prende sicuro
+    children=[
+        html.H4(
+            "Ora scegli tu: compara un dato di tua preferenza",
+            className="text-center mb-2"
+        ),
+        html.H6(
+            "Scegli le due regioni e la categoria",
+            className="text-center mb-4"
+        ),
+
+        # blocco dropdown uno sotto l'altro
+        html.Div(
+            className="comparazione-dropdowns",
+            children=[
+                dcc.Dropdown(
+                    id="dropdown-regione-1",
+                    options=[{"label": r, "value": r} for r in regioni],
+                    value="Abruzzo",
+                    clearable=False
+                ),
+                dcc.Dropdown(
+                    id="dropdown-regione-2",
+                    options=[{"label": r, "value": r} for r in regioni if r != "Abruzzo"],
+                    value="Basilicata",
+                    clearable=False
+                ),
+                dcc.Dropdown(
+                    id="dropdown-categoria",
+                    options=[],
+                    placeholder="Seleziona una categoria",
+                    clearable=False
+                ),
+            ],
+        ),
+
+        dcc.Graph(id="grafico-comparazione", style={"height": "400px"})
+    ]
+)

@@ -1,9 +1,76 @@
+/* --------------------------
+   MARGINI
+---------------------------*/
+html, body {
+  margin: 0 !important;
+  padding: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+  color: #1C1C1C;
+  font-weight: 400;
+  line-height: 1.5;
+  min-height: 100vh; 
+}
+
+#mappa,
+#suolo,
+#swot,
+#fonti,
+#edifici,
+#azioni,
+#industria,
+#comparazione {
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
+/* mantiene lo spazio sotto la navbar fissa */
+body {
+  padding-top: 70px;
+  padding-bottom: 60px;
+}
+
+/* --------------------------
+   NAVBAR 
+---------------------------*/
+.navbar {
+    position: fixed !important;
+    top: 0;
+    left: 0;              /* <-- aggiunto */
+    width: 100% !important;
+    z-index: 1000;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    padding-left: 0 !important;   /* <-- aggiunto */
+    padding-right: 0 !important;  /* <-- aggiunto */
+}
+
+/* --------------------------
+   FOOTER 
+---------------------------*/
+footer, .footer, .footer-can {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  margin: 0;
+  padding: 15px 0;
+  box-sizing: border-box;
+}
+
+.container,
+.container-fluid {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+/* --------------------------
+   TUA SEZIONE: IMMAGINI AZIONI
+---------------------------*/
 .azioni-img {
   width: 100px;
   height: 100px;
   border-radius: 50%;
   margin: 0 auto 10px auto;
-  background-color: #ffffff; /* sfondo cerchio */
+  background-color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -24,20 +91,17 @@
 /* --------------------------
    SEZIONE COMPARAZIONE
 ---------------------------*/
-
-/* Contenitore complessivo */
 #comparazione {
-  background-color: #f8f9fa; /* grigio chiaro */
+  background-color: #f8f9fa;
   border-radius: 12px;
-  padding: 25px;
-  margin-top: 25px;
+  padding: 25px 30px;
+  margin: 25px 0px 40px 0px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
-/* Titoli */
 #comparazione h4 {
   font-weight: 700;
-  color: #004c5c; /* blu oceano */
+  color: #004c5c;
 }
 
 #comparazione h6 {
@@ -46,7 +110,6 @@
   margin-bottom: 20px;
 }
 
-/* Dropdowns */
 #comparazione .Select-control {
   border-radius: 8px;
   border-color: #cfd8dc;
@@ -57,20 +120,17 @@
   border-radius: 8px;
 }
 
-/* Allineamento dropdowns sulla stessa riga */
-#comparazione .row {
+.comparazione-dropdowns {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 15px; /* spazio orizzontale tra i dropdown */
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
 }
 
-/* Grafico comparazione */
 #grafico-comparazione {
   margin-top: 20px;
 }
 
-/* Testo valori sul grafico */
 #grafico-comparazione .bar text {
   font-size: 13px;
   font-weight: bold;
@@ -80,8 +140,6 @@
 /* --------------------------
    RESPONSIVE – SEZIONE COMPARAZIONE
 ---------------------------*/
-
-/* Schermi medi: tablet */
 @media (max-width: 992px) {
   #comparazione .row {
     flex-wrap: wrap;
@@ -98,7 +156,6 @@
   }
 }
 
-/* Schermi piccoli: smartphone */
 @media (max-width: 768px) {
   #comparazione {
     padding: 15px;
@@ -128,37 +185,23 @@
   }
 }
 
-/* Scroll morbido a tutti gli anchor */
+/* Scroll morbido */
 html {
   scroll-behavior: smooth;
 }
 
-/* Navbar fissa */
-.navbar {
-    position: fixed !important;
-    top: 0;
-    width: 100%;
-    z-index: 1000;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-}
-
-/* Aggiusta lo spazio sopra il contenuto */
-body {
-    padding-top: 70px;
-}
-
-/* Offset in alto per le sezioni ancorate (altezza navbar ~ 70-80px) */
+/* Offset sezioni */
 #mappa, #suolo, #swot, #fonti, #edifici, #azioni, #industria, #comparazione {
   scroll-margin-top: 80px;
 }
 
-/* Spazio tra menu a tendina e mappa */
+/* Dropdown regione */
 #regione-dropdown {
   display: block !important;
-  margin: 0 auto 30px auto !important; /* puoi regolare */
+  margin: 0 auto 30px auto !important;
 }
 
-/* Forza proporzioni uguali per i grafici a torta */
+/* Grafici a torta */
 .grafico-torta {
   display: flex;
   justify-content: center;
@@ -166,9 +209,9 @@ body {
 }
 
 .grafico-torta .js-plotly-plot {
-  width: 100% !important;   /* riempie interamente il box */
+  width: 100% !important;
   height: 100% !important;
-  max-width: 420px;         /* limite massimo, per uniformità */
+  max-width: 420px;
   max-height: 420px;
   flex-shrink: 0;
 }
@@ -180,102 +223,64 @@ body {
 }
 
 /* --------------------------
-   TIPOLOGIA FONT GLOBALE
+   TESTI GLOBALI
 ---------------------------*/
-body, html {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
-  color: #1C1C1C;
-  font-weight: 400;
-  line-height: 1.5;
+h1 {
+  font-size: 2.5rem;
 }
 
-/* --------------------------
-   TITOLI PRINCIPALI
----------------------------*/
-h1, h2, h3, h4, h5 {
-  color: #005F73;           /* petrolio */
-  font-weight: 700;         /* bold */
-  letter-spacing: 0.3px;
-  margin-bottom: 0.6em;
+h4 {
+  font-size: 1.25rem;
 }
 
-/* --------------------------
-   SOTTOTITOLI / TESTI SECONDARI
----------------------------*/
 h6, .subhead, .text-sub {
-  color: #61A1BC;           /* azzurro polvere */
-  font-weight: 500;         /* medium */
+  color: #61A1BC;
+  font-weight: 500;
   font-size: 1rem;
   margin-bottom: 0.4em;
 }
 
-/* --------------------------
-   TESTO NORMALE
----------------------------*/
 p, small, span, div {
   color: #1C1C1C;
   font-weight: 400;
 }
 
-/* --------------------------
-   NAVBAR e LINK
----------------------------*/
+/* Navbar text */
 .navbar, .navbar a, .navbar-brand {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
   font-weight: 400;
   letter-spacing: 0.2px;
 }
 
-/* --------------------------
-   DROPDOWN e LABEL
----------------------------*/
+/* Dropdown labels */
 .Select-control, .Select-value-label {
   font-family: inherit;
   color: #005F73 !important;
   font-size: 14px;
 }
 
-/* --------------------------
-   TESTI NEI GRAFICI (Plotly)
----------------------------*/
+/* Testi nei grafici */
 .js-plotly-plot text {
   font-family: 'Inter', sans-serif !important;
   font-weight: 500;
   fill: #1C1C1C !important;
 }
 
-/* definisci dimensioni specifiche per H1, H4 in tutto l’app */
-h1 {
-  font-size: 2.5rem;   /* puoi aggiustare se troppo grande / piccolo */
-}
-h4 {
-  font-size: 1.25rem;
-}
-
-/* la classe subhead (usata per sottotitoli) già definita da te */
-.subhead {
-  color: #61A1BC;
-  font-weight: 500;
-}
-
-
-/* Citazione finale color petrolio */
+/* Citazione finale */
 .blockquote {
   color: #005F73 !important;
   font-style: italic;
 }
 
-/* --------------------------
-   ALLINEA I TITOLI DEI BOX SUOLO AI TITOLI SWOT
----------------------------*/
+/* Titoli suolo */
 #suolo h4 {
-  text-align: left !important;      /* forza l’allineamento a sinistra */
-  margin-left: 1rem !important;     /* rientro coerente con gli altri box */
-  color: #005F73 !important;        /* petrolio */
+  text-align: left !important;
+  margin-left: 1rem !important;
+  color: #005F73 !important;
   font-weight: 700 !important;
 }
 
-/* Centra solo i grafici a torta */
+/* Centra grafici suolo */
 #grafico-altimetria .js-plotly-plot,
 #grafico-uso .js-plotly-plot {
   display: block !important;
