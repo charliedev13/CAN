@@ -6,10 +6,10 @@ services:
    container_name: mysql_container
    restart: always
    environment:
-     MYSQL_USER: teamcan
-     MYSQL_PASSWORD: Hfdfzbhvd.665
-     MYSQL_DATABASE: CAN_DB
-     MYSQL_ROOT_PASSWORD: Hfdfzbhvd.665root
+     MYSQL_USER: ${MYSQL_USER}
+     MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+     MYSQL_DATABASE: ${MYSQL_DATABASE}
+     MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
    ports:
      - "3306:3306"
    volumes:
@@ -18,15 +18,15 @@ services:
    networks:
      - can_networkup
 
-  #per production, commentare phpmyadmin 
+  #per production (messa online), commentare phpmyadmin 
   phpmyadmin:
    image: phpmyadmin/phpmyadmin
    container_name: phpmyadmin_container
    restart: always
    environment:
      PMA_HOST: db
-     PMA_USER: root
-     PMA_PASSWORD: Hfdfzbhvd.665root
+     PMA_USER: ${PMA_USER}
+     PMA_PASSWORD: ${PMA_PASSWORD}
    ports:
      - "8080:80"
    depends_on:
@@ -40,10 +40,11 @@ services:
     container_name: backend_container
     restart: always
     environment:
-      DB_HOST: db
-      DB_USER: teamcan
-      DB_PASSWORD: Hfdfzbhvd.665
-      DB_NAME: CAN_DB
+      DB_HOST: ${DB_HOST}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME}
+      URL_PASSWORD_DB: ${URL_PASSWORD_DB}
     ports:
       - "8000:8000"
     volumes:
@@ -61,8 +62,8 @@ services:
     container_name: frontend_container
     restart: always 
     environment:
-       BASE_URL: http://backend:8000
-       WEATHER_API_KEY: "596616b2b490c9159dca4a3a8ee498bb"
+       BASE_URL: ${BASE_URL}
+       WEATHER_API_KEY: ${WEATHER_API_KEY}
       
     ports:
       - "8050:8050"

@@ -3,7 +3,12 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 
-SQLALCHEMY_DATABASE_URL = "mysql+pymysql://teamcan:Hfdfzbhvd.665@db:3306/CAN_DB"
+# importa file env
+from dotenv import load_dotenv
+import os
+load_dotenv()
+URL_PASSWORD_DB = os.getenv("URL_PASSWORD_DB")
+SQLALCHEMY_DATABASE_URL = URL_PASSWORD_DB
 
 engine = create_engine(SQLALCHEMY_DATABASE_URL, pool_pre_ping=True)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)

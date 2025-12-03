@@ -6,6 +6,7 @@ undo_*
 *.iblog
 .DS_Store
 .venv
+.env
 .vscode/
 __pycache__/
 frontend/meteo.env
