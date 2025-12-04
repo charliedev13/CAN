@@ -41,7 +41,7 @@ def update_industria(selected_region):
 
     valori = {
         "Emissioni per valore aggiunto (kg CO₂ per €)": emissioni_rescaled,
-        "Quota elettrico (%)": quota_elettrico
+        "Quota di energia elettrica sul totale dei consumi (%)": quota_elettrico
     }
     colori = ["#7B4A20", "#F2AE2E"]
 

@@ -12,7 +12,7 @@ import dash_bootstrap_components as dbc
 
 layout = dbc.Navbar(
     dbc.Container([
-        dbc.NavbarBrand("CAN", className="text-white fw-bold me-5"),
+        dbc.NavbarBrand("CAN", className="text-white fw-bold me-5 padding-left-15"),
 
         dbc.NavbarToggler(id="navbar-toggler", n_clicks=0),
 

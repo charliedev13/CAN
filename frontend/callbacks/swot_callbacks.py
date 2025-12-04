@@ -85,6 +85,6 @@ def update_punto_forza(selected_region):
 
     return html.Div([
         html.H6("💪 Questa regione si distingue per:", className="mt-2"),
-        html.Div([html.Span(testo, style={"marginLeft": "10px"})],
+        html.Div([html.Span(testo)],
                  style={"display": "flex", "alignItems": "center", "marginBottom": "8px"})
     ])

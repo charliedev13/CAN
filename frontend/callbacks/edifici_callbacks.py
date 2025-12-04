@@ -33,7 +33,7 @@ def update_edifici(selected_region):
     valori = {
         "Consumo medio di energia (kWh/m²·anno)": record["consumo_medio_kwh_m2y"].iloc[0],
         "Emissioni di gas serra per abitante (tCO₂/ab)": record["emissioni_procapite_tco2_ab"].iloc[0],
-        "Uso di energia elettrica sugli edifici (%)": record["quota_elettrico_pct"].iloc[0],
+        "Porzione di energia elettrica sul totale dei consumi (%)": record["quota_elettrico_pct"].iloc[0],
         "Edifici ad alta efficienza (Classe A) (%)": record["quota_ape_classe_a_pct"].iloc[0]
     }
 

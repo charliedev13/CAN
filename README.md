@@ -81,6 +81,7 @@ CAN/
 │   │   ├── edifici_callbacks.py
 │   │   ├── industria_callbacks.py
 │   │   ├── azioni_callbacks.py
+│   │   ├── legend_callbacks.py
 │   │   └── comparazione_callbacks.py
 │   │
 │   ├── assets/                 # File statici

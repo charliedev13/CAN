@@ -1,5 +1,5 @@
 """
-CAN Dashboard – Applicazione di visualizzazione ambientale e energetica nazionale
+CAN Dashboard - Applicazione di visualizzazione ambientale e energetica nazionale
 
 Questa è la versione completamente componentizzata della dashboard CAN.
 Integra frontend interattivo (Dash) e backend (FastAPI) tramite richieste REST.
@@ -10,11 +10,11 @@ Struttura:
     api.py        → chiamate al backend FastAPI
     data_utils.py → dati condivisi e funzioni di supporto
 
-Autori: Eurix Srl - Team CAN – Carlotta Forlino, Andrea Calabrò e Nicolò Giraudo
+Autori: Eurix Srl - Team CAN - Carlotta Forlino, Andrea Calabrò e Nicolò Giraudo
 Versione: 1.0.0
 """
 
-from dash import Dash
+from dash import Dash, html
 import dash_bootstrap_components as dbc
 
 # ===========================
@@ -30,7 +30,7 @@ from .components.edifici import layout as edifici_layout
 from .components.azioni import layout as azioni_layout
 from .components.industria import layout as industria_layout
 from .components.comparazione import layout as comparazione_layout
-from .components.footer import layout as footer_layout
+from .components.footer import (layout as footer_layout, legend_panel_desktop, legend_offcanvas_mobile,)
 
 # ===========================
 # INIZIALIZZAZIONE APP DASH
@@ -57,7 +57,9 @@ app.layout = dbc.Container(fluid=True, children=[
     azioni_layout,
     industria_layout,
     comparazione_layout,
-    footer_layout
+    footer_layout,
+    legend_panel_desktop,
+    legend_offcanvas_mobile,
 ])
 
 # ===========================
@@ -72,10 +74,11 @@ from .callbacks.edifici_callbacks import *
 from .callbacks.azioni_callbacks import *
 from .callbacks.industria_callbacks import *
 from .callbacks.comparazione_callbacks import *
+from .callbacks.legend_callbacks import *
 
 # ===========================
 # AVVIO SERVER
 # ===========================
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8050, debug=True)
+    app.run(host="0.0.0.0", port=8050, debug=True, dev_tools_ui=False)
 

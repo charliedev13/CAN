@@ -43,6 +43,10 @@ body {
     padding-right: 0 !important;  /* <-- aggiunto */
 }
 
+.padding-left-15{
+  padding-left:15px;
+}
+
 /* --------------------------
    FOOTER 
 ---------------------------*/
@@ -54,6 +58,8 @@ footer, .footer, .footer-can {
   margin: 0;
   padding: 15px 0;
   box-sizing: border-box;
+  z-index: 999;
+  pointer-events: auto !important;
 }
 
 .container,
@@ -287,4 +293,94 @@ p, small, span, div {
   margin: 0 auto !important;
   max-width: 420px;
   max-height: 420px;
+}
+
+/* --------------------------
+   LEGENDA FISSA (DESKTOP)
+---------------------------*/
+.legend-panel {
+  position: fixed;
+  left: 20px;
+  bottom: 62px;              /* sopra il footer fisso */
+  width: 260px;
+  max-height: 40vh;
+  overflow-y: auto;
+  background-color: #ffffff;
+  border-radius: 12px;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  padding: 16px 18px;
+  z-index: 1000;
+  display: block;
+}
+
+.legend-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.legend-title {
+  font-weight: 600;
+  color: #005F73;
+}
+
+.legend-close {
+  background: none;
+  border: none;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+}
+
+.legend-list dt {
+  font-weight: 600;
+  color: #005F73;
+  font-size: 0.9rem;
+}
+
+.legend-list dd {
+  margin: 0 0 6px 0;
+  font-size: 0.85rem;
+  color: #555;
+}
+
+/* Mobile / tablet: nascondi pannello fisso */
+@media (max-width: 992px) {
+  .legend-panel {
+    display: none !important;
+  }
+}
+
+.footer-link {
+  cursor: pointer !important;
+  text-decoration: underline !important;
+  margin-left: 4px;
+  color: #ffffff !important;
+  font-weight: 500 !important;
+  font-size: 0.875rem;
+  background: none !important;
+  border: none !important;
+  padding: 0 !important;
+  display: inline !important;
+}
+
+footer {
+    padding: 0px !important;
+}
+
+.footer-link:hover {
+  opacity: 0.8;
+  text-decoration: underline !important;
+}
+
+.footer-link:active {
+  opacity: 0.6;
+}
+
+/* Non mostrare il menu di debug di Dash */
+.dash-debug-menu {
+    visibility: hidden;
 }
