@@ -67,26 +67,30 @@ def update_mix(selected_region):
     )
 
     fig.update_layout(
-        margin=dict(l=40, r=20, t=10, b=40),
-        xaxis=dict(
-            range=[0, 100],
-            title=None,
-            showgrid=False,
-            zeroline=False,
-            linecolor="black",
-            linewidth=1
-        ),
-        yaxis=dict(
-            title=None,
-            showgrid=False,
-            zeroline=False,
-            linecolor="black",
-            linewidth=1
-        ),
-        plot_bgcolor="white",
-        paper_bgcolor="white",
-        showlegend=False,
-        font=dict(size=13)
-    )
+    margin={"l": 40, "r": 20, "t": 10, "b": 40},
+
+    xaxis={
+        "range": [0, 100],
+        "title": None,
+        "showgrid": False,
+        "zeroline": False,
+        "linecolor": "black",
+        "linewidth": 1
+    },
+
+    yaxis={
+        "title": None,
+        "showgrid": False,
+        "zeroline": False,
+        "linecolor": "black",
+        "linewidth": 1
+    },
+
+    plot_bgcolor="white",
+    paper_bgcolor="white",
+    showlegend=False,
+
+    font={"size": 13}
+)
 
     return fig

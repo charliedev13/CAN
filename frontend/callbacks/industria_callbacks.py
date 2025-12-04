@@ -56,15 +56,32 @@ def update_industria(selected_region):
 
     y_max = max(valori.values()) if valori.values() else 0
     fig.update_layout(
-        margin=dict(l=40, r=20, t=10, b=120),
+        margin={"l": 40, "r": 20, "t": 10, "b": 120},
         plot_bgcolor="white",
         paper_bgcolor="white",
         showlegend=True,
         legend_title_text=None,
-        legend=dict(orientation="v", y=-0.25, x=0.5, xanchor="center", yanchor="top"),
-        xaxis=dict(title="", showticklabels=False, linecolor="black", linewidth=1),
-        yaxis=dict(title="", linecolor="black", linewidth=1, range=[0, y_max * 1.2]),
-        font=dict(size=13)
+        legend={
+            "orientation": "v",
+            "y": -0.25,
+            "x": 0.5,
+            "xanchor": "center",
+            "yanchor": "top"
+        },
+        xaxis={
+            "title": "",
+            "showticklabels": False,
+            "linecolor": "black",
+            "linewidth": 1
+        },
+        yaxis={
+            "title": "",
+            "linecolor": "black",
+            "linewidth": 1,
+            "range": [0, y_max * 1.2]
+        },
+        font={"size": 13}
     )
+
     fig.update_layout(legend_itemclick=False, legend_itemdoubleclick=False)
     return fig, "Emissioni e consumo energetico dell’industria"

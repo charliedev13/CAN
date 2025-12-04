@@ -3,6 +3,8 @@ from sqlalchemy import Engine, create_engine, Column, Integer, String, Numeric, 
 from sqlalchemy.orm import sessionmaker, declarative_base, relationship
 from database import Base, engine
 
+REGIONI_ID_FK = "regioni.id_regione"
+
 # Regioni
 
 class Regioni(Base):
@@ -28,7 +30,7 @@ class Regioni(Base):
 class MorfologiaSuolo(Base):
     __tablename__ = "morfologia_suolo"
 
-    id_regione = Column(Integer, ForeignKey("regioni.id_regione"), primary_key=True)
+    id_regione = Column(Integer, ForeignKey("REGIONI_ID_FK"), primary_key=True)
     pianura_pct = Column(Numeric(5,2))
     collina_pct = Column(Numeric(5,2))
     montagna_pct = Column(Numeric(5,2))
@@ -43,7 +45,7 @@ class MorfologiaSuolo(Base):
 class EmissioniTotali(Base):
     __tablename__ = "emissioni_totali"
 
-    id_regione = Column(Integer, ForeignKey("regioni.id_regione"), primary_key=True)
+    id_regione = Column(Integer, ForeignKey("REGIONI_ID_FK"), primary_key=True)
     co2eq_mln_t = Column(Numeric(12,3))  # milioni di tonnellate CO2eq
 
     regione = relationship("Regioni", back_populates="emissioni_totali")
@@ -52,7 +54,7 @@ class EmissioniTotali(Base):
 class Edifici(Base):
     __tablename__ = "edifici"
 
-    id_regione = Column(Integer, ForeignKey("regioni.id_regione"), primary_key=True)
+    id_regione = Column(Integer, ForeignKey("REGIONI_ID_FK"), primary_key=True)
     consumo_medio_kwh_m2y = Column(Numeric(12,2))
     emissioni_procapite_tco2_ab = Column(Numeric(12,3))
     quota_elettrico_pct = Column(Numeric(5,2))
@@ -64,7 +66,7 @@ class Edifici(Base):
 class Industria(Base):
     __tablename__ = "industria"
 
-    id_regione = Column(Integer, ForeignKey("regioni.id_regione"), primary_key=True)
+    id_regione = Column(Integer, ForeignKey("REGIONI_ID_FK"), primary_key=True)
     emissioni_per_valore_aggiunto_tco2_per_mln_eur = Column(Numeric(12,4))
     quota_elettrico_pct = Column(Numeric(5,2))
 
@@ -74,7 +76,7 @@ class Industria(Base):
 class MixEnergetico(Base):
     __tablename__ = "mix_energetico"
 
-    id_regione = Column(Integer, ForeignKey("regioni.id_regione"), primary_key=True)
+    id_regione = Column(Integer, ForeignKey("REGIONI_ID_FK"), primary_key=True)
     carbone_pct = Column(Numeric(5,2))
     petrolio_pct = Column(Numeric(5,2))
     gas_pct = Column(Numeric(5,2))
@@ -94,7 +96,7 @@ class MixEnergetico(Base):
 class Assorbimenti(Base):
     __tablename__ = "assorbimenti"
 
-    id_regione = Column(Integer, ForeignKey("regioni.id_regione"), primary_key=True)
+    id_regione = Column(Integer, ForeignKey("REGIONI_ID_FK"), primary_key=True)
     punti_forza = Column(Text)
     aree_miglioramento = Column(Text)
 
@@ -104,7 +106,7 @@ class Assorbimenti(Base):
 class Azioni(Base):
     __tablename__ = "azioni"
 
-    id_regione = Column(Integer, ForeignKey("regioni.id_regione"), primary_key=True)
+    id_regione = Column(Integer, ForeignKey("REGIONI_ID_FK"), primary_key=True)
     fotovoltaico_capacita_gw = Column(Numeric(10,3))
     quota_produzione_fer_pct = Column(Numeric(5,2))
     quota_auto_elettriche_pct = Column(Numeric(5,2))

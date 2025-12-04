@@ -33,7 +33,7 @@ def update_edifici(selected_region):
     valori = {
         "Consumo medio di energia (kWh/m²·anno)": record["consumo_medio_kwh_m2y"].iloc[0],
         "Emissioni di gas serra per abitante (tCO₂/ab)": record["emissioni_procapite_tco2_ab"].iloc[0],
-        "Porzione di energia elettrica sul totale dei consumi (%)": record["quota_elettrico_pct"].iloc[0],
+        "Quanta parte dell’energia consumata proviene da elettricità (%)": record["quota_elettrico_pct"].iloc[0],
         "Edifici ad alta efficienza (Classe A) (%)": record["quota_ape_classe_a_pct"].iloc[0]
     }
 
@@ -50,15 +50,32 @@ def update_edifici(selected_region):
 
     y_max = max(valori.values()) if valori.values() else 0
     fig.update_layout(
-        margin=dict(l=40, r=20, t=10, b=120),
+        margin={"l": 40, "r": 20, "t": 10, "b": 120},
         plot_bgcolor="white",
         paper_bgcolor="white",
         showlegend=True,
         legend_title_text=None,
-        legend=dict(orientation="v", y=-0.25, x=0.5, xanchor="center", yanchor="top"),
-        xaxis=dict(title="", showticklabels=False, linecolor="black", linewidth=1),
-        yaxis=dict(title="", linecolor="black", linewidth=1, range=[0, y_max * 1.25]),
-        font=dict(size=13)
+        legend={
+            "orientation": "v",
+            "y": -0.25,
+            "x": 0.5,
+            "xanchor": "center",
+            "yanchor": "top"
+        },
+        xaxis={
+            "title": "",
+            "showticklabels": False,
+            "linecolor": "black",
+            "linewidth": 1
+        },
+        yaxis={
+            "title": "",
+            "linecolor": "black",
+            "linewidth": 1,
+            "range": [0, y_max * 1.25]
+        },
+        font={"size": 13}
     )
+
     fig.update_layout(legend_itemclick=False, legend_itemdoubleclick=False)
     return fig

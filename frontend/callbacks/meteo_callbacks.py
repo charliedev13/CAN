@@ -44,27 +44,32 @@ REGIONE_TO_CITY = {
 }
 
 # Funzione emoji in base al meteo
+def _contains_any(text: str, keywords: list[str]) -> bool:
+    return any(k in text for k in keywords)
+
 def meteo_emoji(description: str):
     d = description.lower()
-    
-    if "sereno" in d or "clear" in d:
-        return "☀️"
-    elif "poche nuvole" in d or "nubi sparse" in d or "nuvoloso" in d or "cielo coperto" in d or "cloud" in d:
-        return "☁️"
-    elif "pioggia" in d or "rain" in d or "rovesci" in d:
-        return "🌧️"
-    elif "temporale" in d or "storm" in d:
-        return "⛈️"
-    elif "neve" in d or "snow" in d:
-        return "❄️"
-    elif "nebbia" in d or "foschia" in d or "fog" in d or "mist" in d:
-        return "🌫️"
-    elif "vento" in d or "wind" in d:
-        return "💨"
-    elif "sole" in d and ("nuvole" in d or "cloud" in d):
+
+    CATEGORIES = [
+        (["sereno", "clear"], "☀️"),
+        (["poche nuvole", "nubi sparse", "nuvoloso", "cielo coperto", "cloud"], "☁️"),
+        (["pioggia", "rain", "rovesci"], "🌧️"),
+        (["temporale", "storm"], "⛈️"),
+        (["neve", "snow"], "❄️"),
+        (["nebbia", "foschia", "fog", "mist"], "🌫️"),
+        (["vento", "wind"], "💨"),
+    ]
+
+    # Ciclo sulle categorie → riduce drasticamente gli elif
+    for keywords, emoji in CATEGORIES:
+        if _contains_any(d, keywords):
+            return emoji
+
+    # Caso speciale "sole tra le nuvole"
+    if "sole" in d and _contains_any(d, ["nuvole", "cloud"]):
         return "🌤️"
-    else:
-        return "🌡️"
+
+    return "🌡️"
 
 @app.callback(
     Output("meteo-container", "children"),

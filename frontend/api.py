@@ -83,7 +83,7 @@ def get_edifici():
         resp = requests.get(f"{BASE_URL}/edifici").json()
         df = pd.DataFrame(resp)
         regioni = get_regioni()
-        return df.merge(regioni, on="id_regione").rename(columns={"nome": "Regione"})
+        return df.merge(regioni, on="id_regione", how="inner", validate="one_to_one").rename(columns={"nome": "Regione"})
     except Exception as e:
         print(f"[API] Errore caricando edifici: {e}")
         return pd.DataFrame()

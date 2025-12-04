@@ -27,7 +27,7 @@ from ..data_utils import geojson, prop_name_key, df_regioni, df_long, geojson_to
     Input("regione-dropdown", "value"),
     Input("italia-map", "clickData")
 )
-def update_all(drop_val, clickData):
+def update_all(drop_val, click_data):
     """
     Aggiorna la mappa e i grafici a torta quando cambia la regione selezionata.
     """
@@ -35,8 +35,8 @@ def update_all(drop_val, clickData):
     trigger = ctx.triggered_id
 
     # --- Click su mappa: aggiorna la selezione ---
-    if trigger == "italia-map" and clickData:
-        pts = clickData.get("points")
+    if trigger == "italia-map" and click_data:
+        pts = click_data.get("points")
         if pts and len(pts) > 0:
             clicked_loc = pts[0].get("location") or pts[0].get("hovertext")
             if clicked_loc in geojson_to_df_map:
@@ -71,13 +71,13 @@ def update_all(drop_val, clickData):
                     "Superficie: %{customdata[1]} km²<br>" +
                     "Densità: %{customdata[2]} ab/km²<br>" +
                     "PIL: %{customdata[3]} mln €<extra></extra>",
-        hoverlabel=dict(
-            bgcolor="#faf9f7", 
-            font_size=14,
-            font_family="Inter, Arial, sans-serif",
-            font_color="#005F73",
-            bordercolor="#ffffff", 
-        ),
+        hoverlabel={
+            "bgcolor" : "#faf9f7", 
+            "font_size" : 14,
+            "font_family" : "Inter, Arial, sans-serif",
+            "font_color" : "#005F73",
+            "bordercolor" : "#ffffff", 
+        },
         customdata=df_map[["nome", "superficie_kmq", "densita_demografica", "pil"]].values
     )
     fig_map.update_layout(margin={"r": 0, "t": 0, "l": 0, "b": 0}, coloraxis_showscale=False)
@@ -114,25 +114,27 @@ def update_all(drop_val, clickData):
     )
 
     fig_altimetrica.update_traces(
-        textposition="outside",
-        textinfo="percent",  # 🔹 solo percentuali
-        textfont_size=12,
-        pull=0,
-        marker=dict(line=dict(color="#ffffff", width=1)),
-        hoverinfo="none",
-        hovertemplate=None
+    textposition="outside",
+    textinfo="percent",
+    textfont_size=12,
+    pull=0,
+    marker={"line": {"color": "#ffffff", "width": 1}},   # ✔ literal
+    hoverinfo="none",
+    hovertemplate=None
     )
 
     fig_altimetrica.update_layout(
-        margin=dict(t=40, b=50, l=10, r=10),
-        legend=dict(
-            orientation="h",   # 🔹 legenda orizzontale
-            y=-0.2,
-            x=0.5,
-            xanchor="center",
-            yanchor="top",
-            title_text=None
-        ),
+        margin={"t": 40, "b": 50, "l": 10, "r": 10},
+
+        legend={
+            "orientation": "h",    # 🔹 legenda orizzontale
+            "y": -0.2,
+            "x": 0.5,
+            "xanchor": "center",
+            "yanchor": "top",
+            "title_text": None
+        },
+
         legend_traceorder="normal",
         uniformtext_minsize=10,
         uniformtext_mode="hide",
@@ -141,7 +143,8 @@ def update_all(drop_val, clickData):
         width=400
     )
 
-    fig_altimetrica.update_layout(title_font=dict(size=22, color="#005F73", family="Inter, sans-serif"))
+
+    fig_altimetrica.update_layout(title_font={"size" : 22, "color" : "#005F73", "family" : "Inter, sans-serif"})
     fig_altimetrica.update_layout(legend_itemclick=False, legend_itemdoubleclick=False)
 
     # --- Grafico 2: Agricolo, Urbano, Forestale ---
@@ -175,21 +178,21 @@ def update_all(drop_val, clickData):
         textinfo="percent",  # 🔹 solo percentuali
         textfont_size=12,
         pull=0,
-        marker=dict(line=dict(color="#ffffff", width=1)),
+        marker={"line" : {"color" : "#ffffff", "width" : 1}},
         hoverinfo="none",
         hovertemplate=None
     )
 
     fig_uso.update_layout(
-        margin=dict(t=40, b=50, l=10, r=10),
-        legend=dict(
-            orientation="h",   # 🔹 legenda orizzontale
-            y=-0.2,
-            x=0.5,
-            xanchor="center",
-            yanchor="top",
-            title_text=None
-        ),
+        margin={"t" : 40, "b" : 50, "l" : 10, "r" : 10},
+        legend={
+            "orientation" : "h",   # 🔹 legenda orizzontale
+            "y" : -0.2,
+            "x" : 0.5,
+            "xanchor" : "center",
+            "yanchor" : "top",
+            "title_text" : None
+        },
         legend_traceorder="normal",
         uniformtext_minsize=10,
         uniformtext_mode="hide",
@@ -198,7 +201,7 @@ def update_all(drop_val, clickData):
         width=400
     )
 
-    fig_uso.update_layout(title_font=dict(size=22, color="#005F73", family="Inter, sans-serif"))
+    fig_uso.update_layout(title_font={"size" : 22, "color" : "#005F73", "family" : "Inter, sans-serif"})
     fig_uso.update_layout(legend_itemclick=False, legend_itemdoubleclick=False)
 
     titolo_alt = f"Altimetria del suolo in {selected_region}"

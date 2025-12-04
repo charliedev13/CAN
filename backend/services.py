@@ -6,6 +6,8 @@ import schemas
 # ==============================
 # REGIONI
 # ==============================
+
+PROBLEMA = "Regione non trovata"
 class RegioneService:
     @staticmethod
     def get_all(db: Session):
@@ -15,7 +17,7 @@ class RegioneService:
     def get_by_id(regione_id: int, db: Session):
         regione = db.query(models.Regioni).filter(models.Regioni.id_regione == regione_id).first()
         if not regione:
-            raise HTTPException(status_code=404, detail="Regione non trovata")
+            raise HTTPException(status_code=404, detail=PROBLEMA)
         return regione
 
     @staticmethod
@@ -30,7 +32,7 @@ class RegioneService:
     def update(regione_id: int, regione: schemas.RegioneCreate, db: Session):
         db_regione = db.query(models.Regioni).filter(models.Regioni.id_regione == regione_id).first()
         if not db_regione:
-            raise HTTPException(status_code=404, detail="Regione non trovata")
+            raise HTTPException(status_code=404, detail=PROBLEMA)
         for key, value in regione.dict().items():
             setattr(db_regione, key, value)
         db.commit()
@@ -41,7 +43,7 @@ class RegioneService:
     def delete(regione_id: int, db: Session):
         regione = db.query(models.Regioni).filter(models.Regioni.id_regione == regione_id).first()
         if not regione:
-            raise HTTPException(status_code=404, detail="Regione non trovata")
+            raise HTTPException(status_code=404, detail=PROBLEMA)
         db.delete(regione)
         db.commit()
         return {"message": "Regione eliminata con successo"}

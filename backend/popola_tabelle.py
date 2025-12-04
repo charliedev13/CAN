@@ -147,6 +147,8 @@ df_emissioni = pd.read_csv("Emissioni pro capite di gas serra degli edifici.csv"
 df_quota_elettrico = pd.read_csv("Quota di consumi elettrici negli edifici rispetto al totale.csv")
 df_classe_a = pd.read_csv("Quota di edifici in classe A negli APE.csv")
 
+QUOTA = "Quota (%)"
+
 for record_regione in session.query(Regioni).all():
     regione_std = record_regione.nome
 
@@ -169,12 +171,12 @@ for record_regione in session.query(Regioni).all():
     # Quota elettrico
     row_qe = df_quota_elettrico[df_quota_elettrico["Regione"].str.strip().str.lower() == regione_std.lower()]
     if not row_qe.empty:
-        record_edifici.quota_elettrico_pct = to_float(row_qe.iloc[0]["Quota (%)"])
+        record_edifici.quota_elettrico_pct = to_float(row_qe.iloc[0][QUOTA])
 
     # Quota classe A
     row_ca = df_classe_a[df_classe_a["Regione"].str.strip().str.lower() == regione_std.lower()]
     if not row_ca.empty:
-        record_edifici.quota_ape_classe_a_pct = to_float(row_ca.iloc[0]["Quota (%)"])
+        record_edifici.quota_ape_classe_a_pct = to_float(row_ca.iloc[0][QUOTA])
 
 
 # Popola tabella industria
@@ -182,7 +184,7 @@ df_emissioni = pd.read_csv("Emissioni di gas serra per valore aggiunto dell'indu
 df_quota = pd.read_csv("Quota di consumi elettrici nell'industria.csv")
 
 # Merge dei due dataset sulla colonna Regione
-df_industria = pd.merge(df_emissioni, df_quota, on="Regione", how="outer")
+df_industria = pd.merge(df_emissioni, df_quota, on="Regione", how="outer", validate="one_to_one")
 
 for i, row in df_industria.iterrows():
     regione_std = normalizza_regione(row["Regione"])
@@ -195,12 +197,12 @@ for i, row in df_industria.iterrows():
 
     if record:
         record.emissioni_per_valore_aggiunto_tco2_per_mln_eur = to_float(row["Emissioni (tCO₂eq/€ mln)"])
-        record.quota_elettrico_pct = to_float(row["Quota (%)"])
+        record.quota_elettrico_pct = to_float(row[QUOTA])
     else:
         nuova_industria = Industria(
             id_regione=session.query(Regioni.id_regione).filter_by(nome=regione_std).scalar(),
             emissioni_per_valore_aggiunto_tco2_per_mln_eur=to_float(row["Emissioni (tCO₂eq/€ mln)"]),
-            quota_elettrico_pct=to_float(row["Quota (%)"])
+            quota_elettrico_pct=to_float(row[QUOTA])
         )
         session.add(nuova_industria)
 

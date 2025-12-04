@@ -130,14 +130,15 @@ def update_confronto(regione1, regione2, categoria):
     )
     fig.update_traces(texttemplate="%{text:.2f}", textposition="outside", hoverinfo="none", hovertemplate=None)
     fig.update_layout(
-        margin=dict(l=60, r=30, t=10, b=40),
+        margin={"l": 60, "r": 30, "t": 10, "b": 40},
         plot_bgcolor="white",
         paper_bgcolor="white",
         showlegend=False,
-        xaxis=dict(range=[0, x_max * 1.2], linecolor="black", linewidth=1),
-        yaxis=dict(linecolor="black", linewidth=1),
+        xaxis={"range": [0, x_max * 1.2], "linecolor": "black", "linewidth": 1},
+        yaxis={"linecolor": "black", "linewidth": 1},
         xaxis_title=None,
         yaxis_title=None,
-        font=dict(size=13)
+        font={"size": 13}
     )
+
     return fig

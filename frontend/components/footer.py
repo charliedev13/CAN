@@ -37,8 +37,8 @@ def legend_content():
             html.Dt("Classe A"),
             html.Dd("Immobile ad altissima efficienza energetica, caratterizzato da bassi consumi e minimo impatto ambientale. Le sue principali caratteristiche includono un elevato isolamento termico, impianti di riscaldamento e raffrescamento efficienti, e l'uso di fonti di energia rinnovabile."),
         
-            html.Dt("GW"),
-            html.Dd("Gigawatt. Indica la potenza elettrica, pari a un miliardo di Watt."),
+            html.Dt("Gigawatt (GW)"),
+            html.Dd("Indica la potenza elettrica, pari a un miliardo di Watt."),
 
             html.Dt("CO₂ per €"),
             html.Dd("Emissioni di CO₂ per euro prodotto: indica quanta CO₂ viene emessa per ogni euro generato dal settore industriale, come misura dell’efficienza produttiva."),
