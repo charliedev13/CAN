@@ -5,6 +5,8 @@ services:
    image: mysql:8.0
    container_name: mysql_container
    restart: always
+   env_file:
+     - .env
    environment:
      MYSQL_USER: ${MYSQL_USER}
      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
@@ -23,6 +25,8 @@ services:
    image: phpmyadmin/phpmyadmin
    container_name: phpmyadmin_container
    restart: always
+   env_file:
+     - .env
    environment:
      PMA_HOST: db
      PMA_USER: ${PMA_USER}
@@ -39,6 +43,8 @@ services:
     image: can-backend
     container_name: backend_container
     restart: always
+    env_file:
+      - .env
     environment:
       DB_HOST: ${DB_HOST}
       DB_USER: ${DB_USER}
@@ -61,6 +67,8 @@ services:
     image: can-frontend
     container_name: frontend_container
     restart: always 
+    env_file:
+      - .env
     environment:
        BASE_URL: ${BASE_URL}
        WEATHER_API_KEY: ${WEATHER_API_KEY}

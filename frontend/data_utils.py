@@ -31,10 +31,10 @@ df_regioni = pd.DataFrame(regioni_resp)
 morf_resp = requests.get(f"{BASE_URL}/morfologia").json()
 assorb_resp = requests.get(f"{BASE_URL}/assorbimenti").json()
 
-df_morf = pd.DataFrame(morf_resp).merge(df_regioni, on="id_regione", how="left")
+df_morf = pd.DataFrame(morf_resp).merge(df_regioni, on="id_regione", how="left", validate="one_to_one")
 df_morf.rename(columns={"nome": "Regione"}, inplace=True)
 
-df_assorb = pd.DataFrame(assorb_resp).merge(df_regioni, on="id_regione", how="left")
+df_assorb = pd.DataFrame(assorb_resp).merge(df_regioni, on="id_regione", how="left", validate="one_to_one")
 df_assorb.rename(columns={"nome": "Regione"}, inplace=True)
 
 # Conversione morfologia in formato long
