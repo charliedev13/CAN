@@ -5,7 +5,11 @@ su una categoria scelta dall’utente.
 from dash import html, dcc
 from ..api import get_regioni
 
-regioni = sorted(get_regioni()["nome"].unique())
+df_regioni = get_regioni()
+if df_regioni is not None and not df_regioni.empty and "nome" in df_regioni.columns:
+    regioni = sorted(df_regioni["nome"].unique())
+else:
+    regioni = []
 
 layout = html.Div(
     id="comparazione",  # <-- ora il CSS lo prende sicuro

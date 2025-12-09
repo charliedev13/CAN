@@ -9,7 +9,12 @@ from ..api import *  # richieste API comuni (regioni, morfologia, ecc.)
 
 # Caricamento delle regioni tramite API
 df_regioni = get_regioni()
-regioni = sorted(df_regioni["nome"].unique())
+# Evita crash se l'API non ha risposto come previsto
+if df_regioni is None or df_regioni.empty or "nome" not in df_regioni.columns:
+    print("[MAPPA] Nessuna regione caricata: API non disponibile o risposta non valida.")
+    regioni = []
+else:
+    regioni = sorted(df_regioni["nome"].unique())
 
 # Layout della sezione mappa
 layout = dbc.Row([
@@ -22,7 +27,7 @@ layout = dbc.Row([
             dcc.Dropdown(
                 id="regione-dropdown",
                 options=[{"label": r, "value": r} for r in regioni],
-                value=regioni[0],
+                value=regioni[0] if regioni else None,
                 clearable=False,
                 style={"width": "60%", "margin": "0 auto"}
             ),

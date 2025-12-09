@@ -160,13 +160,9 @@ Hai già un account GitHub e vuoi provare CAN **senza installare nulla**?
 
 [![Try CAN in GitHub Codespaces](https://img.shields.io/badge/Try%20CAN%20in%20Codespaces-100000?style=for-the-badge&logo=github&logoColor=white)](https://codespaces.new/charliedev13/CAN)
 
-▶️ Passo 1 - **Clicca “Create codespace”** per avviare l’ambiente cloud.
-▶️ Passo 2 — Attendi qualche secondo l’**avvio automatico**.
-▶️ Passo 3 — Quando Codespaces è pronto, vai nella scheda **Ports** (in basso) e apri la porta **8050** cliccando su.
-
-1. Clicca sul pulsante “Try CAN in Codespaces” e poi su **Create codespace**.
-2. Attendi che l’ambiente sia pronto (qualche secondo).
-3. Vai nella scheda **Ports** e apri la porta **8050** cliccando su 🌐.
+- ▶️ Passo 1 - **Clicca “Create codespace”** per avviare l’ambiente cloud.
+- ▶️ Passo 2 — Attendi qualche secondo l’**avvio automatico**.
+- ▶️ Passo 3 — Quando Codespaces è pronto, vai nella scheda **Ports** (in basso) e apri la porta **8050** cliccando su 🌐.
 
 ---
 

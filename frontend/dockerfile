@@ -9,14 +9,12 @@ ENV PYTHONUNBUFFERED=1
 
 WORKDIR /app
 
-COPY frontend/requirements.txt ./requirements.txt
+COPY requirements.txt ./requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
 # Porta del frontend (Dash)
 EXPOSE 8050
-
-HEALTHCHECK CMD curl --fail http://localhost:8050 || exit 1
 
 CMD ["python", "-m", "frontend.app"]

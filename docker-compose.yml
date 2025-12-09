@@ -42,6 +42,8 @@ services:
    depends_on:
      db:
        condition: service_healthy
+   networks:
+     - can_networkup
 
   backend:
     build: 
@@ -67,6 +69,12 @@ services:
         condition: service_healthy
     networks:
       - can_networkup
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/docs"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
 
   frontend:
     build:  
@@ -85,11 +93,11 @@ services:
     volumes:
       - ./frontend:/app/frontend
     depends_on:
-      - backend
+      backend:
+        condition: service_healthy
     networks:
       - can_networkup
-    command: >
-      sh -c "python -m frontend.app"
+    command: sh -c "python -m frontend.app"
 
 networks:
   can_networkup:

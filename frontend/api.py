@@ -10,6 +10,7 @@ Versione: 1.0.0
 """
 import os
 import requests
+import time
 import pandas as pd
 from dotenv import load_dotenv
 import threading
@@ -29,15 +30,25 @@ meteo_lock = threading.Lock()
 # FUNZIONI DI RICHIESTA DATI
 # ===========================
 
-def get_regioni():
-    """Restituisce il DataFrame con tutte le regioni italiane."""
-    try:
-        resp = requests.get(f"{BASE_URL}/regioni").json()
-        return pd.DataFrame(resp)
-    except Exception as e:
-        print(f"[API] Errore caricando regioni: {e}")
-        return pd.DataFrame()
-
+def get_regioni(max_retry=10, delay=3):
+    """
+    Restituisce il DataFrame con tutte le regioni italiane.
+    Riprova automaticamente in caso di errore per aspettare che il backend sia pronto.
+    """
+    for attempt in range(max_retry):
+        try:
+            resp = requests.get(f"{BASE_URL}/regioni", timeout=5).json()
+            return pd.DataFrame(resp)
+        except requests.exceptions.ConnectionError as e:
+            print(f"[API] Tentativo {attempt + 1}/{max_retry} - Backend non ancora pronto: {e}")
+            if attempt < max_retry - 1:
+                time.sleep(delay)
+        except Exception as e:
+            print(f"[API] Errore caricando regioni: {e}")
+            return pd.DataFrame()
+    
+    print("[API] Errore caricando regioni: Backend non raggiungibile dopo tutti i tentativi")
+    return pd.DataFrame()
 
 def get_morfologia():
     """Restituisce i dati sulla morfologia del suolo."""
