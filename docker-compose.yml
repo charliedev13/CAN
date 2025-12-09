@@ -19,6 +19,12 @@ services:
      - ./DB/can_dump.sql:/docker-entrypoint-initdb.d/can_dump.sql
    networks:
      - can_networkup
+   healthcheck:
+     test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root -p$MYSQL_ROOT_PASSWORD || exit 1"]
+     interval: 10s
+     timeout: 5s
+     retries: 10
+     start_period: 20s
 
   #per production (messa online), commentare phpmyadmin 
   phpmyadmin:
@@ -34,7 +40,8 @@ services:
    ports:
      - "8080:80"
    depends_on:
-     - db
+     db:
+       condition: service_healthy
 
   backend:
     build: 
@@ -56,7 +63,8 @@ services:
     volumes:
       - ./backend:/app
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     networks:
       - can_networkup
 
@@ -72,7 +80,6 @@ services:
     environment:
        BASE_URL: ${BASE_URL}
        WEATHER_API_KEY: ${WEATHER_API_KEY}
-      
     ports:
       - "8050:8050"
     volumes:

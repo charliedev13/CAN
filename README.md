@@ -15,6 +15,19 @@ L’obiettivo è offrire una panoramica chiara e interattiva della transizione e
 
 ---
 
+## 🚀 Prova CAN in cloud (GitHub Codespaces)
+
+Hai già un account GitHub e vuoi provare CAN **senza installare nulla**?
+
+[![Try CAN in GitHub Codespaces](https://img.shields.io/badge/Try%20CAN%20in%20Codespaces-100000?style=for-the-badge&logo=github&logoColor=white)](https://codespaces.new/charliedev13/CAN)
+
+### ▶️ Una volta dentro il Codespace
+**CAN si avvia automaticamente** e Codespaces mostrerà diversi URL di porte aperte.
+👉 Apri l’URL della porta **8050**
+È quella del frontend Dash, ovvero la dashboard CAN completa.
+
+---
+
 ## ⏺️ Diagramma
 
 Il flusso logico di navigazione della dashboard è rappresentato nel seguente diagramma BPMN:
