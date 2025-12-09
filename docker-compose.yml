@@ -46,7 +46,7 @@ services:
   backend:
     build: 
       context: ./backend
-      dockerfile: Dockerfile
+      dockerfile: dockerfile
     image: can-backend
     container_name: backend_container
     restart: always
@@ -70,8 +70,8 @@ services:
 
   frontend:
     build:  
-      context: .
-      dockerfile: frontend/Dockerfile
+      context: ./frontend
+      dockerfile: dockerfile
     image: can-frontend
     container_name: frontend_container
     restart: always 

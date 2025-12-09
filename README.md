@@ -21,9 +21,19 @@ Hai già un account GitHub e vuoi provare CAN **senza installare nulla**?
 
 [![Try CAN in GitHub Codespaces](https://img.shields.io/badge/Try%20CAN%20in%20Codespaces-100000?style=for-the-badge&logo=github&logoColor=white)](https://codespaces.new/charliedev13/CAN)
 
-### ▶️ Una volta dentro il Codespace
-**CAN si avvia automaticamente** e Codespaces mostrerà diversi URL di porte aperte.
-👉 Apri l’URL della porta **8050**
+### ▶️ Passo 1 — Conferma la creazione del Codespace
+Dopo aver cliccato il pulsante, GitHub ti mostrerà una schermata di conferma.
+
+👉 **Clicca “Create codespace”** per avviare l’ambiente cloud.
+
+### ▶️ Passo 2 — Attendi l’avvio automatico
+Non devi eseguire nessun comando:  
+**CAN si avvia automaticamente** grazie alla configurazione del Dev Container.
+
+### 🌐 Passo 3 — Apri la dashboard
+Quando Codespaces è pronto, appariranno diversi URL di porte aperte.
+
+👉 **Apri la porta 8050**  
 È quella del frontend Dash, ovvero la dashboard CAN completa.
 
 ---
@@ -128,6 +138,9 @@ CAN/
 │           ├── login.html
 │           ├── register.html
 │           └── reset.html
+│
+├── .devcontainer/                # Cloudspaces
+│   └── devcontainer.json         # Avvio Cloudspaces
 │
 ├── backupSQL/                    # Backup automatico DB (futuro)
 │
