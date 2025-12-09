@@ -15,29 +15,6 @@ L’obiettivo è offrire una panoramica chiara e interattiva della transizione e
 
 ---
 
-## 🚀 Prova CAN in cloud (GitHub Codespaces)
-
-Hai già un account GitHub e vuoi provare CAN **senza installare nulla**?
-
-[![Try CAN in GitHub Codespaces](https://img.shields.io/badge/Try%20CAN%20in%20Codespaces-100000?style=for-the-badge&logo=github&logoColor=white)](https://codespaces.new/charliedev13/CAN)
-
-### ▶️ Passo 1 — Conferma la creazione del Codespace
-Dopo aver cliccato il pulsante, GitHub ti mostrerà una schermata di conferma.
-
-👉 **Clicca “Create codespace”** per avviare l’ambiente cloud.
-
-### ▶️ Passo 2 — Attendi l’avvio automatico
-Non devi eseguire nessun comando:  
-**CAN si avvia automaticamente** grazie alla configurazione del Dev Container.
-
-### 🌐 Passo 3 — Apri la dashboard
-Quando Codespaces è pronto, appariranno diversi URL di porte aperte.
-
-👉 **Apri la porta 8050**  
-È quella del frontend Dash, ovvero la dashboard CAN completa.
-
----
-
 ## ⏺️ Diagramma
 
 Il flusso logico di navigazione della dashboard è rappresentato nel seguente diagramma BPMN:
@@ -173,9 +150,21 @@ cd CAN
 
 ---
 
-## ▶️ Avvio dei servizi (2 opzioni)
+## ▶️ Avvio dei servizi (3 opzioni)
 
-### 🔹 Opzione 1 – Avvio completo con Docker (consigliato)
+### 🔹 Opzione 1 – 🚀 Prova CAN in cloud (GitHub Codespaces)
+
+Hai già un account GitHub e vuoi provare CAN **senza installare nulla**?
+
+[![Try CAN in GitHub Codespaces](https://img.shields.io/badge/Try%20CAN%20in%20Codespaces-100000?style=for-the-badge&logo=github&logoColor=white)](https://codespaces.new/charliedev13/CAN)
+
+▶️ Passo 1 - **Clicca “Create codespace”** per avviare l’ambiente cloud.
+▶️ Passo 2 — Attendi l’avvio automatico, **CAN si avvia automaticamente**.
+▶️ Passo 3 — Quando Codespaces è pronto, **Apri la porta 8050**  
+
+---
+
+### 🔹 Opzione 2 – Avvio completo con Docker (consigliato)
 
 Docker gestisce tutto automaticamente: **non serve creare né attivare ambienti virtuali** o installare manualmente le dipendenze Python.
 
@@ -191,7 +180,7 @@ docker compose up -d
 
 ---
 
-### 🔹 Opzione 2 – Avvio manuale in locale
+### 🔹 Opzione 3 – Avvio manuale in locale
 
 #### 1️⃣ Crea e attiva un ambiente virtuale
 ```bash
