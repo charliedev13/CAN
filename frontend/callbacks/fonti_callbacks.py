@@ -3,9 +3,6 @@ Modulo fonti_callbacks – Gestisce la sezione 'Fonti' (mix energetico regionale
 
 Visualizza la distribuzione percentuale delle fonti energetiche
 (carbone, petrolio, gas e rinnovabili) per la regione selezionata.
-
-Autori: Carlotta Forlino, Andrea Calabrò, Nicolò Giraudo
-Versione: 1.0.0
 """
 import plotly.express as px
 from dash import Input, Output

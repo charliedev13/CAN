@@ -5,9 +5,6 @@ Include:
 - la selezione della regione tramite click o dropdown
 - la visualizzazione della mappa coropletica
 - i grafici a torta per altimetria e uso del suolo
-
-Autori: Eurix Srl - Team CAN – Carlotta Forlino, Andrea Calabrò e Nicolò Giraudo
-Versione: 1.1.0
 """
 
 import plotly.express as px

@@ -1,9 +1,6 @@
 """
 Modulo data_utils - Contiene i dati condivisi e funzioni di supporto
 per le callback della CAN Dashboard.
-
-Autori: Eurix Srl - Team CAN - Carlotta Forlino, Andrea Calabrò e Nicolò Giraudo
-Versione: 1.0.0
 """
 import json
 import pandas as pd

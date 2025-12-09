@@ -1,9 +1,6 @@
 """
 Modulo edifici_callbacks – Gestisce il grafico sui consumi e le emissioni
 degli edifici per la regione selezionata.
-
-Autori: Eurix Srl - Team CAN – Carlotta Forlino, Andrea Calabrò e Nicolò Giraudo
-Versione: 1.0.0
 """
 import plotly.express as px
 from dash import Input, Output

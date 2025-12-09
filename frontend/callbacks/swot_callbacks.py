@@ -2,9 +2,6 @@
 Modulo swot_callbacks – Gestisce la sezione SWOT:
 - Punto di forza
 - Aree di miglioramento (semaforo)
-
-Autori: Eurix Srl - Team CAN – Carlotta Forlino, Andrea Calabrò e Nicolò Giraudo
-Versione: 1.0.0
 """
 from dash import Input, Output, html
 from ..app import app

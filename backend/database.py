@@ -1,4 +1,7 @@
-#Connessione e setup dell'ORM - localhost da collegare al docker
+"""
+Crea la connessione a MySQL e il motore SQLAlchemy.
+Espone la sessione da usare in routes e services.
+"""
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base

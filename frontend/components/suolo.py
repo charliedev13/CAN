@@ -1,9 +1,6 @@
 """
 Modulo suolo – Sezione dedicata alla morfologia e all’uso del suolo.
 Contiene due grafici a torta: altimetria e uso del territorio.
-
-Autore: Eurix Srl - Team CAN – Carlotta Forlino, Andrea Calabrò e Nicolò Giraudo
-Versione: 1.0.0
 """
 from dash import html, dcc
 import dash_bootstrap_components as dbc

@@ -1,3 +1,8 @@
+"""
+Contiene la logica CRUD (Create, Read, Update, Delete).
+Le route lo chiamano per eseguire operazioni sul DB in modo pulito.
+"""
+
 from sqlalchemy.orm import Session
 from fastapi import HTTPException
 import models

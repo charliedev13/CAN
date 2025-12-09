@@ -1,9 +1,6 @@
 """
 Modulo comparazione – Permette il confronto di un dato tra due regioni
 su una categoria scelta dall’utente.
-
-Autore: Eurix Srl - Team CAN – Carlotta Forlino, Andrea Calabrò e Nicolò Giraudo
-Versione: 1.0.0
 """
 from dash import html, dcc
 from ..api import get_regioni

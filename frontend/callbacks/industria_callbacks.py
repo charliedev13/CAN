@@ -3,9 +3,6 @@ Modulo industria_callbacks – Gestisce la sezione INDUSTRIA.
 
 Contiene la logica per aggiornare il grafico delle emissioni e del consumo
 energetico industriale in base alla regione selezionata.
-
-Autori: Eurix Srl - Team CAN – Carlotta Forlino, Andrea Calabrò e Nicolò Giraudo
-Versione: 1.0.0
 """
 import plotly.express as px
 from dash import Input, Output

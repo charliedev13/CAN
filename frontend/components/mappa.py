@@ -1,9 +1,6 @@
 """
 Modulo mappa – Sezione principale con la mappa interattiva e il menu a tendina
 per la selezione della regione. Include anche il blocco meteo regionale.
-
-Autore: Eurix Srl - Team CAN – Carlotta Forlino, Andrea Calabrò e Nicolò Giraudo
-Versione: 1.0.0
 """
 
 from dash import html, dcc

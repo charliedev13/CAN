@@ -1,3 +1,8 @@
+"""
+Definisce gli endpoint API (GET, POST, PUT, DELETE).
+Chiama le funzioni di services.py per eseguire la logica.
+"""
+
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from typing import List

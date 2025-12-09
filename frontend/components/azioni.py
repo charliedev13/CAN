@@ -1,9 +1,6 @@
 """
 Modulo azioni – Mostra le iniziative regionali per l’ambiente:
 fotovoltaico, FER, auto elettriche e risparmio energetico.
-
-Autore: Eurix Srl - Team CAN – Carlotta Forlino, Andrea Calabrò e Nicolò Giraudo
-Versione: 1.0.0
 """
 from dash import html
 import dash_bootstrap_components as dbc

@@ -1,3 +1,7 @@
+"""
+Script per riempire il database con i dati iniziali dalle tabelle CSV.
+"""
+
 from requests import Session
 from models import *
 import pandas as pd

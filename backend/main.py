@@ -1,3 +1,11 @@
+"""
+Avvia l’app FastAPI, importa e registra i router.
+Contiene la configurazione principale dell’applicazione.
+
+Autori: Team CAN - Carlotta Forlino, Andrea Calabrò e Nicolò Giraudo
+Versione: 1.0.0
+"""
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import models

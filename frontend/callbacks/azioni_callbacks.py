@@ -3,9 +3,6 @@ Modulo azioni_callbacks – Gestisce la sezione AZIONI.
 
 Mostra i valori relativi alle azioni ambientali regionali:
 fotovoltaico, FER, auto elettriche e risparmi energetici.
-
-Autori: Eurix Srl - Team CAN – Carlotta Forlino, Andrea Calabrò e Nicolò Giraudo
-Versione: 1.0.0
 """
 from dash import Input, Output
 from ..app import app

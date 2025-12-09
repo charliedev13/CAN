@@ -5,7 +5,7 @@ DataFrame Pandas con i dati richiesti.
 Questo modulo centralizza tutte le chiamate REST ai vari endpoint:
 regioni, morfologia, assorbimenti, mix energetico, edifici, industria e azioni.
 
-Autori: Eurix Srl - Team CAN – Carlotta Forlino, Andrea Calabrò e Nicolò Giraudo
+Autori: Team CAN - Carlotta Forlino, Andrea Calabrò e Nicolò Giraudo
 Versione: 1.0.0
 """
 import os

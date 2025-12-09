@@ -1,3 +1,7 @@
+"""
+Modelli SQLAlchemy che rappresentano le tabelle del database.
+Ogni classe = una tabella con le sue colonne.
+"""
 #modellazione del DB e creazione tabelle
 from sqlalchemy import Engine, create_engine, Column, Integer, String, Numeric, ForeignKey, Text, CheckConstraint
 from sqlalchemy.orm import sessionmaker, declarative_base, relationship

@@ -3,9 +3,6 @@ Modulo navbar_callbacks – Gestisce il comportamento della barra di navigazione
 
 In particolare, controlla l'apertura e la chiusura del menu "hamburger"
 nelle visualizzazioni mobile.
-
-Autori: Eurix Srl - Team CAN – Carlotta Forlino, Andrea Calabrò e Nicolò Giraudo
-Versione: 1.0.0
 """
 from dash import Input, Output, State
 from ..app import app

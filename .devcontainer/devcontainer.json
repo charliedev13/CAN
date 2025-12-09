@@ -18,7 +18,7 @@
       ]
     }
   },
-  "postCreateCommand": "pip3 install -r backend/requirements.txt && pip3 install -r frontend/requirements.txt",
+  "postCreateCommand": "test -f .env || cp .env.codespaces .env; pip3 install -r backend/requirements.txt && pip3 install -r frontend/requirements.txt",
   "postStartCommand": "docker compose up -d || true",
   "forwardPorts": [8000, 8050, 8080, 3306],
   "remoteUser": "vscode"

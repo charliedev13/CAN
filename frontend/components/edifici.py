@@ -1,8 +1,5 @@
 """
 Modulo edifici – Sezione sui consumi e la sostenibilità degli edifici regionali.
-
-Autore: Eurix Srl - Team CAN – Carlotta Forlino, Andrea Calabrò e Nicolò Giraudo
-Versione: 1.0.0
 """
 from dash import html, dcc
 import dash_bootstrap_components as dbc

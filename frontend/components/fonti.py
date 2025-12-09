@@ -3,9 +3,6 @@ Modulo fonti – Mostra il mix energetico regionale.
 
 Contiene il grafico a barre orizzontali con la ripartizione percentuale
 tra carbone, petrolio, gas e fonti rinnovabili.
-
-Autori: Carlotta Forlino, Andrea Calabrò, Nicolò Giraudo
-Versione: 1.0.0
 """
 from dash import html, dcc
 import dash_bootstrap_components as dbc

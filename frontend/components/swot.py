@@ -1,8 +1,5 @@
 """
 Modulo swot – Sezione Punti di forza e Aree di miglioramento.
-
-Autore: Eurix Srl - Team CAN – Carlotta Forlino, Andrea Calabrò e Nicolò Giraudo
-Versione: 1.0.0
 """
 from dash import html
 import dash_bootstrap_components as dbc

@@ -3,9 +3,6 @@ Modulo navbar – Barra di navigazione principale della CAN Dashboard.
 
 Contiene il brand e i link di ancoraggio alle sezioni principali della dashboard:
 Mappa, Suolo, Fonti, Edifici, Azioni, Industria e Confronta tu.
-
-Autore: Eurix Srl - Team CAN – Carlotta Forlino, Andrea Calabrò e Nicolò Giraudo
-Versione: 1.0.0
 """
 from dash import html
 import dash_bootstrap_components as dbc

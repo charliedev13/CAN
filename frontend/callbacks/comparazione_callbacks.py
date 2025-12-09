@@ -5,9 +5,6 @@ Permette di:
 - aggiornare i dropdown in modo che le due regioni non coincidano
 - popolare la lista di categorie confrontabili
 - generare il grafico di comparazione orizzontale
-
-Autori: Eurix Srl - Team CAN – Carlotta Forlino, Andrea Calabrò e Nicolò Giraudo
-Versione: 1.0.0
 """
 import plotly.express as px
 import pandas as pd

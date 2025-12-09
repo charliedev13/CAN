@@ -1,4 +1,4 @@
-# EURIX 🌍 CAN – Cambiamento Ambientale Nazionale
+# CAN 🌍 Cambiamento Ambientale Nazionale
 
 ### Analisi e visualizzazione dei dati ambientali ed energetici regionali italiani
 
@@ -121,6 +121,8 @@ CAN/
 │
 ├── backupSQL/                    # Backup automatico DB (futuro)
 │
+├── .env.codespaces               # File per l'avvio dei container in Celoudspaces
+│
 ├── dump_mysql.py                 # Script per creare un dump MySQL (futuro)
 ├── import_mysql.py               # Script per importare il dump (futuro)
 │
@@ -159,8 +161,12 @@ Hai già un account GitHub e vuoi provare CAN **senza installare nulla**?
 [![Try CAN in GitHub Codespaces](https://img.shields.io/badge/Try%20CAN%20in%20Codespaces-100000?style=for-the-badge&logo=github&logoColor=white)](https://codespaces.new/charliedev13/CAN)
 
 ▶️ Passo 1 - **Clicca “Create codespace”** per avviare l’ambiente cloud.
-▶️ Passo 2 — Attendi l’avvio automatico, **CAN si avvia automaticamente**.
-▶️ Passo 3 — Quando Codespaces è pronto, **Apri la porta 8050**  
+▶️ Passo 2 — Attendi qualche secondo l’**avvio automatico**.
+▶️ Passo 3 — Quando Codespaces è pronto, vai nella scheda **Ports** (in basso) e apri la porta **8050** cliccando su.
+
+1. Clicca sul pulsante “Try CAN in Codespaces” e poi su **Create codespace**.
+2. Attendi che l’ambiente sia pronto (qualche secondo).
+3. Vai nella scheda **Ports** e apri la porta **8050** cliccando su 🌐.
 
 ---
 
@@ -250,61 +256,84 @@ version: "3.9"
 
 services:
   db:
-    image: mysql:8.0
-    container_name: mysql_container
-    restart: always
-    environment:
-      MYSQL_USER: teamcan
-      MYSQL_PASSWORD: Hfdfzbhvd.665
-      MYSQL_DATABASE: CAN_DB
-      MYSQL_ROOT_PASSWORD: Hfdfzbhvd.665root
-    ports:
-      - "3306:3306"
-    volumes:
-      - ./mysqldata:/var/lib/mysql
-   
+   image: mysql:8.0
+   container_name: mysql_container
+   restart: always
+   env_file:
+     - .env
+   environment:
+     MYSQL_USER: ${MYSQL_USER}
+     MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+     MYSQL_DATABASE: ${MYSQL_DATABASE}
+     MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+   ports:
+     - "3306:3306"
+   volumes:
+     - mysql_data:/var/lib/mysql
+     - ./DB/can_dump.sql:/docker-entrypoint-initdb.d/can_dump.sql
+   networks:
+     - can_networkup
+   healthcheck:
+     test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root -p$MYSQL_ROOT_PASSWORD || exit 1"]
+     interval: 10s
+     timeout: 5s
+     retries: 10
+     start_period: 20s
+
+  #per production (messa online), commentare phpmyadmin 
   phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    container_name: phpmyadmin_container
-    restart: always
-    environment:
-      PMA_HOST: db
-      PMA_USER: root
-      PMA_PASSWORD: Hfdfzbhvd.665root
-    ports:
-      - "8080:80"
-    depends_on:
-      - db
+   image: phpmyadmin/phpmyadmin
+   container_name: phpmyadmin_container
+   restart: always
+   env_file:
+     - .env
+   environment:
+     PMA_HOST: db
+     PMA_USER: ${PMA_USER}
+     PMA_PASSWORD: ${PMA_PASSWORD}
+   ports:
+     - "8080:80"
+   depends_on:
+     db:
+       condition: service_healthy
 
   backend:
-    build:
+    build: 
       context: ./backend
-      dockerfile: Dockerfile
+      dockerfile: dockerfile
+    image: can-backend
     container_name: backend_container
     restart: always
+    env_file:
+      - .env
     environment:
-      DB_HOST: db
-      DB_USER: teamcan
-      DB_PASSWORD: Hfdfzbhvd.665
-      DB_NAME: CAN_DB
+      DB_HOST: ${DB_HOST}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME}
+      URL_PASSWORD_DB: ${URL_PASSWORD_DB}
     ports:
       - "8000:8000"
     volumes:
       - ./backend:/app
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     networks:
       - can_networkup
 
   frontend:
     build:  
-      context: .
-      dockerfile: frontend/dockerfile
+      context: ./frontend
+      dockerfile: dockerfile
+    image: can-frontend
     container_name: frontend_container
-    restart: always
+    restart: always 
+    env_file:
+      - .env
     environment:
-       BASE_URL: http://backend:8000
-       WEATHER_API_KEY: "596616b2b490c9159dca4a3a8ee498bb"
+       BASE_URL: ${BASE_URL}
+       WEATHER_API_KEY: ${WEATHER_API_KEY}
     ports:
       - "8050:8050"
     volumes:
@@ -319,6 +348,9 @@ services:
 networks:
   can_networkup:
     driver: bridge
+
+volumes:
+  mysql_data:
 ```
 
 ---
@@ -366,7 +398,7 @@ Gli output HTML vengono salvati nella cartella `CAN/docs`.
 
 ## 👥 Autori
 
-**Team CAN – Eurix Srl**  
+**Team CAN**  
 Progetto di sviluppo e comunicazione per la transizione energetica e ambientale.
 
 - Carlotta Forlino  

@@ -1,8 +1,5 @@
 """
 Modulo footer – Sezione finale della dashboard con citazione e credits.
-
-Autore: Eurix Srl - Team CAN – Carlotta Forlino, Andrea Calabrò e Nicolò Giraudo
-Versione: 1.0.0
 """
 from dash import html
 import dash_bootstrap_components as dbc
@@ -104,7 +101,7 @@ layout = html.Div(
             dbc.Container(
                 [
                     html.Small(
-                        "Dati ISTAT e ISPRA · Eurix Srl © 2025",
+                        "Dati ISTAT e ISPRA · Team CAN, 2025",
                         className="text-white",
                     ),
                     html.Span(" · ", className="text-white"),

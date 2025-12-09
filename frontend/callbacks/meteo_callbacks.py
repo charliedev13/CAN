@@ -4,9 +4,6 @@ Modulo meteo_callbacks - Gestisce la sezione meteo e la cache con OpenWeather.
 Contiene:
 - la funzione di aggiornamento del meteo regionale
 - la logica di caching con thread daemon
-
-Autori: Eurix Srl - Team CAN - Carlotta Forlino, Andrea Calabrò e Nicolò Giraudo
-Versione: 1.0.0
 """
 import time
 import threading

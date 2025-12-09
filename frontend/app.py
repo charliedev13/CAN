@@ -10,7 +10,7 @@ Struttura:
     api.py        → chiamate al backend FastAPI
     data_utils.py → dati condivisi e funzioni di supporto
 
-Autori: Eurix Srl - Team CAN - Carlotta Forlino, Andrea Calabrò e Nicolò Giraudo
+Autori: Team CAN - Carlotta Forlino, Andrea Calabrò e Nicolò Giraudo
 Versione: 1.0.0
 """
 
