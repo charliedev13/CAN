@@ -16,6 +16,7 @@ Versione: 1.0.0
 
 from dash import Dash, html
 import dash_bootstrap_components as dbc
+import os
 
 # ===========================
 # IMPORT COMPONENTI (layout)
@@ -79,6 +80,13 @@ from .callbacks.legend_callbacks import *
 # ===========================
 # AVVIO SERVER
 # ===========================
+
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8050, debug=True, dev_tools_ui=False)
+    port = int(os.environ.get("PORT", "8050"))  # default 8050 per locale
+    app.run(
+        host="0.0.0.0",
+        port=port,
+        debug=False  # in produzione meglio False
+    )
+
 

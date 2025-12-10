@@ -139,17 +139,6 @@ CAN/
 ├── .dockerignore
 └── README.md
 ```
-
----
-
-## ⚙️ Setup e installazione
-
-### Clona il repository
-```bash
-git clone https://github.com/<nome_repo>/CAN.git
-cd CAN
-```
-
 ---
 
 ## ▶️ Avvio dei servizi (3 opzioni)
@@ -168,6 +157,12 @@ Hai già un account GitHub e vuoi provare CAN **senza installare nulla**?
 
 ### 🔹 Opzione 2 – Avvio completo con Docker (consigliato)
 
+#### Clona il repository
+```bash
+git clone https://github.com/<nome_repo>/CAN.git
+cd CAN
+```
+
 Docker gestisce tutto automaticamente: **non serve creare né attivare ambienti virtuali** o installare manualmente le dipendenze Python.
 
 ```bash
@@ -184,7 +179,13 @@ docker compose up -d
 
 ### 🔹 Opzione 3 – Avvio manuale in locale
 
-#### 1️⃣ Crea e attiva un ambiente virtuale
+#### 1️⃣ Clona il repository
+```bash
+git clone https://github.com/<nome_repo>/CAN.git
+cd CAN
+```
+
+#### 2️⃣ Crea e attiva un ambiente virtuale
 ```bash
 # macOS/Linux
 python3 -m venv venv        
@@ -195,7 +196,7 @@ python -m venv venv
 venv\Scripts\activate       
 ```
 
-#### 2️⃣ Installa le dipendenze
+#### 3️⃣ Installa le dipendenze
 ```bash
 # macOS/Linux
 pip3 install -r backend/requirements.txt
@@ -206,7 +207,7 @@ pip install -r backend/requirements.txt
 pip install -r frontend/requirements.txt
 ```
 
-#### 3️⃣ Avvia i servizi
+#### 4️⃣ Avvia i servizi
 
 - **Database**
   ```bash
