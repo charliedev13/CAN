@@ -13,6 +13,8 @@
 
 L’obiettivo è offrire una panoramica chiara e interattiva della transizione energetica italiana, fornendo uno strumento utile a enti, analisti e cittadini.
 
+![Screenshot della CAN Dashboard](docs/Screenshot.jpeg)
+
 ---
 
 ## ⏺️ Diagramma
@@ -401,4 +403,3 @@ Progetto di sviluppo e comunicazione per la transizione energetica e ambientale.
 - Carlotta Forlino  
 - Andrea Calabrò  
 - Nicolò Giraudo
-
